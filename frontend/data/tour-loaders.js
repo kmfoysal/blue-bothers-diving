@@ -79,7 +79,7 @@ export async function getTourPagesData(slug) {
                 },
             },
         },
-        fields: ["meta_title", "meta_description", "slug"],
+        fields: ["title", "description", "slug"],
     });
 
     const path = "/api/tours";
