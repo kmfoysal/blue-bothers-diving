@@ -98,6 +98,15 @@ const SecondAccordionData = [
     },
 ];
 
+export async function generateMetadata() {
+    const getOurBoatData = await getAboutPagesData("tour-faq");
+
+    return {
+        title: getOurBoatData?.data[0]?.meta_title || "",
+        description: getOurBoatData?.data[0]?.meta_description || "",
+    };
+}
+
 export default async function Faq() {
     const getTourFaqData = await getAboutPagesData("tour-faq");
 

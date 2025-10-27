@@ -3,13 +3,6 @@ import GridImageGallery from "@/components/GridImageGallery/GridImageGallery";
 import SubPageBanner from "@/components/SubBanner/SubPageBanner";
 import { getAboutPagesData } from "@/data/about-us-loaders";
 
-const bannerContent = {
-    title: "Our Speedboats",
-    content:
-        "At Blue Brothers Diving, your diving experience starts the moment you step on board. Our boats are custom-built for divers, offering the perfect blend of comfort.",
-    image: "/images/our-speedboat-banner-bg.jpg",
-};
-
 const boatBlueBrothersData = {
     isSectionImageRight: false,
     title: "About the boat of Blue Brothers 1",
@@ -38,44 +31,6 @@ const boatBlueBrothersData = {
     buttonUrl: "/",
     isBorderBottom: false,
 };
-
-const blueBrotherImages = [
-    {
-        id: 1,
-        url: "/images/boat-blue-brother-1.jpg",
-        alt: "Boat Blue Brother Image 1",
-    },
-    {
-        id: 2,
-        url: "/images/boat-blue-brother-2.jpg",
-        alt: "Boat Blue Brother Image 2",
-    },
-    {
-        id: 3,
-        url: "/images/boat-blue-brother-3.jpg",
-        alt: "Boat Blue Brother Image 3",
-    },
-    {
-        id: 4,
-        url: "/images/boat-blue-brother-4.jpg",
-        alt: "Boat Blue Brother Image 4",
-    },
-    {
-        id: 5,
-        url: "/images/boat-blue-brother-5.jpg",
-        alt: "Boat Blue Brother Image 5",
-    },
-    {
-        id: 6,
-        url: "/images/boat-blue-brother-6.jpg",
-        alt: "Boat Blue Brother Image 6",
-    },
-    {
-        id: 7,
-        url: "/images/boat-blue-brother.jpg",
-        alt: "Boat Blue Brother Image 7",
-    },
-];
 
 const boatBlueSistersData = {
     isSectionImageRight: true,
@@ -110,33 +65,14 @@ const boatBlueSistersData = {
     isBorderBottom: false,
 };
 
-const blueSisterImages = [
-    {
-        id: 1,
-        url: "/images/boat-blue-sister-1.jpg",
-        alt: "Boat Blue Brother Image 1",
-    },
-    {
-        id: 2,
-        url: "/images/boat-blue-sister-2.jpg",
-        alt: "Boat Blue Sister Image 2",
-    },
-    {
-        id: 3,
-        url: "/images/boat-blue-sister-3.jpg",
-        alt: "Boat Blue Sister Image 3",
-    },
-    {
-        id: 4,
-        url: "/images/boat-blue-sister-4.jpg",
-        alt: "Boat Blue Sister Image 4",
-    },
-    {
-        id: 5,
-        url: "/images/boat-blue-sister.jpg",
-        alt: "Boat Blue Sister Image 5",
-    },
-];
+export async function generateMetadata() {
+    const getOurBoatData = await getAboutPagesData("our-speedboats");
+
+    return {
+        title: getOurBoatData?.data[0]?.meta_title || "",
+        description: getOurBoatData?.data[0]?.meta_description || "",
+    };
+}
 
 export default async function OurSpeedboatsPage() {
     const getOurSpeedboatsData = await getAboutPagesData("our-speedboats");

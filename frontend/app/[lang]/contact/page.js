@@ -3,6 +3,16 @@ import GoogleMap from "@/components/GoogleMap/GoogleMap";
 import SubPageBanner from "@/components/SubBanner/SubPageBanner";
 import { getAboutPagesData } from "@/data/about-us-loaders";
 
+
+export async function generateMetadata() {
+    const getOurBoatData = await getAboutPagesData("contact");
+
+    return {
+        title: getOurBoatData?.data[0]?.meta_title || "",
+        description: getOurBoatData?.data[0]?.meta_description || "",
+    };
+}
+
 export default async function ContactPage() {
     const getContactPageData = await getAboutPagesData("contact");
 

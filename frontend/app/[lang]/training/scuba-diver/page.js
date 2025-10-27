@@ -148,6 +148,15 @@ const snorkelingContent = {
     },
 };
 
+export async function generateMetadata() {
+    const getOurBoatData = await getTrainingPagesData("scuba-diver");
+
+    return {
+        title: getOurBoatData?.data[0]?.title || "",
+        description: getOurBoatData?.data[0]?.description || "",
+    };
+}
+
 export default async function scubaDiverPage() {
     const getScubaDiverData = await getTrainingPagesData("scuba-diver");
 

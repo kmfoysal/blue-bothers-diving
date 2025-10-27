@@ -1,5 +1,6 @@
 import ActivitiesBook from "@/components/ActivitiesBook/ActivitiesBook";
 
+
 export default function BookingPage() {
     return (
         <main className="section-padding">

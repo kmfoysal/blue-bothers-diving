@@ -46,11 +46,21 @@ const FacilitiesFleetData = {
     isBorderBottom: false,
 };
 
+export async function generateMetadata() {
+    const getOurBoatData = await getAboutPagesData("our-dive-center");
+
+    return {
+        title: getOurBoatData?.data[0]?.meta_title || "",
+        description: getOurBoatData?.data[0]?.meta_description || "",
+    };
+}
+
 export default async function OurDiveCenterPage() {
     // Testimonial section heading data fetch
     const getOurDiveCenterData = await getAboutPagesData("our-dive-center");
 
-    const filterContent = getOurDiveCenterData?.data[0]?.blocks[2]?.gallery_image;
+    const filterContent =
+        getOurDiveCenterData?.data[0]?.blocks[2]?.gallery_image;
 
     return (
         <main>
@@ -66,7 +76,12 @@ export default async function OurDiveCenterPage() {
             {/* Gallery */}
             <section className="section-padding">
                 <div className="container">
-                    <GridImageGallery imagesData={getOurDiveCenterData?.data[0]?.blocks[2]?.gallery_image} />
+                    <GridImageGallery
+                        imagesData={
+                            getOurDiveCenterData?.data[0]?.blocks[2]
+                                ?.gallery_image
+                        }
+                    />
                 </div>
             </section>
         </main>

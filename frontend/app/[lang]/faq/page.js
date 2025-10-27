@@ -3,12 +3,14 @@ import QuestionsElGouna from "@/components/QuestionsElGouna/QuestionsElGouna";
 import SubPageBanner from "@/components/SubBanner/SubPageBanner";
 import { getAboutPagesData } from "@/data/about-us-loaders";
 
-const bannerContent = {
-    title: "Frequently asked questions",
-    content:
-        "Dive into a world of aquatic excitement. Our team of water sports enthusiasts is dedicated to ensuring you have a fantastic time on and off the water.",
-    image: "/images/faq-banner-bg.jpg",
-};
+export async function generateMetadata() {
+    const getOurBoatData = await getAboutPagesData("faq");
+
+    return {
+        title: getOurBoatData?.data[0]?.meta_title || "",
+        description: getOurBoatData?.data[0]?.meta_description || "",
+    };
+}
 
 export default async function FAQPage() {
     const getFaqPageData = await getAboutPagesData("faq");
