@@ -7,8 +7,8 @@ export async function generateMetadata() {
     const getOurBoatData = await getTourPagesData("snorkeling-day-trip");
 
     return {
-        title: getOurBoatData?.data[0]?.meta_title || "",
-        description: getOurBoatData?.data[0]?.meta_description || "",
+        title: getOurBoatData?.data[0]?.title || "",
+        description: getOurBoatData?.data[0]?.description || "",
     };
 }
 
