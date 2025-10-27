@@ -6,7 +6,7 @@ import { getAboutPagesData } from "@/data/about-us-loaders";
 export default async function ContactPage() {
     const getContactPageData = await getAboutPagesData("contact");
 
-    console.log("Contact page data:", getContactPageData?.data[0]?.blocks[0]?.map_link);
+    // console.log("Contact page data:", getContactPageData?.data[0]?.blocks[0]?.map_link);
 
     return (
         <main>
