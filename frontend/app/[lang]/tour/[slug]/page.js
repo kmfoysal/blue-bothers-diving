@@ -11,9 +11,9 @@ export async function generateMetadata({ params }) {
 
     return {
         title:
-            snorkelingTourPagesData?.data[0]?.meta_title ||
+            snorkelingTourPagesData?.data[0]?.name ||
             "Private Snorkeling",
-        description: snorkelingTourPagesData?.data[0]?.meta_description || "",
+        description: snorkelingTourPagesData?.data[0]?.description || "",
     };
 }
 
