@@ -1,0 +1,51 @@
+{
+  "kind": "singleType",
+  "collectionName": "diving_pages",
+  "info": {
+    "singularName": "diving-page",
+    "pluralName": "diving-pages",
+    "displayName": "Diving Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "description": {
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "blocks": {
+      "type": "dynamiczone",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "components": [
+        "blocks.banner-slider",
+        "blocks.testimonial",
+        "blocks.professional-courses",
+        "blocks.home-faq",
+        "blocks.why-choose-us",
+        "blocks.features"
+      ]
+    }
+  }
+}

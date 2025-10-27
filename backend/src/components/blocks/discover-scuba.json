@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_blocks_discover_scubas",
+  "info": {
+    "displayName": "Discover Scuba",
+    "icon": "picture"
+  },
+  "options": {},
+  "attributes": {
+    "discover_scuba_img": {
+      "type": "component",
+      "component": "elements.image",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

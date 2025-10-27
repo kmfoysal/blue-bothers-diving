@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_elements_is_include_features",
+  "info": {
+    "displayName": "is_include_feature",
+    "icon": "hashtag"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "features": {
+      "type": "component",
+      "component": "elements.title-with-list",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

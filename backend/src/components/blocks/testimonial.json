@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_blocks_testimonials",
+  "info": {
+    "displayName": "Testimonial",
+    "icon": "star"
+  },
+  "options": {},
+  "attributes": {
+    "section_heading": {
+      "type": "component",
+      "component": "elements.section-heading",
+      "repeatable": false
+    }
+  },
+  "config": {}
+}

@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_elements_package_minimal_cards",
+  "info": {
+    "displayName": "package_minimal_card",
+    "icon": "oneToOne"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "current_price": {
+      "type": "integer",
+      "required": false,
+      "min": 1
+    },
+    "regular_price": {
+      "type": "integer",
+      "min": 1
+    },
+    "service_img": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    }
+  },
+  "config": {}
+}

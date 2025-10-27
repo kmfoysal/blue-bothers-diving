@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_elements_icon_lists",
+  "info": {
+    "displayName": "Icon list",
+    "icon": "star"
+  },
+  "options": {},
+  "attributes": {
+    "icon": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "text": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "config": {}
+}

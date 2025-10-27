@@ -1,0 +1,51 @@
+{
+  "kind": "singleType",
+  "collectionName": "snorkeling_pages",
+  "info": {
+    "singularName": "snorkeling-page",
+    "pluralName": "snorkeling-pages",
+    "displayName": "Snorkeling Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "description": {
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "blocks": {
+      "type": "dynamiczone",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "components": [
+        "blocks.banner-slider",
+        "blocks.professional-courses",
+        "blocks.home-faq",
+        "blocks.testimonial",
+        "blocks.why-choose-us",
+        "blocks.features"
+      ]
+    }
+  }
+}

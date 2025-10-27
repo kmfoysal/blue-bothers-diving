@@ -1,0 +1,46 @@
+{
+  "collectionName": "components_elements_conditions",
+  "info": {
+    "displayName": "conditions",
+    "icon": "connector"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "list": {
+      "type": "component",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "isConditionContent"
+            },
+            false
+          ]
+        }
+      },
+      "component": "elements.list-item",
+      "repeatable": true
+    },
+    "isConditionContent": {
+      "type": "boolean",
+      "default": false
+    },
+    "condition_content": {
+      "type": "blocks",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "isConditionContent"
+            },
+            true
+          ]
+        }
+      }
+    }
+  },
+  "config": {}
+}

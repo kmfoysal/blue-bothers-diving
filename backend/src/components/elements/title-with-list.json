@@ -1,0 +1,65 @@
+{
+  "collectionName": "components_elements_title_with_lists",
+  "info": {
+    "displayName": "title_with_list",
+    "icon": "bulletList"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "isContent": {
+      "type": "boolean",
+      "default": false
+    },
+    "feature": {
+      "type": "component",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "isContent"
+            },
+            false
+          ]
+        }
+      },
+      "component": "elements.text-list",
+      "repeatable": true
+    },
+    "content": {
+      "type": "text",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "isContent"
+            },
+            true
+          ]
+        }
+      }
+    },
+    "isService": {
+      "type": "boolean",
+      "default": false
+    },
+    "package_list": {
+      "type": "component",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "isService"
+            },
+            true
+          ]
+        }
+      },
+      "component": "elements.package-minimal-card",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

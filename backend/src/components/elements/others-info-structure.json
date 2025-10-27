@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_elements_others_info_structures",
+  "info": {
+    "displayName": "others_info_structure",
+    "icon": "server"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "list": {
+      "type": "component",
+      "component": "elements.text-list",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

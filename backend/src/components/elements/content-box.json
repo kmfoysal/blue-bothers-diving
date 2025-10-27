@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_elements_content_boxes",
+  "info": {
+    "displayName": "Content Box",
+    "icon": "grid"
+  },
+  "options": {},
+  "attributes": {
+    "sub_title": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "text"
+    },
+    "cta": {
+      "type": "component",
+      "component": "elements.link",
+      "repeatable": false
+    }
+  },
+  "config": {}
+}

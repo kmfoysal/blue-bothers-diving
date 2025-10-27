@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_elements_text_lists",
+  "info": {
+    "displayName": "text_list",
+    "icon": "bulletList"
+  },
+  "options": {},
+  "attributes": {
+    "text_list_item": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

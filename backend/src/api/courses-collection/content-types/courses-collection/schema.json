@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "courses_collections",
+  "info": {
+    "singularName": "courses-collection",
+    "pluralName": "courses-collections",
+    "displayName": "Courses collection"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "courses_list": {
+      "type": "component",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "elements.single-course",
+      "repeatable": true
+    }
+  }
+}

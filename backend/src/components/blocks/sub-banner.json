@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_blocks_sub_banners",
+  "info": {
+    "displayName": "Sub Banner",
+    "icon": "landscape"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "background": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    }
+  },
+  "config": {}
+}

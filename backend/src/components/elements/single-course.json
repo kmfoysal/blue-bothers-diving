@@ -1,0 +1,44 @@
+{
+  "collectionName": "components_elements_single_courses",
+  "info": {
+    "displayName": "Single Course",
+    "icon": "folder"
+  },
+  "options": {},
+  "attributes": {
+    "featured_image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "duration": {
+      "type": "string"
+    },
+    "availability": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "price": {
+      "type": "integer",
+      "required": true
+    },
+    "offerPrice": {
+      "type": "integer"
+    },
+    "book_now_cta": {
+      "type": "component",
+      "component": "elements.link",
+      "repeatable": false
+    }
+  },
+  "config": {}
+}

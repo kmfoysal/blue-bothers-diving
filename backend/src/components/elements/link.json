@@ -1,0 +1,34 @@
+{
+  "collectionName": "components_elements_links",
+  "info": {
+    "displayName": "Link",
+    "icon": "link"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "default": "Button"
+    },
+    "href": {
+      "type": "string",
+      "default": "/"
+    },
+    "isExternal": {
+      "type": "boolean",
+      "default": false
+    },
+    "isButtonLink": {
+      "type": "boolean",
+      "default": false
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "primary",
+        "secondary"
+      ]
+    }
+  },
+  "config": {}
+}

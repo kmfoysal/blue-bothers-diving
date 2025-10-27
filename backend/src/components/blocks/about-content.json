@@ -1,0 +1,36 @@
+{
+  "collectionName": "components_blocks_about_contents",
+  "info": {
+    "displayName": "Feature Content",
+    "icon": "layout"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "blocks"
+    },
+    "cta": {
+      "type": "component",
+      "component": "elements.link",
+      "repeatable": false
+    },
+    "section_image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "is_right": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "config": {}
+}

@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_elements_list_items",
+  "info": {
+    "displayName": "list_item",
+    "icon": "layer"
+  },
+  "options": {},
+  "attributes": {
+    "icon": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "sub_title": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

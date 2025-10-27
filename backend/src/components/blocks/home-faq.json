@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_blocks_home_faqs",
+  "info": {
+    "displayName": "Langing Page Faq",
+    "icon": "bulletList"
+  },
+  "options": {},
+  "attributes": {
+    "section_image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "section_heading": {
+      "type": "component",
+      "component": "elements.section-heading",
+      "repeatable": false
+    }
+  },
+  "config": {}
+}

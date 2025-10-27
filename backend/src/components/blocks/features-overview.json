@@ -1,0 +1,98 @@
+{
+  "collectionName": "components_blocks_features_overviews",
+  "info": {
+    "displayName": "Features Overview",
+    "icon": "stack"
+  },
+  "options": {},
+  "attributes": {
+    "isOverview": {
+      "type": "boolean",
+      "default": true
+    },
+    "title": {
+      "type": "string",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "isOverview"
+            },
+            true
+          ]
+        }
+      }
+    },
+    "description": {
+      "type": "text",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "isOverview"
+            },
+            true
+          ]
+        }
+      }
+    },
+    "feature_list": {
+      "type": "component",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "isOverview"
+            },
+            true
+          ]
+        }
+      },
+      "component": "elements.icon-list",
+      "repeatable": true
+    },
+    "package_inclusions": {
+      "type": "component",
+      "component": "elements.package-inclusions-wrapper",
+      "repeatable": true
+    },
+    "condition": {
+      "type": "component",
+      "component": "elements.conditions",
+      "repeatable": false
+    },
+    "is_others_info": {
+      "type": "boolean",
+      "default": true
+    },
+    "others_info_title": {
+      "type": "string",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "is_others_info"
+            },
+            true
+          ]
+        }
+      }
+    },
+    "other_info_content": {
+      "type": "component",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "is_others_info"
+            },
+            true
+          ]
+        }
+      },
+      "component": "elements.others-info-structure",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

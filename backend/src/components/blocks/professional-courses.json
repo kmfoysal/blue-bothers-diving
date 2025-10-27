@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_blocks_professional_courses",
+  "info": {
+    "displayName": "Professional Courses",
+    "icon": "crown"
+  },
+  "options": {},
+  "attributes": {
+    "section_heading": {
+      "type": "component",
+      "component": "elements.section-heading",
+      "repeatable": false
+    }
+  },
+  "config": {}
+}

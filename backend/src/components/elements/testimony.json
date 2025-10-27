@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_elements_testimonies",
+  "info": {
+    "displayName": "Testimony Item",
+    "icon": "landscape"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "rating": {
+      "type": "decimal",
+      "required": true,
+      "min": 1,
+      "max": 5
+    },
+    "designation": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "text",
+      "required": true
+    }
+  },
+  "config": {}
+}

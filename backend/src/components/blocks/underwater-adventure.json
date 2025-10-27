@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_blocks_underwater_adventures",
+  "info": {
+    "displayName": "Underwater Adventure",
+    "icon": "dashboard"
+  },
+  "options": {},
+  "attributes": {
+    "highlight_content": {
+      "type": "component",
+      "component": "elements.content-box",
+      "repeatable": true
+    },
+    "right_content": {
+      "type": "component",
+      "component": "elements.content-box",
+      "repeatable": false
+    }
+  },
+  "config": {}
+}

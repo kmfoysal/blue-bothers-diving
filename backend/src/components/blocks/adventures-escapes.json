@@ -1,0 +1,71 @@
+{
+  "collectionName": "components_blocks_adventures_escapes",
+  "info": {
+    "displayName": "Adventures Escapes",
+    "icon": "plus"
+  },
+  "options": {},
+  "attributes": {
+    "first_title": {
+      "type": "string"
+    },
+    "first_image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "second_title": {
+      "type": "string"
+    },
+    "second_image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "third_title": {
+      "type": "string"
+    },
+    "third_image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "fourth_title": {
+      "type": "string"
+    },
+    "cta": {
+      "type": "component",
+      "component": "elements.link",
+      "repeatable": false
+    },
+    "about_content": {
+      "type": "text"
+    },
+    "about_left_image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "about_right_image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "about_cta": {
+      "type": "component",
+      "component": "elements.link",
+      "repeatable": false
+    }
+  },
+  "config": {}
+}

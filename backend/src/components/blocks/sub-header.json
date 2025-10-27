@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_blocks_sub_headers",
+  "info": {
+    "displayName": "sub_header",
+    "icon": "chartBubble"
+  },
+  "options": {},
+  "attributes": {
+    "sub_title": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "feature_list": {
+      "type": "component",
+      "component": "elements.icon-list",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

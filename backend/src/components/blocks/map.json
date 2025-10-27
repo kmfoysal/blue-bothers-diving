@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_blocks_maps",
+  "info": {
+    "displayName": "Map",
+    "icon": "earth"
+  },
+  "options": {},
+  "attributes": {
+    "map_link": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "config": {}
+}

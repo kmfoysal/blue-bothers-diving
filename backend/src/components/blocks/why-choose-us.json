@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_blocks_why_choose_uses",
+  "info": {
+    "displayName": "Why choose us",
+    "icon": "cup"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "component",
+      "component": "elements.section-heading",
+      "repeatable": false
+    },
+    "cta": {
+      "type": "component",
+      "component": "elements.link",
+      "repeatable": false
+    },
+    "section_img": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  },
+  "config": {}
+}
