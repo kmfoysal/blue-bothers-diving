@@ -4,7 +4,7 @@ import TourGallery from "@/components/TourGallery/TourGallery";
 import { getTourPagesData } from "@/data/tour-loaders";
 
 export async function generateMetadata() {
-    const getOurBoatData = await getAboutPagesData("snorkeling-day-trip");
+    const getOurBoatData = await getTourPagesData("snorkeling-day-trip");
 
     return {
         title: getOurBoatData?.data[0]?.meta_title || "",
