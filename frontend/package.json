@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.6.1",
+    "@react-google-maps/api": "^2.20.7",
     "@strapi/blocks-react-renderer": "^1.0.2",
     "lightgallery": "^2.9.0-beta.1",
     "moment": "^2.30.1",

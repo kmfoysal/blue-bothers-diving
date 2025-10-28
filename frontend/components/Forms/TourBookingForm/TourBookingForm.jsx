@@ -107,7 +107,7 @@ export default function TourBookingForm() {
     };
 
     return (
-        <div>
+        <div className=" sticky top-8">
             <form className="px-3 py-6 md:p-6 border border-neutral-500 rounded-lg">
                 <div className="flex flex-col gap-6">
                     {/* Select Date */}

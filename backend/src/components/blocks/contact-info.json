@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_blocks_contact_infos",
+  "info": {
+    "displayName": "contact_info"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "info_item": {
+      "type": "component",
+      "component": "elements.contact-info-list-item",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

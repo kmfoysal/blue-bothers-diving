@@ -1,234 +1,270 @@
 'use client';
-import Image from 'next/image';
-import { useState, useRef, useEffect } from 'react';
-import React from 'react'
 
-export default function OverviewMap() {
+import { GoogleMap, LoadScript, OverlayView } from '@react-google-maps/api';
+import { useState } from 'react';
 
+// Dive Areas with Coordinates
+const diveAreas = {
+  northern: {
+    name: "Northern Red Sea",
+    locations: [
+      { id: 32, name: "Nebk", lat: 28.05, lng: 34.45 },
+      { id: 2, name: "Nabq", lat: 28.08, lng: 34.50 },
+      { id: 22, name: "Sharm Area", lat: 28.0, lng: 34.48 },
+      { id: 2, name: "Hamid", lat: 27.95, lng: 34.70 },
+      { id: 4, name: "Ras Gasabah", lat: 27.88, lng: 34.68 },
+    ]
+  },
+  central: {
+    name: "Central Red Sea",
+    locations: [
+      { id: 8, name: "Sharm El-Sheikh", lat: 27.91, lng: 34.32 },
+      { id: 69, name: "Imar", lat: 27.88, lng: 34.35 },
+      { id: 55, name: "Tiran Island", lat: 27.93, lng: 34.47 },
+      { id: 6, name: "Sanafir Island", lat: 27.77, lng: 34.73 },
+      { id: 33, name: "Hadaba", lat: 27.85, lng: 34.28 },
+    ]
+  },
+  eastern: {
+    name: "Eastern Coast",
+    locations: [
+      { id: 7, name: "Gayal", lat: 27.97, lng: 35.05 },
+      { id: 29, name: "NEOM", lat: 27.98, lng: 35.15 },
+      { id: 12, name: "Wadi", lat: 27.93, lng: 35.28 },
+      { id: 60, name: "Inounah", lat: 27.90, lng: 35.30 },
+      { id: 44, name: "Alkhurayibah", lat: 27.82, lng: 35.38 },
+    ]
+  },
+};
+
+// All dive sites with coordinates
+const allDiveSites = [
+  // Column 1
+  { name: "Abu Kafan", lat: 26.0, lng: 34.5 },
+  { name: "Abu Soma Garden", lat: 26.1, lng: 34.6 },
+  { name: "Arpha Bank", lat: 26.2, lng: 34.7 },
+  { name: "Azra", lat: 26.3, lng: 34.8 },
+  { name: "Cannon Reef", lat: 26.4, lng: 34.9 },
+  { name: "Shaab Salman", lat: 26.5, lng: 35.0 },
+  { name: "Shaab Salman Garden", lat: 26.6, lng: 35.1 },
+  { name: "Shaab Shaali", lat: 26.7, lng: 35.2 },
+  { name: "Tobia Kebir", lat: 26.8, lng: 35.3 },
+  { name: "Shaab Shear", lat: 26.9, lng: 35.4 },
+  
+  // Column 2
+  { name: "DDC Bank", lat: 27.0, lng: 34.4 },
+  { name: "Gamul Kebir", lat: 27.1, lng: 34.5 },
+  { name: "Gamul Soraya", lat: 27.2, lng: 34.6 },
+  { name: "Gassous Bay", lat: 27.3, lng: 34.7 },
+  { name: "Green Hole", lat: 27.4, lng: 34.8 },
+  { name: "House Reef Coral Garden", lat: 27.5, lng: 34.9 },
+  { name: "Shaab Shear Soraya", lat: 27.7, lng: 35.1 },
+  { name: "Shaab Tobia Arba", lat: 27.8, lng: 35.2 },
+  { name: "Umm Hal Hal", lat: 27.9, lng: 35.3 },
+  { name: "Shaab Tobia Soraya", lat: 28.0, lng: 35.4 },
+  
+  // Column 3
+  { name: "Middle Reef", lat: 28.0, lng: 34.4 },
+  { name: "Panorama Reef", lat: 28.1, lng: 34.5 },
+  { name: "Ras Abu Soma", lat: 28.2, lng: 34.6 },
+  { name: "Ras Dudi", lat: 28.3, lng: 34.7 },
+  { name: "Ras Gazira", lat: 28.4, lng: 34.8 },
+  { name: "Ras Umm Hesiwa", lat: 28.5, lng: 34.9 },
+  { name: "Sharm El Naga", lat: 28.7, lng: 35.1 },
+  { name: "Soma Bay", lat: 28.8, lng: 35.2 },
+  { name: "Umm Uruk", lat: 28.9, lng: 35.3 },
+  { name: "Split Reef", lat: 29.0, lng: 35.4 },
+  
+  // Column 4
+  { name: "Safaga Island", lat: 26.7, lng: 33.9 },
+  { name: "Seven Pillars", lat: 26.8, lng: 34.0 },
+  { name: "Shaab Bagui", lat: 26.9, lng: 34.1 },
+  { name: "Shaab Ciaude", lat: 27.0, lng: 34.2 },
+  { name: "Shaab Hamdalah", lat: 27.1, lng: 34.3 },
+  { name: "Shaab Quais", lat: 27.2, lng: 34.4 },
+  { name: "Tobia Hamra", lat: 27.4, lng: 34.6 },
+  { name: "Tobia Island", lat: 27.5, lng: 34.7 },
+  { name: "Zabil", lat: 27.6, lng: 34.8 },
+  { name: "Azra", lat: 27.7, lng: 34.9 },
+];
+
+// Organize into columns for display
+const diveSitesList = [
+  allDiveSites.slice(0, 10),   // Column 1
+  allDiveSites.slice(10, 20),  // Column 2
+  allDiveSites.slice(20, 30),  // Column 3
+  allDiveSites.slice(30, 40),  // Column 4
+];
+
+// Custom Numbered Marker
+function CustomMarker({ location, onClick }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <OverlayView
+      position={{ lat: location.lat, lng: location.lng }}
+      mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+    >
+      <div
+        onClick={onClick}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer"
+      >
+        <div
+          className={`
+            ${isHovered ? 'bg-blue-600 scale-110' : 'neutral-950'}
+            text-white w-11 h-11 rounded-full
+            flex items-center justify-center
+            font-bold text-sm
+            border-3 border-white shadow-lg bg-neutral-950
+            transition-all duration-300 ease-in-out
+          `}
+        >
+          {location.id}
+        </div>
+      </div>
+    </OverlayView>
+  );
+}
+
+export default function DiveMapTailwind() {
+  const [map, setMap] = useState(null);
+  const [center] = useState({ lat: 27.9, lng: 34.6 });
+  const [zoom] = useState(10);
   const [selectedSite, setSelectedSite] = useState(null);
-  const [zoom, setZoom] = useState(1);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
-  const mapRef = useRef(null);
 
-  // Dive sites data with coordinates
-  const diveSites = [
-    { id: 1, name: 'Abu Kafan', number: '32', x: 15, y: 15, region: 'Nabq' },
-    { id: 2, name: 'Abu Soma Garden', number: '02', x: 18, y: 22, region: 'Nabq' },
-    { id: 3, name: 'Arpha Bank', number: '22', x: 25, y: 28, region: 'Nabq' },
-    { id: 4, name: 'Azra', number: '08', x: 12, y: 42, region: 'Sharm El Sheikh' },
-    { id: 5, name: 'Cannon Reef', number: '69', x: 18, y: 42, region: 'Imar' },
-    { id: 6, name: 'Shaab Salman', number: '33', x: 8, y: 68, region: 'Hadaba' },
-    { id: 7, name: 'Shaab Salman Garden', number: '02', x: 42, y: 8, region: 'Hamid' },
-    { id: 8, name: 'Shaab Shaali', number: '04', x: 43, y: 21, region: 'Ras Qasabah' },
-    { id: 9, name: 'Tobia Kebir', number: '55', x: 33, y: 48, region: 'Tiran Island' },
-    { id: 10, name: 'DDC Bank', number: '06', x: 52, y: 48, region: 'Sanafir Island' },
-    { id: 11, name: 'Gamul Kebir', number: '07', x: 92, y: 7, region: 'Gayal' },
-    { id: 12, name: 'Gamul Soraya', number: '29', x: 103, y: 9, region: 'Neom Community-1' },
-    { id: 13, name: 'Gassous Bay', number: '12', x: 112, y: 11, region: 'Wadi Jnoubah' },
-    { id: 14, name: 'Green Hole', number: '60', x: 115, y: 19, region: 'Wadi Jnoubah' },
-    { id: 15, name: 'House Reef Coral Garden', number: '44', x: 118, y: 28, region: 'Alkhurayba' },
-    { id: 16, name: 'Shaab Shear', number: null, x: 120, y: 35, region: 'Sharma' },
-    { id: 17, name: 'Shaab Shear Soraya', number: null, x: 95, y: 40, region: null },
-    { id: 18, name: 'Shaab Tobia Arba', number: null, x: 75, y: 45, region: null },
-    { id: 19, name: 'Umm Hal Hal', number: null, x: 65, y: 50, region: null },
-    { id: 20, name: 'Middle Reef', number: null, x: 55, y: 55, region: null },
-    { id: 21, name: 'Panorama Reef', number: null, x: 45, y: 60, region: null },
-    { id: 22, name: 'Ras Abu Soma', number: null, x: 35, y: 65, region: null },
-    { id: 23, name: 'Ras Dudi', number: null, x: 25, y: 70, region: null },
-    { id: 24, name: 'Ras Gazira', number: null, x: 50, y: 75, region: null },
-    { id: 25, name: 'Ras Umm Hesiwa', number: null, x: 60, y: 65, region: null },
-    { id: 26, name: 'Shaab Tobia Soraya', number: null, x: 70, y: 55, region: null },
-    { id: 27, name: 'Sharm El Naga', number: null, x: 80, y: 45, region: null },
-    { id: 28, name: 'Soma Bay', number: null, x: 85, y: 50, region: null },
-    { id: 29, name: 'Umm Uruk', number: null, x: 75, y: 60, region: null },
-    { id: 30, name: 'Safaga Island', number: null, x: 90, y: 55, region: null },
-    { id: 31, name: 'Seven Pillars', number: null, x: 95, y: 60, region: null },
-    { id: 32, name: 'Shaab Bagui', number: null, x: 100, y: 65, region: null },
-    { id: 33, name: 'Shaab Claude', number: null, x: 105, y: 70, region: null },
-    { id: 34, name: 'Shaab Hamdalah', number: null, x: 85, y: 75, region: null },
-    { id: 35, name: 'Shaab Quais', number: null, x: 70, y: 80, region: null },
-    { id: 36, name: 'Split Reef', number: null, x: 60, y: 85, region: null },
-    { id: 37, name: 'Tobia Hamra', number: null, x: 50, y: 90, region: null },
-    { id: 38, name: 'Tobia Island', number: null, x: 40, y: 85, region: null },
-    { id: 39, name: 'Zabil', number: null, x: 30, y: 80, region: null },
-  ];
+  const mapOptions = {
+    mapTypeControl: true,
+    streetViewControl: false,
+    fullscreenControl: true,
+    zoomControl: true,
+    styles: [
+      {
+        featureType: 'water',
+        elementType: 'geometry',
+        stylers: [{ color: '#a2daf2' }],
+      },
+      {
+        featureType: 'landscape',
+        elementType: 'geometry',
+        stylers: [{ color: '#d4e8c1' }],
+      },
+    ],
+  };
 
-  // Menu items organized in columns
-  const menuColumns = [
-    [
-      'Abu Kafan',
-      'Abu Soma Garden',
-      'Arpha Bank',
-      'Azra',
-      'Azra',
-      'Cannon Reef',
-      'Shaab Salman',
-      'Shaab Salman Garden',
-      'Shaab Shaali',
-      'Tobia Kebir',
-    ],
-    [
-      'DDC Bank',
-      'Gamul Kebir',
-      'Gamul Soraya',
-      'Gassous Bay',
-      'Green Hole',
-      'House Reef Coral Garden',
-      'Shaab Shear',
-      'Shaab Shear Soraya',
-      'Shaab Tobia Arba',
-      'Umm Hal Hal',
-    ],
-    [
-      'Middle Reef',
-      'Panorama Reef',
-      'Ras Abu Soma',
-      'Ras Dudi',
-      'Ras Gazira',
-      'Ras Umm Hesiwa',
-      'Shaab Tobia Soraya',
-      'Sharm El Naga',
-      'Soma Bay',
-      'Umm Uruk',
-    ],
-    [
-      'Safaga Island',
-      'Seven Pillars',
-      'Shaab Bagui',
-      'Shaab Claude',
-      'Shaab Hamdalah',
-      'Shaab Quais',
-      'Split Reef',
-      'Tobia Hamra',
-      'Tobia Island',
-      'Zabil',
-    ],
-  ];
-
-  const handleSiteClick = (siteName) => {
-    const site = diveSites.find((s) => s.name === siteName);
-    if (site) {
-      setSelectedSite(site);
-      setZoom(3);
-      // Center the map on the selected site
-      setPan({
-        x: -(site.x * 3 - 50),
-        y: -(site.y * 3 - 50),
-      });
+  const handleMarkerClick = (location) => {
+    if (map) {
+      map.panTo({ lat: location.lat, lng: location.lng });
+      map.setZoom(13);
+      setSelectedSite(location.name);
+      setTimeout(() => setSelectedSite(null), 2000);
     }
   };
 
-  const handleZoomOut = () => {
-    setZoom(1);
-    setPan({ x: 0, y: 0 });
-    setSelectedSite(null);
+  const handleSiteClick = (site) => {
+    if (map) {
+      map.panTo({ lat: site.lat, lng: site.lng });
+      
+      const targetZoom = 14;
+      const currentZoom = map.getZoom();
+      
+      if (Math.abs(currentZoom - targetZoom) > 3) {
+        const zoomStep = currentZoom < targetZoom ? 1 : -1;
+        let steps = Math.abs(currentZoom - targetZoom);
+        let currentStep = 0;
+        
+        const zoomInterval = setInterval(() => {
+          currentStep++;
+          const newZoom = currentZoom + (zoomStep * currentStep);
+          map.setZoom(newZoom);
+          
+          if (currentStep >= steps) {
+            clearInterval(zoomInterval);
+          }
+        }, 100);
+      } else {
+        map.setZoom(targetZoom);
+      }
+      
+      setSelectedSite(site.name);
+      setTimeout(() => setSelectedSite(null), 3000);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   return (
-    <div className='md:pt-28 pt-10'>
-      <div className=' text-neutral-950 max-w-[990px] w-full mx-auto px-4 text-center md:pb-28 pb-6'>
-        <h1 className=' md:text-xl text-ml font-bold leading-xl tracking-xs md:mb-3 mb-1'>Overview Map</h1>
-        <p className=' text-neutral-500 text-xs md:text-sm font-medium'>Discover the underwater world of the Red Sea from the water surface</p>
+    <div className="w-full min-h-screen bg-white">
+      {/* MAP SECTION */}
+      <div className="w-full h-[500px] relative">
+        <LoadScript 
+          googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API || 'AIzaSyD7paxRNSEwHA2CoFCwk6fQzwh-kBxIF4o'}
+          loadingElement={
+            <div className="h-full flex items-center justify-center bg-neutral-950">
+              <div className="text-center">
+                <div className="w-10 h-10 border-3 border-gray-300 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
+                <p className="text-gray-600">Loading map...</p>
+              </div>
+            </div>
+          }
+        >
+          <GoogleMap
+            mapContainerClassName="w-full h-full"
+            center={center}
+            zoom={zoom}
+            onLoad={setMap}
+            options={mapOptions}
+          >
+            {map && Object.values(diveAreas).map((area) =>
+              area.locations.map((location, idx) => (
+                <CustomMarker
+                  key={`${location.id}-${idx}`}
+                  location={location}
+                  onClick={() => handleMarkerClick(location)}
+                />
+              ))
+            )}
+          </GoogleMap>
+        </LoadScript>
       </div>
 
-      <div className="flex flex-col ">
-        {/* Map Container */}
-        <div className="flex-1 relative overflow-hidden max-h-[600px] bg-gray-100">
-          <div
-            ref={mapRef}
-            className="w-full h-full relative"
-            style={{
-              transform: `scale(${zoom}) translate(${pan.x}px, ${pan.y}px)`,
-              transition: 'transform 0.5s ease-in-out',
-            }}
-          >
-            {/* Map Image Background */}
-            <div className="relative w-full h-full md:min-h-[600px] min-h-[360px]">
+      {/* DIVE SITES LIST SECTION */}
+      <div className="w-full py-10 px-5 md:py-16 md:px-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="mb-8">
+            <h2 className="text-sm leading-md tracking-xs text-neutral-950 pb-3 border-b border-neutral-300 mb-2">
+              Red Sea Dive sites | Dive Map of
+            </h2>
+          </div>
 
-              <Image
-                                                  src={"/images/amp.avif"
-                                                  }
-                                                  alt="image"
-                                                  width={1920}
-                                                  height={783}
-                                                  className="inline-block object-cover w-full h-full md:min-h-[600px] min-h-[360px]"
-                                              />              
-              {/* Dive Site Markers - Positioned over the image */}
-              <div className="absolute inset-0">
-                {diveSites.map((site) => (
+          {/* Sites Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+            {diveSitesList.map((column, colIndex) => (
+              <div key={colIndex} className="flex flex-col">
+                {column.map((site, siteIndex) => (
                   <div
-                    key={site.id}
-                    className="absolute cursor-pointer transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 hover:scale-110"
-                    style={{
-                      left: `${site.x}%`,
-                      top: `${site.y}%`,
-                    }}
-                    onClick={() => handleSiteClick(site.name)}
+                    key={siteIndex}
+                    onClick={() => handleSiteClick(site)}
+                    className={`
+                      py-2.5 px-3 text-sm
+                      ${siteIndex < column.length - 1 ? '' : ''}
+                      cursor-pointer rounded
+                      transition-all duration-200 ease-in-out
+                      ${selectedSite === site.name 
+                        ? 'bg-blue-600 text-white font-semibold shadow-lg scale-[1.02]' 
+                        : ' hover:text-neutral-950 hover:bg-blue-50 hover:translate-x-1'
+                      }
+                    `}
                   >
-                    {zoom === 1 && site.number ? (
-                      // Show numbers when zoomed out
-                      <div className="bg-gray-700 text-white rounded-full w-10 h-10 flex items-center justify-center text-sm font-bold shadow-lg border-2 border-white">
-                        {site.number}
-                      </div>
-                    ) : zoom > 1 && selectedSite?.id === site.id ? (
-                      // Show detailed info when zoomed in and selected
-                      <div className="bg-white rounded-lg shadow-xl p-3 min-w-[120px] border-2 border-blue-500">
-                        <div className="text-xs font-bold text-gray-800 mb-1">{site.name}</div>
-                        {site.region && (
-                          <div className="text-xs text-gray-600">{site.region}</div>
-                        )}
-                        {site.number && (
-                          <div className="text-xs text-blue-600 mt-1">Site #{site.number}</div>
-                        )}
-                      </div>
-                    ) : (
-                      // Show dot for other sites when zoomed in
-                      <div className="w-3 h-3 bg-blue-500 rounded-full border-2 border-white shadow"></div>
-                    )}
+                    {site.name}
                   </div>
                 ))}
               </div>
-            </div>
-          </div>
-
-          {/* Zoom Controls */}
-          {zoom > 1 && (
-            <button
-              onClick={handleZoomOut}
-              className="absolute top-4 right-4 bg-white px-4 py-2 rounded-lg shadow-lg hover:bg-gray-100 transition-colors font-medium text-sm z-10"
-            >
-              ← Zoom Out
-            </button>
-          )}
-        </div>
-
-        {/* Bottom Menu */}
-        <div className="bg-white pb-28">
-          <div className="container mx-auto px-4 py-6">
-            <h2 className=" text-sm font-semiBold leading-md tracking-xs py-4 mb-4 border-b border-neutral-300">
-              Red Sea Dive sites | Dive Map of
-            </h2>
-            <div className="grid md:grid-cols-4 grid-cols-2 gap-6">
-              {menuColumns.map((column, colIndex) => (
-                <div key={colIndex} className="space-y-2">
-                  {column.map((siteName, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleSiteClick(siteName)}
-                      className={`w-full text-left px-3 py-2 rounded transition-colors text-xs leading-xs ${
-                        selectedSite?.name === siteName
-                          ? 'bg-neutral-900 text-white font-semibold text-xs leading-xs'
-                          : 'hover:bg-gray-100 text-gray-700'
-                      }`} >
-                      {siteName}
-                    </button>
-                  ))}
-                </div>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

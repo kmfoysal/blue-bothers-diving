@@ -61,7 +61,8 @@
         "blocks.about-content",
         "blocks.gallery",
         "blocks.map",
-        "blocks.features-overview"
+        "blocks.features-overview",
+        "blocks.contact-info"
       ]
     }
   }

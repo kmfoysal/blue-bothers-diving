@@ -31,6 +31,22 @@ const divingData = {
             id: 4,
             heading: "Early Bird Price",
             days: "from 10 diving days",
+            description: "incl. 2 dives per day",
+            onSitePrice: "87 €",
+            earlyBirdPrice: "82 €",
+        },
+        {
+            id: 5,
+            heading: "Early Bird Price",
+            days: "from 10 diving days",
+            description: "",
+            onSitePrice: "87 €",
+            earlyBirdPrice: "82 €",
+        },
+        {
+            id: 6,
+            heading: "Early Bird Price",
+            days: "from 10 diving days",
             description: "",
             onSitePrice: "87 €",
             earlyBirdPrice: "82 €",
@@ -39,6 +55,15 @@ const divingData = {
 };
 
 export default function DivingTab() {
+
+
+    const uniqueHeadings = [...new Set(
+        divingData.packages
+            .map(item => item.heading)
+            .filter(h => h !== "")
+    )];
+
+    const tableHeaders = ["", "", ...uniqueHeadings];
     return (
         <main>
             {/* Header */}
@@ -64,50 +89,99 @@ export default function DivingTab() {
                 <h3 className="text-md leading-ml uppercase tracking-xs font-semiBold text-neutral-900 mb-1">
                     Full day diving trips
                 </h3>
-                <p className="text-xs leading-xs italic text-neutral-500 font-default">
+                <p className="text-xs leading-xs italic text-neutral-500 font-default mb-4">
                     Price per day
                 </p>
 
                 {/* Table */}
                 <div className="">
-                    {/* For Desktop version */}
-                    <table className="w-full mt-4 border-separate price-table rounded-lg overflow-hidden">
-                        <thead>
-                            <tr className="text-neutral-900 text-3xs md:text-2xs leading-xs font-medium tracking-md bg-blue-50">
-                                {divingData.packages.map((packageData) => (
-                                    <th
-                                        key={packageData.id}
-                                        className="text-left p-4"
+                    {/* Desktop Table Layout - Hidden on mobile */}
+                    <div className="hidden md:block">
+                        <table className="w-full border-separate price-table rounded-lg overflow-hidden">
+                            <thead>
+                                <tr className="text-neutral-900 bg-blue-50">
+                                    {tableHeaders.map((heading, index) => (
+                                        <th
+                                            key={index}
+                                            className={` ${heading === ""
+                                                    ? "bg-gray-100"
+                                                    : "text-2xs leading-xs font-medium tracking-md text-left p-4"
+                                                }`}
+                                        >
+                                            {heading}
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {divingData.packages.map((item, index) => (
+                                    <tr
+                                        key={index}
+                                        className={index % 2 === 0 ? 'bg-blue-100' : 'bg-blue-50'}
                                     >
-                                        {packageData.heading}
-                                    </th>
+                                        <td className="py-4 px-6 text-2xs leading-xs font-medium tracking-md">
+                                            {item.days}
+                                        </td>
+                                        <td className="py-4 px-6 text-2xs leading-xs font-medium tracking-md">
+                                            {item.description}
+                                        </td>
+                                        <td className="py-4 px-6 text-2xs leading-xs font-medium tracking-md">
+                                            {item.onSitePrice}
+                                        </td>
+                                        <td className="py-4 px-6 text-2xs leading-xs font-medium tracking-md">
+                                            {item.earlyBirdPrice}
+                                        </td>
+                                    </tr>
                                 ))}
-                            </tr>
-                        </thead>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* For Mobile version */}
+                    <table className="md:hidden w-full mt-4 border-separate price-table rounded-md overflow-hidden">
                         <tbody>
-                            {divingData.packages.map((packageData) => (
+                            {divingData.packages.map((packageData, index) => (
                                 <tr
                                     key={packageData.id}
-                                    className="text-neutral-500 text-3xs md:text-xs leading-3xs md:leading-xs font-medium tracking-xs"
-                                >
-                                    <td className="p-4 text-neutral-900">
-                                        {packageData.days}
+                                    className={`${index % 2 === 0 ? "bg-blue-50" : "bg-neutral-50"
+                                        }`}>
+                                    {/* Left Column - Days and Description */}
+                                    <td className="p-4 align-top">
+                                        <div className="text-neutral-900 text-2xs leading-xs font-semibold mb-1">
+                                            {packageData.days}
+                                        </div>
+                                        {packageData.description && (
+                                            <div className="text-neutral-900 text-2xs leading-xs font-medium">
+                                                {packageData.description}
+                                            </div>
+                                        )}
                                     </td>
-                                    <td className="p-4 text-neutral-900">
-                                        {packageData.description}
-                                    </td>
-                                    <td className="p-4 text-neutral-900">
-                                        {packageData.onSitePrice}
-                                    </td>
-                                    <td className="p-4 text-neutral-900">
-                                        {packageData.earlyBirdPrice}
+
+                                    {/* Right Column - Price Labels and Values */}
+                                    <td className="p-4 align-top">
+                                        <div className="space-y-2">
+                                            <div className="flex justify-between items-center gap-4">
+                                                <span className="text-neutral-900 text-2xs leading-xs font-medium whitespace-nowrap">
+                                                    On-Site Price
+                                                </span>
+                                                <span className="text-neutral-900 text-2xs leading-xs font-semibold">
+                                                    {packageData.onSitePrice}
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between items-center gap-4">
+                                                <span className="text-neutral-900 text-2xs leading-xs font-medium whitespace-nowrap">
+                                                    Early Bird Price
+                                                </span>
+                                                <span className="text-neutral-900 text-2xs leading-xs font-semibold">
+                                                    {packageData.earlyBirdPrice}
+                                                </span>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
-
-                    {/* For Mobile version */}
                 </div>
 
                 <p className="text-xs leading-xs italic text-neutral-500 font-default mt-4">

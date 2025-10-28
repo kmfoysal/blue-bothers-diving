@@ -412,6 +412,40 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiContactFormsDataContactFormsData
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'contact_form_data';
+  info: {
+    displayName: 'Contact Form Data';
+    pluralName: 'contact-form-data';
+    singularName: 'contact-forms-data';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    agree_privacy_policy: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email & Schema.Attribute.Required;
+    first_name: Schema.Attribute.String & Schema.Attribute.Required;
+    last_name: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::contact-forms-data.contact-forms-data'
+    > &
+      Schema.Attribute.Private;
+    message: Schema.Attribute.Text & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    received_newsletter: Schema.Attribute.Boolean;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiCoursesCollectionCoursesCollection
   extends Struct.CollectionTypeSchema {
   collectionName: 'courses_collections';
@@ -780,6 +814,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         'blocks.gallery',
         'blocks.map',
         'blocks.features-overview',
+        'blocks.contact-info',
       ]
     > &
       Schema.Attribute.SetPluginOptions<{
@@ -1908,6 +1943,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::category.category': ApiCategoryCategory;
+      'api::contact-forms-data.contact-forms-data': ApiContactFormsDataContactFormsData;
       'api::courses-collection.courses-collection': ApiCoursesCollectionCoursesCollection;
       'api::diving-page.diving-page': ApiDivingPageDivingPage;
       'api::faq.faq': ApiFaqFaq;

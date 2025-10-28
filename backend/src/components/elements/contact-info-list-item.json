@@ -1,0 +1,43 @@
+{
+  "collectionName": "components_elements_contact_info_list_items",
+  "info": {
+    "displayName": "contact_info_list_item",
+    "icon": "collapse"
+  },
+  "options": {},
+  "attributes": {
+    "icon": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "label": {
+      "type": "string"
+    },
+    "info": {
+      "type": "string"
+    },
+    "isLink": {
+      "type": "boolean",
+      "default": false
+    },
+    "info_link": {
+      "type": "component",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "isLink"
+            },
+            true
+          ]
+        }
+      },
+      "component": "elements.link",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

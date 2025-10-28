@@ -53,6 +53,21 @@ export interface BlocksBannerSlider extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksContactInfo extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_contact_infos';
+  info: {
+    displayName: 'contact_info';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    info_item: Schema.Attribute.Component<
+      'elements.contact-info-list-item',
+      true
+    >;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface BlocksDiscoverScuba extends Struct.ComponentSchema {
   collectionName: 'components_blocks_discover_scubas';
   info: {
@@ -236,6 +251,21 @@ export interface ElementsConditions extends Struct.ComponentSchema {
       Schema.Attribute.DefaultTo<false>;
     list: Schema.Attribute.Component<'elements.list-item', true>;
     title: Schema.Attribute.String;
+  };
+}
+
+export interface ElementsContactInfoListItem extends Struct.ComponentSchema {
+  collectionName: 'components_elements_contact_info_list_items';
+  info: {
+    displayName: 'contact_info_list_item';
+    icon: 'collapse';
+  };
+  attributes: {
+    icon: Schema.Attribute.Media<'images'>;
+    info: Schema.Attribute.String;
+    info_link: Schema.Attribute.Component<'elements.link', true>;
+    isLink: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    label: Schema.Attribute.String;
   };
 }
 
@@ -520,6 +550,7 @@ declare module '@strapi/strapi' {
       'blocks.about-content': BlocksAboutContent;
       'blocks.adventures-escapes': BlocksAdventuresEscapes;
       'blocks.banner-slider': BlocksBannerSlider;
+      'blocks.contact-info': BlocksContactInfo;
       'blocks.discover-scuba': BlocksDiscoverScuba;
       'blocks.features': BlocksFeatures;
       'blocks.features-overview': BlocksFeaturesOverview;
@@ -533,6 +564,7 @@ declare module '@strapi/strapi' {
       'blocks.underwater-adventure': BlocksUnderwaterAdventure;
       'blocks.why-choose-us': BlocksWhyChooseUs;
       'elements.conditions': ElementsConditions;
+      'elements.contact-info-list-item': ElementsContactInfoListItem;
       'elements.content-box': ElementsContentBox;
       'elements.footer-widget': ElementsFooterWidget;
       'elements.icon-list': ElementsIconList;

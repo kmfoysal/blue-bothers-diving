@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "contact_form_data",
+  "info": {
+    "singularName": "contact-forms-data",
+    "pluralName": "contact-form-data",
+    "displayName": "Contact Form Data"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "first_name": {
+      "type": "string",
+      "required": true
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "message": {
+      "type": "text",
+      "required": true
+    },
+    "agree_privacy_policy": {
+      "type": "boolean",
+      "required": true
+    },
+    "received_newsletter": {
+      "type": "boolean"
+    }
+  }
+}

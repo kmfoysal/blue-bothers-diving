@@ -99,6 +99,20 @@ export const getAboutPagesData = cache(async (slug) => {
                             },
                         },
                     },
+                    "blocks.contact-info": {
+                        populate: {
+                            info_item: {
+                                populate: {
+                                    icon: {
+                                        fields: ["url", "alternativeText"],
+                                    },
+                                    info_link: {
+                                        populate: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
                     "blocks.gallery": {
                         populate: {
                             gallery_image: {
