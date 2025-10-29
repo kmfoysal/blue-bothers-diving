@@ -196,7 +196,7 @@ export default function DiveMapTailwind() {
   return (
     <div className="w-full min-h-screen bg-white">
       {/* MAP SECTION */}
-      <div className="w-full h-[500px] relative">
+      <div className="w-full h-[400px] md:h-[600px] lg:h-[784px] relative">
         <LoadScript 
           googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API || 'AIzaSyD7paxRNSEwHA2CoFCwk6fQzwh-kBxIF4o'}
           loadingElement={

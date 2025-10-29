@@ -42,12 +42,7 @@ export default function ContactForm() {
                         We will get back to you quickly
                     </p>
 
-                    {/* Success/Error Messages */}
-                    {successMessage && (
-                        <div className="mt-4 p-4 bg-green-50 border border-green-300 text-green-700 rounded-lg">
-                            {successMessage}
-                        </div>
-                    )}
+                    {/* Error Messages Only */}
                     {(errorMessage || strapiErrors) && (
                         <div className="mt-4 p-4 bg-red-50 border border-red-300 text-red-700 rounded-lg">
                             {errorMessage || strapiErrors}
@@ -294,6 +289,13 @@ export default function ContactForm() {
                 >
                     Submit Now
                 </button>
+
+                {/* Success Message */}
+                {successMessage && (
+                    <div className="mt-4 p-4 bg-green-50 border border-green-300 text-green-700 rounded-lg">
+                        {successMessage}
+                    </div>
+                )}
             </form>
         </div>
     );

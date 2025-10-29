@@ -18,7 +18,7 @@ export default function TeamCard({ memberData }) {
             {/* Content */}
             <div className="p-2 text-center">
                 {/* Name */}
-                <h3 className="text-ml leading-ml font-semiBold tracking-xs text-neutral-900">
+                <h3 className="text-ml leading-ml font-semiBold tracking-xs text-neutral-900 mt-4">
                     {name}
                 </h3>
                 {/* Designation */}
@@ -50,7 +50,7 @@ export default function TeamCard({ memberData }) {
                                 alt={social?.image?.alternativeText}
                                 width={14}
                                 height={14}
-                                className="transition-colors duration-200 group-hover:fill-blue-700"
+                                className="transition-colors duration-200 group-hover:fill-blue-700 filter group-hover:[filter:invert(72.08%)_grayscale(73.22%)_sepia(31.95%)_saturate(1022.89%)_hue-rotate(173.45deg)_brightness(1.37305)_contrast(0.91415)]"
                             />
                         </Link>
                     ))}
