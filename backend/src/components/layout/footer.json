@@ -18,6 +18,11 @@
       "component": "elements.footer-widget",
       "repeatable": true
     },
+    "contact_info": {
+      "type": "component",
+      "component": "elements.contact-info-list-item",
+      "repeatable": true
+    },
     "copyright": {
       "type": "text"
     },

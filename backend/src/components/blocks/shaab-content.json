@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_blocks_shaab_contents",
+  "info": {
+    "displayName": "Shaab content",
+    "icon": "cast"
+  },
+  "options": {},
+  "attributes": {
+    "content": {
+      "type": "component",
+      "component": "elements.shaab-content-item",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

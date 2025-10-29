@@ -815,6 +815,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         'blocks.map',
         'blocks.features-overview',
         'blocks.contact-info',
+        'blocks.shaab-content',
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

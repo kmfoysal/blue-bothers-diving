@@ -123,6 +123,17 @@ export const getAboutPagesData = cache(async (slug) => {
                     "blocks.map": {
                         populate: true,
                     },
+                    "blocks.shaab-content": {
+                        populate: {
+                            content: {
+                                populate: {
+                                    icon: {
+                                        fields: ["url", "alternativeText"],
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },

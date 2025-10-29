@@ -171,6 +171,17 @@ export interface BlocksProfessionalCourses extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksShaabContent extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_shaab_contents';
+  info: {
+    displayName: 'Shaab content';
+    icon: 'cast';
+  };
+  attributes: {
+    content: Schema.Attribute.Component<'elements.shaab-content-item', true>;
+  };
+}
+
 export interface BlocksSubBanner extends Struct.ComponentSchema {
   collectionName: 'components_blocks_sub_banners';
   info: {
@@ -447,6 +458,22 @@ export interface ElementsSectionHeading extends Struct.ComponentSchema {
   };
 }
 
+export interface ElementsShaabContentItem extends Struct.ComponentSchema {
+  collectionName: 'components_elements_shaab_content_items';
+  info: {
+    displayName: 'Shaab content Item';
+    icon: 'play';
+  };
+  attributes: {
+    content: Schema.Attribute.Text;
+    description: Schema.Attribute.Blocks;
+    icon: Schema.Attribute.Media<'images'>;
+    isDescription: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    isFluid: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface ElementsSingleCourse extends Struct.ComponentSchema {
   collectionName: 'components_elements_single_courses';
   info: {
@@ -524,6 +551,10 @@ export interface LayoutFooter extends Struct.ComponentSchema {
     displayName: 'Footer';
   };
   attributes: {
+    contact_info: Schema.Attribute.Component<
+      'elements.contact-info-list-item',
+      true
+    >;
     copyright: Schema.Attribute.Text;
     description: Schema.Attribute.Text;
     footerBottomLinks: Schema.Attribute.Component<'elements.link', true>;
@@ -558,6 +589,7 @@ declare module '@strapi/strapi' {
       'blocks.home-faq': BlocksHomeFaq;
       'blocks.map': BlocksMap;
       'blocks.professional-courses': BlocksProfessionalCourses;
+      'blocks.shaab-content': BlocksShaabContent;
       'blocks.sub-banner': BlocksSubBanner;
       'blocks.sub-header': BlocksSubHeader;
       'blocks.testimonial': BlocksTestimonial;
@@ -578,6 +610,7 @@ declare module '@strapi/strapi' {
       'elements.package-inclusions-wrapper': ElementsPackageInclusionsWrapper;
       'elements.package-minimal-card': ElementsPackageMinimalCard;
       'elements.section-heading': ElementsSectionHeading;
+      'elements.shaab-content-item': ElementsShaabContentItem;
       'elements.single-course': ElementsSingleCourse;
       'elements.testimony': ElementsTestimony;
       'elements.text-list': ElementsTextList;

@@ -58,8 +58,6 @@ export default async function OurBoatPage() {
     
     const getOurBoatData = await getAboutPagesData("our-boat");
 
-    console.log("Our Boat page data:", getOurBoatData?.data[0]?.meta_title);
-
     return (
         <main>
             <SubPageBanner

@@ -59,8 +59,6 @@ export default async function OurDiveCenterPage() {
     // Testimonial section heading data fetch
     const getOurDiveCenterData = await getAboutPagesData("our-dive-center");
 
-    const filterContent =
-        getOurDiveCenterData?.data[0]?.blocks[2]?.gallery_image;
 
     return (
         <main>

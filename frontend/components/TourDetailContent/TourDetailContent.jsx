@@ -122,11 +122,6 @@ export default function TourDetailContent({ data, overviewFeatures }) {
                         <div className="mt-4">
                             {condition?.isConditionContent ? (
                                 <>
-                                    {/* <p className="text-2xs sm:text-xs leading-2xs sm:leading-xs text-neutral-500 mb-4">
-                                        {condition?.content ||
-                                            "Default Content"}
-                                    </p> */}
-
                                     <BlockRendererClient
                                         content={condition?.condition_content}
                                     />
