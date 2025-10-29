@@ -816,6 +816,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         'blocks.features-overview',
         'blocks.contact-info',
         'blocks.shaab-content',
+        'blocks.pricing-list-tab',
       ]
     > &
       Schema.Attribute.SetPluginOptions<{
@@ -849,6 +850,43 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID &
       Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiPricingRowPricingRow extends Struct.SingleTypeSchema {
+  collectionName: 'pricing_rows';
+  info: {
+    displayName: 'Pricing row';
+    pluralName: 'pricing-rows';
+    singularName: 'pricing-row';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::pricing-row.pricing-row'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    row: Schema.Attribute.Component<'elements.pricing-row-item', true> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -1953,6 +1991,7 @@ declare module '@strapi/strapi' {
       'api::language.language': ApiLanguageLanguage;
       'api::newsletter-signup.newsletter-signup': ApiNewsletterSignupNewsletterSignup;
       'api::page.page': ApiPagePage;
+      'api::pricing-row.pricing-row': ApiPricingRowPricingRow;
       'api::private-snorkeling-collection.private-snorkeling-collection': ApiPrivateSnorkelingCollectionPrivateSnorkelingCollection;
       'api::snorkeling-page.snorkeling-page': ApiSnorkelingPageSnorkelingPage;
       'api::team-member.team-member': ApiTeamMemberTeamMember;

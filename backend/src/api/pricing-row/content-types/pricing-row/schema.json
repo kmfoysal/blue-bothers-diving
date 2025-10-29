@@ -1,0 +1,29 @@
+{
+  "kind": "singleType",
+  "collectionName": "pricing_rows",
+  "info": {
+    "singularName": "pricing-row",
+    "pluralName": "pricing-rows",
+    "displayName": "Pricing row"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "row": {
+      "type": "component",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "elements.pricing-row-item",
+      "repeatable": true
+    }
+  }
+}

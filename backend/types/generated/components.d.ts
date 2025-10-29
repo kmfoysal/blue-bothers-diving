@@ -157,6 +157,45 @@ export interface BlocksMap extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksPriceList extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_price_lists';
+  info: {
+    displayName: 'Price list';
+    icon: 'rocket';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    icon: Schema.Attribute.Media<'images'>;
+    pricing_table: Schema.Attribute.Component<'blocks.pricing-table', true>;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface BlocksPricingListTab extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_pricing_list_tabs';
+  info: {
+    displayName: 'Pricing list tab';
+    icon: 'server';
+  };
+  attributes: {
+    pricing_list_tab: Schema.Attribute.Component<'blocks.price-list', true>;
+  };
+}
+
+export interface BlocksPricingTable extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_pricing_tables';
+  info: {
+    displayName: 'Pricing table';
+    icon: 'bulletList';
+  };
+  attributes: {
+    note: Schema.Attribute.Text;
+    price_row_item: Schema.Attribute.Component<'elements.price-row', true>;
+    sub_title: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface BlocksProfessionalCourses extends Struct.ComponentSchema {
   collectionName: 'components_blocks_professional_courses';
   info: {
@@ -445,6 +484,39 @@ export interface ElementsPackageMinimalCard extends Struct.ComponentSchema {
   };
 }
 
+export interface ElementsPriceRow extends Struct.ComponentSchema {
+  collectionName: 'components_elements_price_rows';
+  info: {
+    displayName: 'Price row';
+    icon: 'oneToOne';
+  };
+  attributes: {
+    price_row: Schema.Attribute.Component<'elements.pricing-row-item', true>;
+  };
+}
+
+export interface ElementsPriceRowItem extends Struct.ComponentSchema {
+  collectionName: 'components_elements_price_row_items';
+  info: {
+    displayName: 'Price row item';
+    icon: 'plus';
+  };
+  attributes: {
+    list_row_item: Schema.Attribute.Component<'elements.text-list', true>;
+  };
+}
+
+export interface ElementsPricingRowItem extends Struct.ComponentSchema {
+  collectionName: 'components_elements_pricing_row_items';
+  info: {
+    displayName: 'Pricing row item';
+    icon: 'bulletList';
+  };
+  attributes: {
+    text: Schema.Attribute.String;
+  };
+}
+
 export interface ElementsSectionHeading extends Struct.ComponentSchema {
   collectionName: 'components_elements_section_headings';
   info: {
@@ -588,6 +660,9 @@ declare module '@strapi/strapi' {
       'blocks.gallery': BlocksGallery;
       'blocks.home-faq': BlocksHomeFaq;
       'blocks.map': BlocksMap;
+      'blocks.price-list': BlocksPriceList;
+      'blocks.pricing-list-tab': BlocksPricingListTab;
+      'blocks.pricing-table': BlocksPricingTable;
       'blocks.professional-courses': BlocksProfessionalCourses;
       'blocks.shaab-content': BlocksShaabContent;
       'blocks.sub-banner': BlocksSubBanner;
@@ -609,6 +684,9 @@ declare module '@strapi/strapi' {
       'elements.others-info-structure': ElementsOthersInfoStructure;
       'elements.package-inclusions-wrapper': ElementsPackageInclusionsWrapper;
       'elements.package-minimal-card': ElementsPackageMinimalCard;
+      'elements.price-row': ElementsPriceRow;
+      'elements.price-row-item': ElementsPriceRowItem;
+      'elements.pricing-row-item': ElementsPricingRowItem;
       'elements.section-heading': ElementsSectionHeading;
       'elements.shaab-content-item': ElementsShaabContentItem;
       'elements.single-course': ElementsSingleCourse;

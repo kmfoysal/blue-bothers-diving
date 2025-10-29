@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_elements_price_rows",
+  "info": {
+    "displayName": "Price row",
+    "icon": "oneToOne"
+  },
+  "options": {},
+  "attributes": {
+    "price_row": {
+      "type": "component",
+      "component": "elements.pricing-row-item",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

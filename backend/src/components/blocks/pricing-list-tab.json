@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_blocks_pricing_list_tabs",
+  "info": {
+    "displayName": "Pricing list tab",
+    "icon": "server"
+  },
+  "options": {},
+  "attributes": {
+    "pricing_list_tab": {
+      "type": "component",
+      "component": "blocks.price-list",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

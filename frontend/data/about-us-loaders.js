@@ -134,6 +134,26 @@ export const getAboutPagesData = cache(async (slug) => {
                             },
                         },
                     },
+                    "blocks.pricing-list-tab": {
+                        populate: {
+                            pricing_list_tab: {
+                                populate: {
+                                    icon: {
+                                        fields: ["url", "alternativeText"],
+                                    },
+                                    pricing_table: {
+                                        populate: {
+                                            price_row_item: {
+                                                populate: {
+                                                    price_row: true,
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },

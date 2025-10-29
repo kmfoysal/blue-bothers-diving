@@ -63,7 +63,8 @@
         "blocks.map",
         "blocks.features-overview",
         "blocks.contact-info",
-        "blocks.shaab-content"
+        "blocks.shaab-content",
+        "blocks.pricing-list-tab"
       ]
     }
   }

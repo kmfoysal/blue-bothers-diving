@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_blocks_pricing_tables",
+  "info": {
+    "displayName": "Pricing table",
+    "icon": "bulletList"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "sub_title": {
+      "type": "string"
+    },
+    "note": {
+      "type": "text"
+    },
+    "price_row_item": {
+      "type": "component",
+      "component": "elements.price-row",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

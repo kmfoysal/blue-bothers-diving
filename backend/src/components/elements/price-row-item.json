@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_elements_price_row_items",
+  "info": {
+    "displayName": "Price row item",
+    "icon": "plus"
+  },
+  "options": {},
+  "attributes": {
+    "list_row_item": {
+      "type": "component",
+      "component": "elements.text-list",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

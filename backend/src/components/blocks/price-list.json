@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_blocks_price_lists",
+  "info": {
+    "displayName": "Price list",
+    "icon": "rocket"
+  },
+  "options": {},
+  "attributes": {
+    "icon": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "pricing_table": {
+      "type": "component",
+      "component": "blocks.pricing-table",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

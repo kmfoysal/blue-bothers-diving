@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_elements_pricing_row_items",
+  "info": {
+    "displayName": "Pricing row item",
+    "icon": "bulletList"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}
