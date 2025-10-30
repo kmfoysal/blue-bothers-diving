@@ -357,3 +357,84 @@ body {
     background: #3b71b8;
     border-radius: 999px;
 }
+
+/* ============================================
+   MOBILE MENU ANIMATIONS - SMOOTH & ATTRACTIVE
+   ============================================ */
+
+/* Main slide animations with smooth cubic-bezier */
+@keyframes slide-up {
+    0% {
+        transform: translateY(100%);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-down {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(100%);
+    }
+}
+
+/* Fade animations for backdrop */
+
+
+/* Fade in up animation for menu items */
+@keyframes fade-in-up {
+    0% {
+        transform: translateY(20px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Apply animations with smooth cubic-bezier easing */
+.animate-slide-up {
+    animation: slide-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-slide-down {
+    animation: slide-down 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-fade-in {
+    animation: fade-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-fade-out {
+    animation: fade-out 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-fade-in-up {
+    animation: fade-in-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Smooth scroll for mobile menu */
+.overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+}
+
+/* Optional: Add subtle bounce effect */
+@keyframes slide-up-bounce {
+    0% {
+        transform: translateY(100%);
+    }
+    70% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* If you want bounce effect, replace the class with this: */
+/* .animate-slide-up {
+  animation: slide-up-bounce 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+} */

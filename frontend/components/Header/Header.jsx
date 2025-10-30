@@ -84,19 +84,39 @@ function useDropdown() {
     };
 }
 
-// useMobileMenu - Manages mobile menu state and interactions
+// useMobileMenu - Manages mobile menu state and interactions with smooth animation
 function useMobileMenu() {
     const [isOpen, setIsOpen] = useState(false);
+    const [isClosing, setIsClosing] = useState(false);
     const [openItem, setOpenItem] = useState(null);
     const [openNested, setOpenNested] = useState(null);
     const [openThirdLevel, setOpenThirdLevel] = useState(null);
 
-    const toggleMenu = useCallback(() => setIsOpen((prev) => !prev), []);
+    const toggleMenu = useCallback(() => {
+        if (isOpen) {
+            setIsClosing(true);
+            setTimeout(() => {
+                setIsOpen(false);
+                setIsClosing(false);
+                setOpenItem(null);
+                setOpenNested(null);
+                setOpenThirdLevel(null);
+            }, 400); // Match animation duration
+        } else {
+            setIsOpen(true);
+            setIsClosing(false);
+        }
+    }, [isOpen]);
+
     const closeMenu = useCallback(() => {
-        setIsOpen(false);
-        setOpenItem(null);
-        setOpenNested(null);
-        setOpenThirdLevel(null);
+        setIsClosing(true);
+        setTimeout(() => {
+            setIsOpen(false);
+            setIsClosing(false);
+            setOpenItem(null);
+            setOpenNested(null);
+            setOpenThirdLevel(null);
+        }, 400); // Match animation duration
     }, []);
 
     const toggleItem = useCallback((itemId) => {
@@ -129,6 +149,7 @@ function useMobileMenu() {
 
     return {
         isOpen,
+        isClosing,
         openItem,
         openNested,
         openThirdLevel,
@@ -167,7 +188,9 @@ function useHeaderTheme(pathname) {
     }, [pathname]);
 }
 
-// components/NavItem.jsx
+// ============================================
+// UI COMPONENTS
+// ============================================
 
 function NavItem({
     item,
@@ -506,39 +529,41 @@ function DesktopHeader({ data, navData, theme, headerRef, dropdown }) {
     );
 }
 
-// MobileHeader Component
+// MobileHeader Component with smooth animations
 function MobileHeader({ data, navData, mobileMenu }) {
     return (
         <>
-            <header className="sm:hidden fixed top-0 left-0 right-0 bg-white border-b border-neutral-200 z-50">
-                <div className="flex items-center justify-between px-2 sm:px-4 py-3">
-                    <Link href="/" onClick={mobileMenu.closeMenu}>
-                        <StrapiImage
-                            src={data?.logo?.image?.url}
-                            alt={data?.logo?.image?.alternativeText}
-                            width={48}
-                            height={48}
-                        />
-                    </Link>
-
+            <header className="sm:hidden z-70">
+                <div className="inline-flex fixed z-50 right-0 top-0 items-center justify-between px-2 sm:px-4 py-2">
                     <button
                         onClick={mobileMenu.toggleMenu}
-                        className="p-2"
+                        className="relative z-[60]"
                         aria-label="Toggle menu"
                     >
                         <MenuIcon isOpen={mobileMenu.isOpen} />
                     </button>
                 </div>
 
-                {mobileMenu.isOpen && (
-                    <MobileNav
-                        data={data}
-                        navData={navData}
-                        mobileMenu={mobileMenu}
-                    />
+                {(mobileMenu.isOpen || mobileMenu.isClosing) && (
+                    <>
+                        {/* Backdrop overlay with fade animation */}
+                        <div
+                            className={`fixed inset-0 z-40 ${
+                                mobileMenu.isClosing
+                                    ? "animate-fade-out"
+                                    : "animate-fade-in"
+                            }`}
+                            onClick={mobileMenu.closeMenu}
+                        />
+
+                        <MobileNav
+                            data={data}
+                            navData={navData}
+                            mobileMenu={mobileMenu}
+                        />
+                    </>
                 )}
             </header>
-            <div className="sm:hidden h-[73px]" />
         </>
     );
 }
@@ -547,7 +572,7 @@ function MobileHeader({ data, navData, mobileMenu }) {
 function MenuIcon({ isOpen }) {
     return isOpen ? (
         <svg
-            className="w-6 h-6"
+            className="w-6 h-6 transition-transform duration-300"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -561,7 +586,7 @@ function MenuIcon({ isOpen }) {
         </svg>
     ) : (
         <svg
-            className="w-6 h-6"
+            className="w-6 h-6 transition-transform duration-300"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -594,7 +619,7 @@ function MobileNavItem({ item, mobileMenu }) {
             <li>
                 <Link
                     href={item.path}
-                    className="block py-3 text-neutral-900 font-medium px-2 transition-all duration-200 bg-white hover:bg-[#E4F1FA]"
+                    className="block py-3 text-neutral-900 font-medium px-2 transition-all duration-200 bg-white hover:bg-blue-50"
                     onClick={closeMenu}
                 >
                     {item.title}
@@ -607,7 +632,7 @@ function MobileNavItem({ item, mobileMenu }) {
         <li>
             <button
                 onClick={() => toggleItem(item.id)}
-                className="w-full flex items-center justify-between py-3 text-neutral-900 font-medium px-2 transition-all duration-200 bg-white hover:bg-[#E4F1FA]"
+                className="w-full flex items-center justify-between py-3 text-neutral-900 font-medium px-2 transition-all duration-200 bg-white hover:bg-blue-50"
             >
                 <span>{item.title}</span>
                 <ChevronIcon isOpen={isOpen} />
@@ -646,7 +671,7 @@ function MobileSubItem({
             <li>
                 <Link
                     href={item.path}
-                    className="flex items-center gap-2 py-2.5 text-xs text-neutral-700 px-2 transition-all duration-200 bg-white hover:bg-[#E4F1FA]"
+                    className="flex items-center gap-2 py-2.5 text-xs text-neutral-700 px-2 transition-all duration-200 bg-white hover:bg-blue-50"
                     onClick={onClose}
                 >
                     <ArrowIcon />
@@ -660,7 +685,7 @@ function MobileSubItem({
         <li>
             <button
                 onClick={() => onToggle(item.id)}
-                className="w-full flex items-center justify-between py-2.5 text-xs text-neutral-700 px-2 transition-all duration-200 bg-white hover:bg-[#E4F1FA]"
+                className="w-full flex items-center justify-between py-2.5 text-xs text-neutral-700 px-2 transition-all duration-200 bg-white hover:bg-blue-50"
             >
                 <span className="flex items-center gap-2">
                     <ArrowIcon />
@@ -693,7 +718,7 @@ function MobileThirdLevelItem({ item, isOpen, onToggle, onClose }) {
             <li>
                 <Link
                     href={item.path}
-                    className="flex items-center gap-2 py-2 text-xs text-neutral-600 px-2 transition-all duration-200 bg-white hover:bg-[#E4F1FA]"
+                    className="flex items-center gap-2 py-2 text-xs text-neutral-600 px-2 transition-all duration-200 bg-white hover:bg-blue-50"
                     onClick={onClose}
                 >
                     <ArrowIcon />
@@ -707,7 +732,7 @@ function MobileThirdLevelItem({ item, isOpen, onToggle, onClose }) {
         <li>
             <button
                 onClick={() => onToggle(item.id)}
-                className="w-full flex items-center justify-between py-2 text-xs text-neutral-600 px-2 transition-all duration-200 bg-white hover:bg-[#E4F1FA]"
+                className="w-full flex items-center justify-between py-2 text-xs text-neutral-600 px-2 transition-all duration-200 bg-white hover:bg-blue-50"
             >
                 <span className="flex items-center gap-2">
                     <ArrowIcon />
@@ -722,7 +747,7 @@ function MobileThirdLevelItem({ item, isOpen, onToggle, onClose }) {
                         <li key={fourthLevelItem.id}>
                             <Link
                                 href={fourthLevelItem.path}
-                                className="flex items-center gap-2 py-2 text-xs text-neutral-500 px-2 transition-all duration-200 bg-white hover:bg-[#E4F1FA]"
+                                className="flex items-center gap-2 py-2 text-xs text-neutral-500 px-2 transition-all duration-200 bg-white hover:bg-blue-50"
                                 onClick={onClose}
                             >
                                 <ArrowIcon />
@@ -736,22 +761,55 @@ function MobileThirdLevelItem({ item, isOpen, onToggle, onClose }) {
     );
 }
 
-// MobileNav Component
+// MobileNav Component with smooth staggered animations
 function MobileNav({ data, navData, mobileMenu }) {
+    const animationClass = mobileMenu.isClosing
+        ? "animate-slide-down"
+        : "animate-slide-up";
+
     return (
-        <div className="fixed inset-0 top-[73px] bg-white overflow-y-auto">
-            <nav className="px-2 sm:px-4 sm:py-6 py-3 flex flex-col h-full justify-between">
-                <ul className="space-y-1">
-                    {navData?.map((item) => (
-                        <MobileNavItem
+        <div
+            className={`fixed inset-0 top-0 bg-white overflow-y-auto z-50 ${animationClass}`}
+        >
+            <button
+                onClick={mobileMenu.toggleMenu}
+                className="z-[60] right-0 absolute p-3"
+                aria-label="Toggle menu"
+            >
+                <MenuIcon isOpen={mobileMenu.isOpen} />
+            </button>
+            <nav className=" px-2 sm:px-4 sm:py-6 py-3 flex flex-col h-full justify-between">
+                <ul className="space-y-1 pt-16">
+                    {navData?.map((item, index) => (
+                        <div
                             key={item.id}
-                            item={item}
-                            mobileMenu={mobileMenu}
-                        />
+                            className={`${
+                                mobileMenu.isClosing ? "" : "animate-fade-in-up"
+                            }`}
+                            style={{
+                                animationDelay: mobileMenu.isClosing
+                                    ? "0ms"
+                                    : `${index * 50}ms`,
+                            }}
+                        >
+                            <MobileNavItem
+                                item={item}
+                                mobileMenu={mobileMenu}
+                            />
+                        </div>
                     ))}
                 </ul>
 
-                <div className="mt-8 pt-6 space-y-4">
+                <div
+                    className={`mt-8 pt-6 space-y-4 ${
+                        mobileMenu.isClosing ? "" : "animate-fade-in-up"
+                    }`}
+                    style={{
+                        animationDelay: mobileMenu.isClosing
+                            ? "0ms"
+                            : `${(navData?.length || 0) * 50}ms`,
+                    }}
+                >
                     <div className="flex items-center justify-center gap-2">
                         <LanguageSwitcher />
                     </div>
