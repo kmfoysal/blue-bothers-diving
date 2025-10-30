@@ -143,6 +143,13 @@ export const getAboutPagesData = cache(async (slug) => {
                                     },
                                     pricing_table: {
                                         populate: {
+                                            pricing_column: {
+                                                populate: {
+                                                    list_row_item: {
+                                                        populate: true,
+                                                    },
+                                                },
+                                            },
                                             price_row_item: {
                                                 populate: {
                                                     price_row: true,

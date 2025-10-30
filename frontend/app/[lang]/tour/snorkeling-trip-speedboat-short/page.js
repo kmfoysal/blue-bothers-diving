@@ -4,13 +4,13 @@ import TourGallery from "@/components/TourGallery/TourGallery";
 import { getTourPagesData } from "@/data/tour-loaders";
 
 export async function generateMetadata() {
-    const getOurBoatData = await getTourPagesData(
+    const getMetaData = await getTourPagesData(
         "snorkeling-trip-speedboat-short"
     );
 
     return {
-        title: getOurBoatData?.data[0]?.title || "",
-        description: getOurBoatData?.data[0]?.description || "",
+        title: getMetaData?.data[0]?.title || "",
+        description: getMetaData?.data[0]?.description || "",
     };
 }
 

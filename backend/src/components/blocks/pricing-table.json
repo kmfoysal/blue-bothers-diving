@@ -15,6 +15,11 @@
     "note": {
       "type": "text"
     },
+    "pricing_column": {
+      "type": "component",
+      "component": "elements.price-row-item",
+      "repeatable": false
+    },
     "price_row_item": {
       "type": "component",
       "component": "elements.price-row",

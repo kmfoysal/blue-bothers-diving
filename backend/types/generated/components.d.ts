@@ -191,6 +191,10 @@ export interface BlocksPricingTable extends Struct.ComponentSchema {
   attributes: {
     note: Schema.Attribute.Text;
     price_row_item: Schema.Attribute.Component<'elements.price-row', true>;
+    pricing_column: Schema.Attribute.Component<
+      'elements.price-row-item',
+      false
+    >;
     sub_title: Schema.Attribute.String;
     title: Schema.Attribute.String;
   };

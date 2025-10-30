@@ -1,33 +1,21 @@
 "use client";
-
 import { useState } from "react";
 import DivingTab from "./DivingTab/DivingTab";
-import SnorkelingTab from "./SnorkelingTab/SnorkelingTab";
-import GeneralInfoTab from "./GeneralInfoTab/GeneralInfoTab";
 
-export default function Tab() {
-    const [activeTab, setActiveTab] = useState(1);
+export default function Tab({ tabData }) {
+    // console.log("Pricing Tab Data:", data);
+    const [activeTab, setActiveTab] = useState(tabData?.[0]?.id || 1);
 
-    const tabs = [
-        {
-            id: 1,
-            label: "Home",
-            content: <DivingTab />,
-        },
-        {
-            id: 2,
-            label: "Snorkeling",
-            content: <SnorkelingTab />,
-        },
-        {
-            id: 3,
-            label: "General Info ",
-            content: <GeneralInfoTab />,
-        },
-    ];
+    // Create tabs from data
+    const tabs =
+        tabData?.map((item) => ({
+            id: item.id,
+            label: item.title, // or item.label if label field exists in data
+            content: <DivingTab data={item} />, // pass item data to DivingTab
+        })) || [];
 
     return (
-        <div className="w-full ">
+        <div className="w-full">
             {/* Tab Navigation */}
             <div className="">
                 <nav className="flex justify-center md:justify-start">
@@ -46,7 +34,6 @@ export default function Tab() {
                     ))}
                 </nav>
             </div>
-
             {/* Tab Content */}
             <div className="">
                 {tabs.map((tab) => (

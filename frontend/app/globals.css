@@ -341,3 +341,19 @@ body {
     fill: #3b71b8 !important;
 }
 /* date picker */
+
+/* Table custom */
+
+/* Custom Scrollbar with Tailwind color */
+.table-scrollbar::-webkit-scrollbar {
+    height: 4px;
+}
+
+.table-scrollbar::-webkit-scrollbar-track {
+    background: #e4f1fa;
+}
+
+.table-scrollbar::-webkit-scrollbar-thumb {
+    background: #3b71b8;
+    border-radius: 999px;
+}

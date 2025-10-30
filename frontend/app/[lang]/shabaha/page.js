@@ -4,19 +4,19 @@ import { StrapiImage } from "@/components/StrapiImage/StrapiImage";
 import { getAboutPagesData } from "@/data/about-us-loaders";
 
 export async function generateMetadata() {
-    const getOurBoatData = await getAboutPagesData("shabaha-two");
+    const getMetaData = await getAboutPagesData("shabaha-two");
 
     return {
-        title: getOurBoatData?.data[0]?.meta_title || "",
-        description: getOurBoatData?.data[0]?.meta_description || "",
+        title: getMetaData?.data[0]?.meta_title || "",
+        description: getMetaData?.data[0]?.meta_description || "",
     };
 }
 
 export default async function Shabaha() {
-    const getShaabElErgData = await getAboutPagesData("shabaha-two");
+    const getShabahaTwoData = await getAboutPagesData("shabaha-two");
 
-    const { page_banner } = getShaabElErgData?.data[0] || {};
-    const features = getShaabElErgData?.data[0]?.blocks[0] || {};
+    const { page_banner } = getShabahaTwoData?.data[0] || {};
+    const features = getShabahaTwoData?.data[0]?.blocks[0] || {};
     console.log("Shaab El Erg page data:", features);
 
     return (

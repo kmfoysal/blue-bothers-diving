@@ -66,11 +66,11 @@ const boatBlueSistersData = {
 };
 
 export async function generateMetadata() {
-    const getOurBoatData = await getAboutPagesData("our-speedboats");
+    const getMetaData = await getAboutPagesData("our-speedboats");
 
     return {
-        title: getOurBoatData?.data[0]?.meta_title || "",
-        description: getOurBoatData?.data[0]?.meta_description || "",
+        title: getMetaData?.data[0]?.meta_title || "",
+        description: getMetaData?.data[0]?.meta_description || "",
     };
 }
 

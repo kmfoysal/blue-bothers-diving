@@ -4,11 +4,11 @@ import SubPageBanner from "@/components/SubBanner/SubPageBanner";
 import { getAboutPagesData } from "@/data/about-us-loaders";
 
 export async function generateMetadata() {
-    const getOurBoatData = await getAboutPagesData("faq");
+    const getMetaData = await getAboutPagesData("faq");
 
     return {
-        title: getOurBoatData?.data[0]?.meta_title || "",
-        description: getOurBoatData?.data[0]?.meta_description || "",
+        title: getMetaData?.data[0]?.meta_title || "",
+        description: getMetaData?.data[0]?.meta_description || "",
     };
 }
 

@@ -47,11 +47,11 @@ const FacilitiesFleetData = {
 };
 
 export async function generateMetadata() {
-    const getOurBoatData = await getAboutPagesData("our-dive-center");
+    const getMetaData = await getAboutPagesData("our-dive-center");
 
     return {
-        title: getOurBoatData?.data[0]?.meta_title || "",
-        description: getOurBoatData?.data[0]?.meta_description || "",
+        title: getMetaData?.data[0]?.meta_title || "",
+        description: getMetaData?.data[0]?.meta_description || "",
     };
 }
 

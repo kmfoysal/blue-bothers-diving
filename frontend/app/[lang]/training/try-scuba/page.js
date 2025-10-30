@@ -1,15 +1,14 @@
-import FeatureContentPrice from "@/components/FeatureContentPrice/FeatureContentPrice";
 import PageHeader from "@/components/PageHeader/PageHeader";
 import TourDetailContent from "@/components/TourDetailContent/TourDetailContent";
 import TourGallery from "@/components/TourGallery/TourGallery";
 import { getTrainingPagesData } from "@/data/training-loaders";
 
 export async function generateMetadata() {
-    const getOurBoatData = await getTrainingPagesData("try-scuba");
+    const getMetaData = await getTrainingPagesData("try-scuba");
 
     return {
-        title: getOurBoatData?.data[0]?.title || "",
-        description: getOurBoatData?.data[0]?.description || "",
+        title: getMetaData?.data[0]?.title || "",
+        description: getMetaData?.data[0]?.description || "",
     };
 }
 
@@ -23,8 +22,8 @@ export default async function TryScubaPage() {
                 tourGallery={getTryScubaData?.data[0]?.blocks[1]?.gallery_image}
             />
             <TourDetailContent
-                            overviewFeatures={getTryScubaData?.data[0]?.blocks[2]}
-                        />
+                overviewFeatures={getTryScubaData?.data[0]?.blocks[2]}
+            />
         </main>
     );
 }

@@ -45,11 +45,11 @@ const FacilitiesFleetData = {
 
 // Dynamic Metadata Generate
 export async function generateMetadata() {
-    const getOurBoatData = await getAboutPagesData("our-boat");
+    const getMetaData = await getAboutPagesData("our-boat");
 
     return {
-        title: getOurBoatData?.data[0]?.meta_title || "",
-        description: getOurBoatData?.data[0]?.meta_description || "",
+        title: getMetaData?.data[0]?.meta_title || "",
+        description: getMetaData?.data[0]?.meta_description || "",
     };
 }
 

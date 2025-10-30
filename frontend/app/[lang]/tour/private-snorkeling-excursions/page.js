@@ -4,13 +4,11 @@ import { getPrivateSnorkelingCardData } from "@/data/private-snorkeling-loaders"
 import { getTourPagesData } from "@/data/tour-loaders";
 
 export async function generateMetadata() {
-    const getOurBoatData = await getTourPagesData(
-        "private-snorkeling-excursions"
-    );
+    const getMetaData = await getTourPagesData("private-snorkeling-excursions");
 
     return {
-        title: getOurBoatData?.data[0]?.title || "",
-        description: getOurBoatData?.data[0]?.description || "",
+        title: getMetaData?.data[0]?.title || "",
+        description: getMetaData?.data[0]?.description || "",
     };
 }
 

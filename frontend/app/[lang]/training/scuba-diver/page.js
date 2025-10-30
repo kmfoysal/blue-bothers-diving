@@ -149,11 +149,11 @@ const snorkelingContent = {
 };
 
 export async function generateMetadata() {
-    const getOurBoatData = await getTrainingPagesData("scuba-diver");
+    const getMetaData = await getTrainingPagesData("scuba-diver");
 
     return {
-        title: getOurBoatData?.data[0]?.title || "",
-        description: getOurBoatData?.data[0]?.description || "",
+        title: getMetaData?.data[0]?.title || "",
+        description: getMetaData?.data[0]?.description || "",
     };
 }
 

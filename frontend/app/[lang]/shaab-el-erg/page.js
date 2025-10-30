@@ -4,11 +4,11 @@ import { StrapiImage } from "@/components/StrapiImage/StrapiImage";
 import { getAboutPagesData } from "@/data/about-us-loaders";
 
 export async function generateMetadata() {
-    const getOurBoatData = await getAboutPagesData("shaab-el-erg");
+    const getMetaData = await getAboutPagesData("shaab-el-erg");
 
     return {
-        title: getOurBoatData?.data[0]?.meta_title || "",
-        description: getOurBoatData?.data[0]?.meta_description || "",
+        title: getMetaData?.data[0]?.meta_title || "",
+        description: getMetaData?.data[0]?.meta_description || "",
     };
 }
 
