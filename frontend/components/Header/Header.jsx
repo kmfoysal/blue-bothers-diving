@@ -534,7 +534,7 @@ function MobileHeader({ data, navData, mobileMenu }) {
     return (
         <>
             <header className="sm:hidden z-70">
-                <div className="inline-flex fixed z-50 right-0 top-0 items-center justify-between px-2 sm:px-4 py-2">
+                <div className="inline-flex fixed z-50 right-2 top-2 items-center justify-between px-2 sm:px-4 py-2 bg-white/70 backdrop-blur-sm rounded-full overflow-hidden">
                     <button
                         onClick={mobileMenu.toggleMenu}
                         className="relative z-[60]"
