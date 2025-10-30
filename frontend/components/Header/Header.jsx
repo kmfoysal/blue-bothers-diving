@@ -779,7 +779,7 @@ function MobileNav({ data, navData, mobileMenu }) {
                 <MenuIcon isOpen={mobileMenu.isOpen} />
             </button>
             <nav className=" px-2 sm:px-4 sm:py-6 py-3 flex flex-col h-full justify-between">
-                <ul className="space-y-1 pt-16">
+                <ul className="space-y-1 pt-12">
                     {navData?.map((item, index) => (
                         <div
                             key={item.id}
