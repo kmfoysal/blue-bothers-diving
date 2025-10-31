@@ -70,11 +70,11 @@ export function BannerSlide({ dict, data }) {
 
                     {/*  */}
                     <div className="col-span-1 order-1 sm:order-2 relative h-full flex items-center ">
-                        <div className="w-full sm:max-w-[615px] px-4 sm:px-0 pb-16 pt-[48px] lg:py-[150px] xl:py-[180px] xxl:py-[220px] sm:pl-[106px] h-full ">
+                        <div className="w-full sm:max-w-[615px] px-4 sm:px-0 pb-16 pt-[48px] sm:py-[100px] lg:py-[150px] xl:py-[180px] xxl:py-[220px] sm:pl-[80px] xl:pl-[106px] h-full ">
                             <span className="text-blue-700 text-2xs sm:text-sm font-medium leading-sm sm:leading-md tracking-[6px] mb-1">
                                 {data?.sub_title}
                             </span>
-                            <h1 className="text-neutral-950 text-xl sm:text-2xl leading-xl sm:leading-2xl font-play-fair-display font-black">
+                            <h1 className="text-neutral-950 text-lg lg:text-xl xl:text-2xl leading-lg lg:leading-xl xl:leading-2xl font-play-fair-display font-black">
                                 {data?.title}
                             </h1>
                             <p className="text-neutral-500 text-xs sm:text-sm font-medium leading-sm sm:leading-md mt-3 sm:mt-4 mb-6 sm:mb-12">
@@ -101,7 +101,7 @@ export function BannerSlide({ dict, data }) {
                 </div>
 
                 {/* Thumbnails Carousel */}
-                <div className="max-w-[256px] sm:max-w-[120px] md:h-[600px] absolute top-auto sm:top-1/2 left-1/2 transform bottom-[calc(380px-32px)] sm:bottom-auto sm:-translate-y-1/2 -translate-x-1/2 z-10">
+                <div className="max-w-[256px] sm:max-w-[120px] md:h-[320px]  xl:h-[600px] absolute top-auto sm:top-1/2 left-1/2 transform bottom-[calc(380px-32px)] sm:bottom-auto sm:-translate-y-1/2 -translate-x-1/2 z-10">
                     <Swiper
                         modules={[FreeMode, Navigation, Thumbs]}
                         onSwiper={setThumbsSwiper}
@@ -118,15 +118,20 @@ export function BannerSlide({ dict, data }) {
                             // Desktop (641px and above) - vertical
                             641: {
                                 direction: "vertical",
+                                spaceBetween: 40,
+                            },
+                            // Desktop (641px and above) - vertical
+                            1200: {
+                                direction: "vertical",
                                 spaceBetween: 80,
                             },
                         }}
-                        className="thumbs-swiper max-h-[248px] sm:max-h-[448px]"
+                        className="thumbs-swiper max-h-[248px] sm:max-h-[320px] lg:max-h-[448px] xl:max-h-[540px]"
                     >
                         {data?.slideImage?.map((image, index) => (
                             <SwiperSlide key={image.id}>
                                 <div
-                                    className={`relative aspect-square cursor-pointer transition-all duration-300 max-w-[256px] sm:max-w-24 rounded-full ${
+                                    className={`relative aspect-square cursor-pointer transition-all duration-300 sm:max-w-16 md:max-w-20 xl:max-w-[256px] rounded-full ${
                                         activeIndex === index
                                             ? "border-md border-blue-100 relative before:absolute before:content-[''] before:w-full before:h-full before:-inset-1 before:bg-blue-100/0 before:rounded-full before:transition-colors before:decoration-blue-500"
                                             : "border-md border-blue-100 relative before:absolute before:content-[''] before:w-full before:h-full before:inset-0 before:bg-blue-100/80 before:rounded-full"

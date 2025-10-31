@@ -434,7 +434,7 @@ function ThirdLevelDropdown({ items, onClose }) {
 // CTAButtons Component
 function CTAButtons({
     ctas,
-    className = "flex gap-3",
+    className = "flex gap-3 md:hidden",
     onClick,
     isMobile = false,
 }) {
@@ -474,7 +474,7 @@ function DesktopHeader({ data, navData, theme, headerRef, dropdown }) {
             className={`py-2 sm:py-3 w-full hidden sm:block ${theme.headerClass}`}
         >
             <div className="container flex items-center justify-between gap-6">
-                <div className="flex items-center gap-12">
+                <div className="flex items-center gap-8 xl:gap-10 2xl:gap-12">
                     <Link href="/">
                         <StrapiImage
                             src={data?.logo?.image?.url}
@@ -485,7 +485,7 @@ function DesktopHeader({ data, navData, theme, headerRef, dropdown }) {
                     </Link>
 
                     <nav className="hidden sm:block">
-                        <ul className="flex gap-8">
+                        <ul className="flex gap-4 xl:gap-8">
                             {navData?.map((item) => (
                                 <NavItem
                                     key={item.id}
