@@ -57,13 +57,14 @@ export async function generateMetadata() {
 export default async function OurBoatPage() {
     
     const getOurBoatData = await getAboutPagesData("our-boat");
+    console.log("FacilitiesFleet:", getOurBoatData?.data[0]?.blocks[0]);
 
     return (
         <main>
             <SubPageBanner
                 bannerContent={getOurBoatData?.data[0]?.page_banner}
             />
-            <FacilitiesFleet {...FacilitiesFleetData} />
+            <FacilitiesFleet data={getOurBoatData?.data[0]?.blocks[0]} />
             <section className="section-padding container">
                 <GridImageGallery
                     imagesData={

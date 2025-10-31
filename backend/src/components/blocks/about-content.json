@@ -30,6 +30,9 @@
     "is_right": {
       "type": "boolean",
       "default": false
+    },
+    "isBorderBottom": {
+      "type": "boolean"
     }
   },
   "config": {}

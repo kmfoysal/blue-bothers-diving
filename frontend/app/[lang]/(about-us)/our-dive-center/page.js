@@ -65,7 +65,7 @@ export default async function OurDiveCenterPage() {
             <SubPageBanner
                 bannerContent={getOurDiveCenterData?.data[0]?.page_banner}
             />
-            <FacilitiesFleet {...FacilitiesFleetData} />
+            <FacilitiesFleet data={getOurDiveCenterData?.data[0]?.blocks[0]} />
 
             {/* Google Map */}
             <GoogleMap

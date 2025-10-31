@@ -10,6 +10,7 @@ export interface BlocksAboutContent extends Struct.ComponentSchema {
     content: Schema.Attribute.Blocks;
     cta: Schema.Attribute.Component<'elements.link', false>;
     is_right: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    isBorderBottom: Schema.Attribute.Boolean;
     section_image: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios'
     >;

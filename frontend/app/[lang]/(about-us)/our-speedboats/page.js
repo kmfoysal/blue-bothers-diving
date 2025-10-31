@@ -83,7 +83,7 @@ export default async function OurSpeedboatsPage() {
                 bannerContent={getOurSpeedboatsData?.data[0]?.page_banner}
             />
             {/* Boat of Blue Brothers */}
-            <FacilitiesFleet {...boatBlueBrothersData} />
+            <FacilitiesFleet data={getOurSpeedboatsData?.data[0]?.blocks[0]} />
             {/* Gallery of Blue Brothers */}
             <div className="container pb-12 md:pb-[120px]">
                 <GridImageGallery
@@ -100,7 +100,7 @@ export default async function OurSpeedboatsPage() {
             {/* Divider */}
 
             {/* Boat of Blue Sisters */}
-            <FacilitiesFleet {...boatBlueSistersData} />
+            <FacilitiesFleet data={getOurSpeedboatsData?.data[0]?.blocks[2]} />
 
             {/* Gallery of Blue Brothers */}
             <div className="container pb-12 md:pb-[120px]">

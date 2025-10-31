@@ -54,7 +54,14 @@ export const getAboutPagesData = cache(async (slug) => {
             blocks: {
                 on: {
                     "blocks.about-content": {
-                        populate: true,
+                        populate: {
+                            section_image: {
+                                fields: ["url", "alternativeText"],
+                            },
+                            cta: {
+                                populate: true,
+                            },
+                        },
                     },
                     "blocks.features-overview": {
                         populate: {
