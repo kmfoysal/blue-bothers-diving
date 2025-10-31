@@ -3,68 +3,6 @@ import GridImageGallery from "@/components/GridImageGallery/GridImageGallery";
 import SubPageBanner from "@/components/SubBanner/SubPageBanner";
 import { getAboutPagesData } from "@/data/about-us-loaders";
 
-const boatBlueBrothersData = {
-    isSectionImageRight: false,
-    title: "About the boat of Blue Brothers 1",
-    content:
-        "At Blue Brothers Diving, your diving experience starts the moment you step on board. Our boats are custom-built for divers, offering the perfect blend of comfort, functionality, and safety — ensuring every day at sea is as enjoyable as the dives themselves.",
-    imgUrl: "/images/boat-blue-brother-section-img.jpg",
-    listItems: [
-        {
-            id: 1,
-            content: "Length: 6.1m",
-        },
-        {
-            id: 2,
-            content: "Space for guests: up to 6",
-        },
-        {
-            id: 3,
-            content: "Year of manufacture: 2023",
-        },
-        {
-            id: 4,
-            content: "Engine: 150 Horsepower",
-        },
-    ],
-    buttonLabel: "Book Now",
-    buttonUrl: "/",
-    isBorderBottom: false,
-};
-
-const boatBlueSistersData = {
-    isSectionImageRight: true,
-    title: "About the boat of Blue Sister",
-    content:
-        "At Blue Brothers Diving, your diving experience starts the moment you step on board. Our boats are custom-built for divers, offering the perfect blend of comfort, functionality, and safety — ensuring every day at sea is as enjoyable as the dives themselves.",
-    imgUrl: "/images/boat-blue-sister-section-img.jpg",
-    listItems: [
-        {
-            id: 1,
-            content: "Length: 10.5m",
-        },
-        {
-            id: 2,
-            content: "Space for guests: 8 snorkelers or 7 divers (or mixed)",
-        },
-        {
-            id: 3,
-            content: "Year of manufacture: 2024",
-        },
-        {
-            id: 4,
-            content: "Engines: 2x 250 Horsepower",
-        },
-        {
-            id: 5,
-            content: "Toilet & Shower",
-        },
-    ],
-    buttonLabel: "Book Now",
-    buttonUrl: "/",
-    isBorderBottom: false,
-};
-
 export async function generateMetadata() {
     const getMetaData = await getAboutPagesData("our-speedboats");
 
