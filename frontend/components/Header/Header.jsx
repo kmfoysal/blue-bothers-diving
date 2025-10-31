@@ -434,7 +434,7 @@ function ThirdLevelDropdown({ items, onClose }) {
 // CTAButtons Component
 function CTAButtons({
     ctas,
-    className = "flex gap-3 md:hidden",
+    className = "gap-3 hidden xl:flex",
     onClick,
     isMobile = false,
 }) {

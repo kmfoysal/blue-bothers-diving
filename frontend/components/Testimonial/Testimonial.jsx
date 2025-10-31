@@ -21,7 +21,7 @@ export default function Testimonials({
     return (
         <>
             <section
-                className={`section-padding ${
+                className={`section-padding overflow-hidden ${
                     sectionBgColor ? sectionBgColor : "bg-white"
                 }`}
             >
