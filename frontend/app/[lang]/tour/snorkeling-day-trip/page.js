@@ -17,6 +17,8 @@ export default async function SnorkelingDayTripPage() {
         "snorkeling-day-trip"
     );
 
+    console.log("Snorkeling Day Trip Data:", getSnorkelingDayTripData);
+
     return (
         <main>
             <SubPageBanner

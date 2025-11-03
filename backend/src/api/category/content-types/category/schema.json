@@ -24,6 +24,12 @@
       },
       "required": true,
       "unique": true
+    },
+    "courses_collections": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::courses-collection.courses-collection",
+      "inversedBy": "categories"
     }
   }
 }

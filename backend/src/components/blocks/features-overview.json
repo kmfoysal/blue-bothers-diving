@@ -61,6 +61,36 @@
       "component": "elements.conditions",
       "repeatable": false
     },
+    "isWhatToExpect": {
+      "type": "boolean",
+      "default": false
+    },
+    "what_to_expect_title": {
+      "type": "string",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "isWhatToExpect"
+            },
+            true
+          ]
+        }
+      }
+    },
+    "what_to_expect_content": {
+      "type": "blocks",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "isWhatToExpect"
+            },
+            true
+          ]
+        }
+      }
+    },
     "is_others_info": {
       "type": "boolean",
       "default": true

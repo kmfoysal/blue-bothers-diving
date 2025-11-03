@@ -11,6 +11,9 @@ export default function TourDetailContent({ data, overviewFeatures }) {
         is_others_info,
         others_info_title,
         other_info_content,
+        isWhatToExpect,
+        what_to_expect_title,
+        what_to_expect_content,
     } = overviewFeatures || {};
 
     return (
@@ -162,6 +165,23 @@ export default function TourDetailContent({ data, overviewFeatures }) {
                         </div>
                     </div>
 
+                    {/* What to expect */}
+                    {isWhatToExpect && (
+                        <>
+                            <div className="pb-6 md:pb-8 border-t border-neutral-100 pt-6">
+                                <h4 className="text-sm leading-md font-semiBold text-neutral-950 tracking-xs">
+                                    {what_to_expect_title || "Default Content"}
+                                </h4>
+
+                                <div className="mt-4 flex flex-col gap-2.5">
+                                    <BlockRendererClient
+                                        content={what_to_expect_content}
+                                    />
+                                </div>
+                            </div>
+                        </>
+                    )}
+
                     {/* Others Info */}
                     {is_others_info && (
                         <div className=" border-t border-neutral-100 pt-6">
@@ -170,12 +190,15 @@ export default function TourDetailContent({ data, overviewFeatures }) {
                             </h4>
                             <div className="mt-4 flex flex-col gap-5">
                                 {other_info_content?.map((item) => (
-                                    <div key={item?.id} className="">
+                                    <div key={item?.id}>
                                         <h5 className="text-2xs sm:text-xs font-semiBold leading-2xs sm:leading-xs text-neutral-950 mb-1.5">
                                             {item?.title || "Set Title"}
                                         </h5>
                                         {item?.list?.map((contentItem) => (
-                                            <p key={contentItem?.id} className="text-2xs sm:text-xs leading-2xs sm:leading-xs text-neutral-500 mb-4">
+                                            <p
+                                                key={contentItem?.id}
+                                                className="text-2xs sm:text-xs leading-2xs sm:leading-xs text-neutral-500 mb-4"
+                                            >
                                                 {contentItem?.text_list_item ||
                                                     "Set Content"}
                                             </p>

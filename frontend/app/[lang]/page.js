@@ -2,7 +2,6 @@ import AdventuresEscapes from "@/components/AdventuresEscapes/AdventuresEscapes"
 import { BannerSlide } from "@/components/BannerSlide/BannerSlide";
 import CallToAction from "@/components/CallToAction/CallToAction";
 import DiscoverScuba from "@/components/DiscoverScuba/DiscoverScuba";
-import ProfessionalCourses from "@/components/ProfessionalCourses/ProfessionalCourses";
 import Questions from "@/components/Questions/Questions";
 import Testimonials from "@/components/Testimonial/Testimonial";
 import UnderwaterAdventure from "@/components/UnderwaterAdventure/UnderwaterAdventure";
@@ -22,7 +21,6 @@ import { getDictionary } from "./dictionaries/dictionaries";
 
 // Main component
 export default async function Home({ params }) {
-
     const { lang } = await params;
     const dict = await getDictionary(lang);
 
@@ -66,8 +64,8 @@ export default async function Home({ params }) {
     const professionalCoursesHeading = getProfessionalCourses?.data?.blocks[0];
 
     // Courses data fetch
-    const getHomeCoursesData = await getCoursesData();
-    const coursesData = getHomeCoursesData?.data[0]?.courses_list;
+    // const getHomeCoursesData = await getCoursesData();
+    // const coursesData = getHomeCoursesData?.data[0]?.courses_list;
 
     return (
         <section className="home-section">
@@ -76,10 +74,10 @@ export default async function Home({ params }) {
             <AdventuresEscapes data={advEscapesData} />
             <DiscoverScuba data={discoverScubaData} />
             <UnderwaterAdventure data={underwaterAdvData} />
-            <ProfessionalCourses
+            {/* <ProfessionalCourses
                 data={professionalCoursesHeading}
                 coursesData={coursesData}
-            />
+            /> */}
             <Questions heading={homeFaqSecHeadingData} faqData={homeFaq} />
             <Testimonials
                 heading={testimonialSecHeadingData}

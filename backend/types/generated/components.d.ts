@@ -106,6 +106,8 @@ export interface BlocksFeaturesOverview extends Struct.ComponentSchema {
     feature_list: Schema.Attribute.Component<'elements.icon-list', true>;
     is_others_info: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     isOverview: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    isWhatToExpect: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
     other_info_content: Schema.Attribute.Component<
       'elements.others-info-structure',
       true
@@ -116,6 +118,8 @@ export interface BlocksFeaturesOverview extends Struct.ComponentSchema {
       true
     >;
     title: Schema.Attribute.String;
+    what_to_expect_content: Schema.Attribute.Blocks;
+    what_to_expect_title: Schema.Attribute.String;
   };
 }
 

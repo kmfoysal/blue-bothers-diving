@@ -57,7 +57,7 @@ export default function BookableCard({ course, slugPrefix }) {
                         href={`/${slugPrefix}/${course.id}`}
                         className="inline-flex items-center gap-1 text-2xs sm:text-xs font-medium leading-sm sm:leading-md text-blue-700"
                     >
-                        Pay Now
+                        Book now
                         <svg
                             width="20"
                             height="20"

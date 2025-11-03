@@ -443,7 +443,7 @@ function CTAButtons({
             {ctas?.map((cta) => (
                 <Link
                     key={cta.id}
-                    href="/contact"
+                    href={cta?.href}
                     className={`transition-all duration-300 h-12 flex items-center ${
                         isMobile ? "justify-center w-full" : ""
                     } leading-sm px-6 py-2.5 rounded-full ${
