@@ -173,7 +173,7 @@ export default function TourDetailContent({ data, overviewFeatures }) {
                                     {what_to_expect_title || "Default Content"}
                                 </h4>
 
-                                <div className="mt-4 flex flex-col gap-2.5">
+                                <div className="mt-4 ">
                                     <BlockRendererClient
                                         content={what_to_expect_content}
                                     />

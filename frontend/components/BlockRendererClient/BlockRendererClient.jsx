@@ -14,6 +14,16 @@ export default function BlockRendererClient({ content }) {
                     <p className="text-neutral-500">{children}</p>
                 ),
 
+                // For headings
+                heading: ({ children, level }) => {
+                    if (level === 3) {
+                        return <h4 className="text-neutral-900 pt-5 pb-1">{children}</h4>;
+                    }
+                    // Return default heading for other levels
+                    const Tag = `h${level}`;
+                    return <Tag>{children}</Tag>;
+                },
+
                 // For lists
                 list: ({ children }) => (
                     <ul className="text-neutral-500 py-2 space-y-2">
