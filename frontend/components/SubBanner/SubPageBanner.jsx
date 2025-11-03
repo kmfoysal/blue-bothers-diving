@@ -1,7 +1,6 @@
 import { StrapiImage } from "../StrapiImage/StrapiImage";
 
 export default function SubPageBanner({ bannerContent }) {
-
     const { title, content, background } = bannerContent;
     return (
         <section className="section-padding overflow-hidden relative h-auto sm:min-h-[444px] grid items-center before:absolute before:content-[''] before:w-full before:h-full before:inset-0 before:bg-blue-950/60 before:z-10">

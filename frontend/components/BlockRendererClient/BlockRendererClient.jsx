@@ -17,7 +17,11 @@ export default function BlockRendererClient({ content }) {
                 // For headings
                 heading: ({ children, level }) => {
                     if (level === 3) {
-                        return <h4 className="text-neutral-900 pt-5 pb-1">{children}</h4>;
+                        return (
+                            <h4 className="text-neutral-900 pt-5 pb-1">
+                                {children}
+                            </h4>
+                        );
                     }
                     // Return default heading for other levels
                     const Tag = `h${level}`;

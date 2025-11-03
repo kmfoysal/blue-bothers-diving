@@ -15,23 +15,6 @@
     }
   },
   "attributes": {
-    "title": {
-      "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "required": true
-    },
-    "description": {
-      "type": "text",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
     "meta_title": {
       "type": "string",
       "pluginOptions": {
@@ -55,10 +38,9 @@
           "localized": true
         }
       },
-      "targetField": "title",
       "required": true
     },
-    "banner_background": {
+    "og_image": {
       "type": "media",
       "pluginOptions": {
         "i18n": {
@@ -93,7 +75,9 @@
         }
       },
       "components": [
-        "blocks.features-overview"
+        "blocks.features-overview",
+        "blocks.gallery",
+        "blocks.sub-header"
       ]
     }
   }
