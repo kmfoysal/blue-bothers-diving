@@ -3,6 +3,7 @@ import GoogleMap from "@/components/GoogleMap/GoogleMap";
 import GridImageGallery from "@/components/GridImageGallery/GridImageGallery";
 import SubPageBanner from "@/components/SubBanner/SubPageBanner";
 import { getAboutPagesData } from "@/data/about-us-loaders";
+import { getAllCoursesData } from "@/data/courses-loaders";
 
 export async function generateMetadata() {
     const getMetaData = await getAboutPagesData("our-dive-center");
@@ -16,7 +17,6 @@ export async function generateMetadata() {
 export default async function OurDiveCenterPage() {
     // Testimonial section heading data fetch
     const getOurDiveCenterData = await getAboutPagesData("our-dive-center");
-
 
     return (
         <main>

@@ -17,7 +17,6 @@ export async function generateMetadata() {
 export default async function OurBoatPage() {
     
     const getOurBoatData = await getAboutPagesData("our-boat");
-    console.log("FacilitiesFleet:", getOurBoatData?.data[0]?.blocks[0]);
 
     return (
         <main>

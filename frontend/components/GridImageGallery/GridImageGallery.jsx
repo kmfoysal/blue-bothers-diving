@@ -17,7 +17,6 @@ import { getStrapiMedia, StrapiImage } from "../StrapiImage/StrapiImage";
 export default function GridImageGallery({ imagesData }) {
     const onBeforeSlide = (detail) => {
         const { index, prevIndex } = detail;
-        console.log(index, prevIndex);
     };
 
     return (

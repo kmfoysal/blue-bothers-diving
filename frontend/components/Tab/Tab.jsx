@@ -3,7 +3,6 @@ import { useState } from "react";
 import DivingTab from "./DivingTab/DivingTab";
 
 export default function Tab({ tabData }) {
-    // console.log("Pricing Tab Data:", data);
     const [activeTab, setActiveTab] = useState(tabData?.[0]?.id || 1);
 
     // Create tabs from data

@@ -1,7 +1,6 @@
 import TeamCard from "../TeamCard/TeamCard";
 
 export default function TeamSection({ teamData }) {
-    // console.log("teamData in TeamSection", teamData);
 
     return (
         <section className="section-padding">

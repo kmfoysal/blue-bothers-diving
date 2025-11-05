@@ -171,11 +171,6 @@ export async function generateMetadata() {
 export default async function SpeedboatDiving() {
     const getSpeedboatDivingData = await getAboutPagesData("speedboat-diving");
 
-    console.log(
-        "getSpeedboatDivingData:",
-        getSpeedboatDivingData?.data[0]?.blocks[0]
-    );
-
     return (
         <main>
             <SubPageBanner

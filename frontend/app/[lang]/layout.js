@@ -52,7 +52,6 @@ export default async function RootLayout({ children }) {
     const data = globalData.data;
 
     const navigationData = await getNavigationData("main-menu");
-    // console.log("getNavigationData", navigationData);
 
     return (
         <html lang="en">

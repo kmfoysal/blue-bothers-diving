@@ -4,7 +4,7 @@ import qs from "qs";
 import { cache } from "react";
 
 // Courses Data fetching functionality .......
-export const getCoursesData = cache(async (slug) => {
+export const getAllCoursesData = cache(async (slug) => {
     const coursesQuery = qs.stringify({
         filters: {
             slug: {

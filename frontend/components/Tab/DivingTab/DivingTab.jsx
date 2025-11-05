@@ -55,12 +55,6 @@ const divingData = {
 };
 
 export default function DivingTab({ data }) {
-    // console.log(
-    //     "Pricing Data ---- :",
-    //     data?.pricing_table[0]?.price_row_item?.map((item) =>
-    //         item.price_row.map((row) => row.text)
-    //     )
-    // );
 
     return (
         <main>

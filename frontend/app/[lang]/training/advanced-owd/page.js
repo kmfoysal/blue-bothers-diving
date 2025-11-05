@@ -15,8 +15,6 @@ export async function generateMetadata() {
 export default async function AdvancedOWDPage() {
     const getAdvancedOwdData = await getTrainingPagesData("advanced-owd");
 
-    console.log("Advanced OWD Data:", getAdvancedOwdData?.data[0]?.blocks[2]);
-
     return (
         <main>
             <PageHeader data={getAdvancedOwdData?.data[0]?.blocks[0]} />

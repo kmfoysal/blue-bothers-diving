@@ -6,8 +6,6 @@ export default function FacilitiesFleet({ data }) {
     const { content, section_image, title, is_right, cta, isBorderBottom } =
         data;
 
-    console.log("FacilitiesFleet data:", data);
-
     return (
         <section>
             <div className="container section-padding grid grid-cols-1 md:grid-cols-12 items-center gap-6 sm:gap-8 md:gap-0">

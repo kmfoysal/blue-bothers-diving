@@ -17,7 +17,6 @@ export default async function ShaabElErg() {
 
     const { page_banner } = getShaabElErgData?.data[0] || {};
     const features = getShaabElErgData?.data[0]?.blocks[0] || {};
-    console.log("Shaab El Erg page data:", features);
 
     return (
         <div className="md:pt-28 pt-10">

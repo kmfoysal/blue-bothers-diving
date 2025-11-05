@@ -14,8 +14,6 @@ export async function generateMetadata() {
 export default async function PriceList() {
     const getPriceListData = await getAboutPagesData("price-list");
 
-    console.log("Price List page data:", getPriceListData?.data[0]?.blocks[0]);
-
     return (
         <main>
             <PriceSubBanner

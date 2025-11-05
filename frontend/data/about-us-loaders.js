@@ -171,14 +171,7 @@ export const getAboutPagesData = cache(async (slug) => {
                 },
             },
         },
-        fields: [
-            "meta_title",
-            "meta_description",
-            "slug",
-            "isWhatToExpect",
-            "what_to_expect_title",
-            "what_to_expect_content",
-        ],
+        fields: ["meta_title", "meta_description", "slug"],
     });
 
     const path = "/api/pages";

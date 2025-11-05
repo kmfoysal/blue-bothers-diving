@@ -17,11 +17,6 @@ export default function CallToAction() {
         INITIAL_STATE
     );
 
-    console.log(
-        formState,
-        "This is our form state coming from the server action"
-    );
-
     const zodErrors = formState?.zodErrors?.email?.[0];
     const strapiErrors = formState?.strapiErrors?.[0]?.message;
     const errorMessage = strapiErrors || zodErrors || formState?.errorMessage;

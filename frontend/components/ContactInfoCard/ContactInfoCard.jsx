@@ -5,8 +5,6 @@ import { StrapiImage } from "../StrapiImage/StrapiImage";
 export default function ContactInfoCard({ contactInfo }) {
     const { title, description, info_item } = contactInfo || {};
 
-    console.log("Contact Info Items:", info_item);
-
     return (
         <section className="section-padding">
             <div className="container grid grid-cols-12 gap-6 sm:gap-8">

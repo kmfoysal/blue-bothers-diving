@@ -16,8 +16,6 @@ export default function ContactForm() {
         INITIAL_STATE
     );
 
-    console.log(formState, "Contact form state");
-
     // Extract errors
     const firstNameError = formState?.zodErrors?.first_name?.[0];
     const lastNameError = formState?.zodErrors?.last_name?.[0];
