@@ -38,6 +38,7 @@
           "localized": true
         }
       },
+      "targetField": "meta_title",
       "required": true
     },
     "og_image": {
@@ -79,6 +80,14 @@
         "blocks.gallery",
         "blocks.sub-header"
       ]
+    },
+    "offerPrice": {
+      "type": "integer",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     }
   }
 }

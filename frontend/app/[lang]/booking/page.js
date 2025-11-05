@@ -1,7 +1,22 @@
 import ActivitiesBook from "@/components/ActivitiesBook/ActivitiesBook";
+import {
+    getAllCategoriesData,
+    getAllCoursesData,
+} from "@/data/courses-loaders";
 
+// export async function generateMetadata() {
+//     const getMetaData = await getCour("buoyancy");
 
-export default function BookingPage() {
+//     return {
+//         title: getMetaData?.data[0]?.title || "",
+//         description: getMetaData?.data[0]?.description || "",
+//     };
+// }
+
+export default async function BookingPage() {
+    const allCoursesData = await getAllCoursesData();
+    const allCategoryData = await getAllCategoriesData();
+
     return (
         <main className="section-padding">
             <div className="container">
@@ -19,7 +34,7 @@ export default function BookingPage() {
             </div>
 
             {/*  Professional Courses Card  */}
-            <ActivitiesBook />
+            <ActivitiesBook allCoursesData={allCoursesData?.data} allCategoryData={allCategoryData?.data} />
         </main>
     );
 }

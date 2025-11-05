@@ -499,6 +499,12 @@ export interface ApiCoursesCollectionCoursesCollection
           localized: true;
         };
       }>;
+    offerPrice: Schema.Attribute.Integer &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     og_image: Schema.Attribute.Media<'images'> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -513,7 +519,7 @@ export interface ApiCoursesCollectionCoursesCollection
         };
       }>;
     publishedAt: Schema.Attribute.DateTime;
-    slug: Schema.Attribute.UID &
+    slug: Schema.Attribute.UID<'meta_title'> &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {

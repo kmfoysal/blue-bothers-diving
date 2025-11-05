@@ -3,8 +3,70 @@ import { getStrapiURL } from "@/utils/get-strapi-url";
 import qs from "qs";
 import { cache } from "react";
 
+// All Categories Data fetching functionality .......
+const allCategoriesData = qs.stringify({
+    populate: {
+        fields: ["name", "id", "locale"],
+        courses_collections: {
+            populate: {
+                fields: ["slug", "price", "meta_title", "meta_description"],
+            }
+        },
+    },
+});
+
+export async function getAllCategoriesData() {
+    const path = "/api/categories";
+    const BASE_URL = getStrapiURL();
+
+    const url = new URL(path, BASE_URL);
+
+    url.search = allCategoriesData;
+
+    return await fetchAPI(url.href, { method: "GET" });
+}
+
+// All Courses Data fetching functionality .......
+const allCoursesData = qs.stringify({
+    populate: {
+        fields: ["slug", "price", "meta_title"],
+        categories: {
+            fields: ["name"],
+        },
+        og_image: {
+            fields: ["url", "alternativeText"],
+        },
+        blocks: {
+            on: {
+                "blocks.sub-header": {
+                    populate: {
+                        feature_list: {
+                            populate: {
+                                icon: {
+                                    fields: ["url", "alternativeText"],
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    },
+});
+
+export async function getAllCoursesData() {
+    const path = "/api/courses-collections";
+    const BASE_URL = getStrapiURL();
+
+    const url = new URL(path, BASE_URL);
+
+    url.search = allCoursesData;
+
+    return await fetchAPI(url.href, { method: "GET" });
+}
+
 // Courses Data fetching functionality .......
-export const getAllCoursesData = cache(async (slug) => {
+export const getSingleCoursesData = cache(async (slug) => {
     const coursesQuery = qs.stringify({
         filters: {
             slug: {

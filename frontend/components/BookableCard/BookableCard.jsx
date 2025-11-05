@@ -1,18 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
+import { StrapiImage } from "../StrapiImage/StrapiImage";
 
 export default function BookableCard({ course, slugPrefix }) {
+    console.log("Course: ", course);
+
     return (
         <div
             key={course?.id}
             className="rounded-md bg-blue-50 col-span-full sm:col-span-6 md:col-span-4 xl:col-span-3"
         >
-            <Image
-                src={course?.image}
-                alt={course?.alt}
+            <StrapiImage
+                src={course?.og_image?.url}
+                alt={course?.og_image?.alternativeText}
                 width={400}
                 height={400}
-                className="w-full max-w-full rounded-t-md"
+                className="w-full max-w-full rounded-t-md object-cover min-h-[228px]"
             />
             {/* Card Content */}
             <div className="py-4 sm:py-6 px-3 sm:px-4">
@@ -28,11 +31,11 @@ export default function BookableCard({ course, slugPrefix }) {
                         {course?.date}
                     </div>
                 </div>
-                <h4 className="text-xs sm:text-sm font-semiBold leading-xs sm:leading-md tracking-xs text-neutral-900 mb-3">
-                    {course?.title}
+                <h4 className="text-xs sm:text-sm font-semiBold leading-xs sm:leading-md tracking-xs text-neutral-900 mb-3 line-clamp-2 min-h-12">
+                    {course?.blocks?.[0]?.title}
                 </h4>
-                <p className="text-neutral-500 text-2xs sm:text-xs font-medium leading-xs mb-3">
-                    {course?.description}
+                <p className="text-neutral-500 text-2xs sm:text-xs font-medium leading-xs mb-3 line-clamp-3 min-h-14">
+                    {course?.blocks?.[0]?.description}
                 </p>
                 <p className="text-neutral-900 text-2xs sm:text-xs font-medium leading-xs mb-3">
                     {course?.packageInclude}
@@ -54,7 +57,7 @@ export default function BookableCard({ course, slugPrefix }) {
                     </div>
                     {/* Button */}
                     <Link
-                        href={`/${slugPrefix}/${course.id}`}
+                        href={`/${slugPrefix}/${course?.slug}`}
                         className="inline-flex items-center gap-1 text-2xs sm:text-xs font-medium leading-sm sm:leading-md text-blue-700"
                     >
                         Book now
