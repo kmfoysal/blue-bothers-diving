@@ -231,7 +231,7 @@ const homeFAQData = qs.stringify({
     filters: {
         categories: {
             name: {
-                $eq: "home",
+                $eqi: "home",
             },
         },
     },
@@ -285,7 +285,7 @@ const testimonialsData = qs.stringify({
     filters: {
         categories: {
             name: {
-                $eq: "home",
+                $eqi: "home",
             },
         },
     },
@@ -853,7 +853,7 @@ export async function getNavigationData(menuSlug = "main-menu") {
     const url = new URL(path, BASE_URL);
     url.searchParams.append("type", "TREE");
 
-    // 
+    //
     // url.searchParams.append("fields", "id,title,order,path");
 
     return await fetchAPI(url.href, { method: "GET" });
