@@ -455,12 +455,12 @@ export async function getSnorkelingFAQSecHeadingData() {
     return await fetchAPI(url.href, { method: "GET" });
 }
 
-// Snorkeling faq data - [Home FAQ ]
+// Snorkeling faq data - [Home FAQ ]https://desktop.postman.com/?desktopVersion=11.70.2&userId=36134268&teamId=0&region=us
 const snorkelingFAQData = qs.stringify({
     filters: {
         categories: {
             name: {
-                $eq: "snorkeling",
+                $eqi: "snorkeling",
             },
         },
     },
@@ -514,7 +514,7 @@ const snorkelingTestimonialsData = qs.stringify({
     filters: {
         categories: {
             name: {
-                $eq: "snorkeling",
+                $eqi: "snorkeling",
             },
         },
     },
@@ -700,7 +700,7 @@ const divingFAQData = qs.stringify({
     filters: {
         categories: {
             name: {
-                $eq: "snorkeling",
+                $eqi: "diving",
             },
         },
     },
@@ -754,7 +754,7 @@ const divingTestimonialsData = qs.stringify({
     filters: {
         categories: {
             name: {
-                $eq: "diving",
+                $eqi: "diving",
             },
         },
     },

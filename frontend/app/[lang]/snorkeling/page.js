@@ -1,7 +1,6 @@
 import { BannerSlide } from "@/components/BannerSlide/BannerSlide";
 import CallToAction from "@/components/CallToAction/CallToAction";
 import Features from "@/components/Features/Features";
-import ProfessionalCourses from "@/components/ProfessionalCourses/ProfessionalCourses";
 import Questions from "@/components/Questions/Questions";
 import Testimonials from "@/components/Testimonial/Testimonial";
 import WhyChooseUs from "@/components/WhyChooseUs/WhyChooseUs";
@@ -33,11 +32,14 @@ export default async function Snorkeling({ params }) {
 
     // FAQ section heading data fetch
     const getSnorkelingFaqSecHeading = await getSnorkelingFAQSecHeadingData();
-    const snorkelingFaqSecHeadingData = getSnorkelingFaqSecHeading?.data?.blocks[0];
+    const snorkelingFaqSecHeadingData =
+        getSnorkelingFaqSecHeading?.data?.blocks[0];
 
     // FAQ data fetch
     const getSnorkelingFaqData = await getSnorkelingFAQData();
-    const snorkelingFaq = getSnorkelingFaqData?.data?.sort((a, b) => b.priority - a.priority) || [];
+    const snorkelingFaq =
+        getSnorkelingFaqData?.data?.sort((a, b) => b.priority - a.priority) ||
+        [];
 
     // Testimonial Section Heading data fetch
     const getSnorkelingTestimonySecHeading =
@@ -47,11 +49,14 @@ export default async function Snorkeling({ params }) {
 
     // Testimonial data fetch
     const getSnorkelingTestimonials = await getSnorkelingTestimonialsData();
-    const snorkelingTestimonials = getSnorkelingTestimonials?.data?.sort((a, b) => b.priority - a.priority) || [];
+    const snorkelingTestimonials =
+        getSnorkelingTestimonials?.data?.sort(
+            (a, b) => b.priority - a.priority
+        ) || [];
 
     // Courses data fetch
     const getHomeCoursesData = await getCoursesData();
-    const coursesData = getHomeCoursesData?.data[0]?.courses_list;
+    // const coursesData = getHomeCoursesData?.data[0]?.courses_list;
 
     // Why choose us data fetch
     const getWhyChooseUsData = await getSnorkelingChooseUsData();
@@ -68,11 +73,14 @@ export default async function Snorkeling({ params }) {
 
             <WhyChooseUs data={whyChooseUsData} />
             <Features data={featuresData} />
-            <ProfessionalCourses
+            {/* <ProfessionalCourses
                 data={snorkelingCoursesHeading}
                 coursesData={coursesData}
+            /> */}
+            <Questions
+                heading={snorkelingFaqSecHeadingData}
+                faqData={snorkelingFaq}
             />
-            <Questions heading={snorkelingFaqSecHeadingData} faqData={snorkelingFaq} />
             <Testimonials
                 heading={testimonialSecHeading}
                 testimonials={snorkelingTestimonials}

@@ -50,7 +50,7 @@ export default async function Diving({ params }) {
 
     // Courses data fetch
     const getHomeCoursesData = await getCoursesData();
-    const coursesData = getHomeCoursesData?.data[0]?.courses_list;
+    // const coursesData = getHomeCoursesData?.data[0]?.courses_list;
 
     // Why choose us data fetch
     const getWhyChooseUsData = await getDivingChooseUsData();
@@ -67,10 +67,10 @@ export default async function Diving({ params }) {
 
             <WhyChooseUs data={whyChooseUsData} />
             <Features data={featuresData} />
-            <ProfessionalCourses
+            {/* <ProfessionalCourses
                 data={divingCoursesHeading}
                 coursesData={coursesData}
-            />
+            /> */}
             <Questions heading={divingFaqSecHeading} faqData={divingFaq} />
             <Testimonials
                 heading={divingTestimonySectionHeading}
