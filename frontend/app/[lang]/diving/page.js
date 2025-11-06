@@ -1,12 +1,12 @@
 import { BannerSlide } from "@/components/BannerSlide/BannerSlide";
 import CallToAction from "@/components/CallToAction/CallToAction";
 import Features from "@/components/Features/Features";
-import ProfessionalCourses from "@/components/ProfessionalCourses/ProfessionalCourses";
 import Questions from "@/components/Questions/Questions";
 import Testimonials from "@/components/Testimonial/Testimonial";
+import ToursActivities from "@/components/ToursActivities/ToursActivities";
 import WhyChooseUs from "@/components/WhyChooseUs/WhyChooseUs";
+import { getCategoryWiseCoursesData } from "@/data/courses-loaders";
 import {
-    getCoursesData,
     getDivingBanner,
     getDivingChooseUsData,
     getDivingCoursesHeadingData,
@@ -34,9 +34,10 @@ export default async function Diving({ params }) {
     const getDivingFaqSecHeading = await getDivingFAQSecHeadingData();
     const divingFaqSecHeading = getDivingFaqSecHeading?.data?.blocks[0];
 
-    // FAQ data fetch    
+    // FAQ data fetch
     const getDivingFaqData = await getDivingFAQData();
-    const divingFaq = getDivingFaqData?.data?.sort((a, b) => b.priority - a.priority) || [];
+    const divingFaq =
+        getDivingFaqData?.data?.sort((a, b) => b.priority - a.priority) || [];
 
     // Testimonial section heading data fetch
     const getDivingTestimonySecHeading =
@@ -46,11 +47,13 @@ export default async function Diving({ params }) {
 
     // Testimonial data fetch
     const getDivingTestimonials = await getDivingTestimonialsData();
-    const divingTestimonials = getDivingTestimonials?.data?.sort((a, b) => b.priority - a.priority) || [];
+    const divingTestimonials =
+        getDivingTestimonials?.data?.sort((a, b) => b.priority - a.priority) ||
+        [];
 
-    // Courses data fetch
-    const getHomeCoursesData = await getCoursesData();
-    // const coursesData = getHomeCoursesData?.data[0]?.courses_list;
+    // Diving Courses data fetch
+    const getDivingCoursesData = await getCategoryWiseCoursesData("diving");
+    const coursesData = getDivingCoursesData?.data;
 
     // Why choose us data fetch
     const getWhyChooseUsData = await getDivingChooseUsData();
@@ -67,10 +70,10 @@ export default async function Diving({ params }) {
 
             <WhyChooseUs data={whyChooseUsData} />
             <Features data={featuresData} />
-            {/* <ProfessionalCourses
+            <ToursActivities
                 data={divingCoursesHeading}
                 coursesData={coursesData}
-            /> */}
+            />
             <Questions heading={divingFaqSecHeading} faqData={divingFaq} />
             <Testimonials
                 heading={divingTestimonySectionHeading}

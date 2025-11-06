@@ -3,8 +3,7 @@
 import { useState } from "react";
 import BookableCard from "../BookableCard/BookableCard";
 
-export default function ActivitiesBook({ allCoursesData, allCategoryData }) {
-    console.log("All Courses Data: ", allCoursesData);
+export default function ActivitiesBook({ allCoursesData }) {
 
     const [selectedCategory, setSelectedCategory] = useState("All");
 

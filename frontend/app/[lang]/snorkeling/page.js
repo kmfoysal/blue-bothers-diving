@@ -3,9 +3,10 @@ import CallToAction from "@/components/CallToAction/CallToAction";
 import Features from "@/components/Features/Features";
 import Questions from "@/components/Questions/Questions";
 import Testimonials from "@/components/Testimonial/Testimonial";
+import ToursActivities from "@/components/ToursActivities/ToursActivities";
 import WhyChooseUs from "@/components/WhyChooseUs/WhyChooseUs";
+import { getCategoryWiseCoursesData } from "@/data/courses-loaders";
 import {
-    getCoursesData,
     getSnorkelingBanner,
     getSnorkelingChooseUsData,
     getSnorkelingCoursesHeadingData,
@@ -54,9 +55,11 @@ export default async function Snorkeling({ params }) {
             (a, b) => b.priority - a.priority
         ) || [];
 
-    // Courses data fetch
-    const getHomeCoursesData = await getCoursesData();
-    // const coursesData = getHomeCoursesData?.data[0]?.courses_list;
+    // Diving Courses data fetch
+    const getSnorkelingCoursesData = await getCategoryWiseCoursesData(
+        "snorkeling"
+    );
+    const coursesData = getSnorkelingCoursesData?.data;
 
     // Why choose us data fetch
     const getWhyChooseUsData = await getSnorkelingChooseUsData();
@@ -73,10 +76,10 @@ export default async function Snorkeling({ params }) {
 
             <WhyChooseUs data={whyChooseUsData} />
             <Features data={featuresData} />
-            {/* <ProfessionalCourses
+            <ToursActivities
                 data={snorkelingCoursesHeading}
                 coursesData={coursesData}
-            /> */}
+            />
             <Questions
                 heading={snorkelingFaqSecHeadingData}
                 faqData={snorkelingFaq}

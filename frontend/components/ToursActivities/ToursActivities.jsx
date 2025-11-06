@@ -1,10 +1,8 @@
+import BookableCard from "../BookableCard/BookableCard";
 import BorderButton from "../Buttons/BorderButton";
-import NewCourseCard from "../NewCourseCard/NewCourseCard";
 
-
-export default function ProfessionalCourses({ data, coursesData }) {
+export default function ToursActivities({ data, coursesData }) {
     const { section_heading } = data;
-
     return (
         <section className="section-padding">
             <div className="container">
@@ -25,17 +23,17 @@ export default function ProfessionalCourses({ data, coursesData }) {
                 <div className="grid grid-cols-12 gap-4 sm:gap-8 mt-6 sm:mt-12">
                     {/* Card */}
                     {coursesData.map((course) => (
-                        <NewCourseCard
+                        <BookableCard
                             key={course.id}
                             course={course}
-                            slugPrefix="courses"
+                            slugPrefix="booking"
                         />
                     ))}
                 </div>
 
                 {/* View All Courses */}
                 <div className="mt-8 sm:mt-12 flex justify-center">
-                    <BorderButton href="/courses" label="View All Courses" />
+                    <BorderButton href="/booking" label="View All Courses" />
                 </div>
             </div>
         </section>

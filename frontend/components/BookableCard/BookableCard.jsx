@@ -3,8 +3,6 @@ import Link from "next/link";
 import { StrapiImage } from "../StrapiImage/StrapiImage";
 
 export default function BookableCard({ course, slugPrefix }) {
-    console.log("Course: ", course);
-
     return (
         <div
             key={course?.id}

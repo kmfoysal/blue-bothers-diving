@@ -1,8 +1,5 @@
 import ActivitiesBook from "@/components/ActivitiesBook/ActivitiesBook";
-import {
-    getAllCategoriesData,
-    getAllCoursesData,
-} from "@/data/courses-loaders";
+import { getAllCoursesData } from "@/data/courses-loaders";
 
 // export async function generateMetadata() {
 //     const getMetaData = await getCour("buoyancy");
@@ -15,7 +12,6 @@ import {
 
 export default async function BookingPage() {
     const allCoursesData = await getAllCoursesData();
-    const allCategoryData = await getAllCategoriesData();
 
     return (
         <main className="section-padding">
@@ -34,7 +30,7 @@ export default async function BookingPage() {
             </div>
 
             {/*  Professional Courses Card  */}
-            <ActivitiesBook allCoursesData={allCoursesData?.data} allCategoryData={allCategoryData?.data} />
+            <ActivitiesBook allCoursesData={allCoursesData?.data} />
         </main>
     );
 }
