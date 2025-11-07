@@ -1,13 +1,16 @@
 "use client";
 
 import { format } from "date-fns";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 
+import { ProductContext } from "@/context";
 import { useEffect, useRef } from "react";
 
-export default function TourBookingForm() {
+export default function TourBookingForm({ priceCart }) {
+    const cartData = priceCart;
+
     const [participants, setParticipants] = useState(1);
     const [tieredPricing, setTieredPricing] = useState("1-2 Days: €99");
     const [isTimeOpen, setIsTimeOpen] = useState(false);
@@ -21,6 +24,9 @@ export default function TourBookingForm() {
     const [minute, setMinute] = useState(0);
     const [period, setPeriod] = useState("am");
     const pickerRef = useRef(null);
+
+    // Fix: Add default empty array to prevent error
+    const { productData = [], setProductData } = useContext(ProductContext);
 
     // Close picker on outside click
     useEffect(() => {
@@ -105,6 +111,26 @@ export default function TourBookingForm() {
         }
         return "04 August, 2025";
     };
+
+    // Handle Add To Cart
+    function handleAddToCart(event, priceCart) {
+        event.stopPropagation();
+        // console.log("Add to card :", priceCart);
+
+        // Ensure productData is an array
+        const currentProducts = Array.isArray(productData) ? productData : [];
+
+        const found = currentProducts.find((item) => {
+            return item.id === priceCart.id;
+        });
+
+        if (!found) {
+            setProductData([...currentProducts, priceCart]);
+        } else {
+            console.error(`The course id ${priceCart.id} already exists.`);
+        }
+    }
+    console.log("Product Data :", productData);
 
     return (
         <div className=" sticky top-8">
@@ -327,24 +353,6 @@ export default function TourBookingForm() {
                         )}
                     </div>
 
-                    {/* <div className="sm:col-span-3 -mt-2">
-                        <fieldset className="border border-neutral-200 rounded-full relative pr-4 px-4 pb-2">
-                            <legend className="text-2xs font-semibold text-neutral-900 ml-1 px-1">
-                                Choose Available Start Time
-                            </legend>
-
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    value={selectedTime}
-                                    readOnly
-                                    className="w-full text-2xs text-neutral-900 min-h-10 bg-transparent outline-none cursor-pointer"
-                                    
-                                />
-                            </div>
-                        </fieldset>
-                    </div> */}
-
                     {/* Participants */}
                     <div className="sm:col-span-3">
                         <fieldset className="border border-neutral-200 rounded-full">
@@ -473,7 +481,7 @@ export default function TourBookingForm() {
                         </div>
                         {/* Price */}
                         <h4 className="text-sm leading-md font-semiBold tracking-xs text-neutral-950">
-                            419 €
+                            {cartData?.price} €
                         </h4>
                     </div>
                     <div className="flex items-center justify-between gap-6">
@@ -487,7 +495,7 @@ export default function TourBookingForm() {
                         </div>
                         {/* Price */}
                         <h4 className="text-sm leading-md font-semiBold tracking-xs text-neutral-950">
-                            319 €
+                            {cartData?.offerPrice} €
                         </h4>
                     </div>
                 </div>
@@ -502,16 +510,17 @@ export default function TourBookingForm() {
 
                     <div className="flex items-center gap-3">
                         <h3 className="text-ml leading-ml font-semiBold tracking-xs text-blue-700">
-                            319 €
+                            {cartData?.offerPrice} €
                         </h3>
                         <h4 className="text-sm leading-md font-semiBold tracking-xs text-neutral-500 line-through">
-                            419 €
+                            {cartData?.price} €
                         </h4>
                     </div>
                     {/* Button */}
                     <button
-                        type="submit"
+                        type="button"
                         className="text-xs sm:text-sm font-medium leading-sm rounded-full px-6 sm:px-8 py-2.5 sm:py-3.5 h-12 sm:h-[58px] text-neutral-50 bg-blue-700 flex w-full sm:w-auto sm:inline-flex justify-center sm:items-center transition-colors duration-200 hover:bg-blue-900"
+                        onClick={(e) => handleAddToCart(e, priceCart)}
                     >
                         Pay Now
                     </button>

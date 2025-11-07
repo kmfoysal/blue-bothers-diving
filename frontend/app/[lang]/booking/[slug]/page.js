@@ -9,8 +9,6 @@ export async function generateMetadata({ params }) {
 
     const metaData = await getSingleCoursesData(slug);
 
-    console.log("Meta Data: ", metaData?.data[0]);
-
     return {
         title: metaData?.data[0]?.meta_title || "Set your meta title.",
         description:
@@ -34,6 +32,7 @@ export default async function SingleCourse({ params }) {
             />
             <TourDetailContent
                 overviewFeatures={singleCourseData?.data[0]?.blocks[2]}
+                priceCart={singleCourseData?.data[0]}
             />
         </main>
     );

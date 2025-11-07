@@ -2,7 +2,7 @@ import BlockRendererClient from "../BlockRendererClient/BlockRendererClient";
 import TourBookingForm from "../Forms/TourBookingForm/TourBookingForm";
 import { StrapiImage } from "../StrapiImage/StrapiImage";
 
-export default function TourDetailContent({ data, overviewFeatures }) {
+export default function TourDetailContent({ overviewFeatures, priceCart }) {
     const {
         isOverview,
         feature_list,
@@ -15,6 +15,8 @@ export default function TourDetailContent({ data, overviewFeatures }) {
         what_to_expect_title,
         what_to_expect_content,
     } = overviewFeatures || {};
+
+    console.log("Overview Features: ", overviewFeatures);
 
     return (
         <section className="section-padding">
@@ -210,7 +212,7 @@ export default function TourDetailContent({ data, overviewFeatures }) {
                     )}
                 </div>
                 <div className="col-span-full md:col-span-6 xl:col-span-5">
-                    <TourBookingForm />
+                    <TourBookingForm data={overviewFeatures} priceCart={priceCart} />
                 </div>
             </div>
         </section>

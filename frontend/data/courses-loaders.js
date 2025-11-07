@@ -50,7 +50,7 @@ export const getSingleCoursesData = cache(async (slug) => {
                 $eq: slug,
             },
         },
-        fields: ["meta_title", "meta_description", "slug", "price"],
+        fields: ["meta_title", "meta_description", "slug", "price", "offerPrice"],
         populate: {
             blocks: {
                 on: {
