@@ -1,6 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
+import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
@@ -9,6 +10,7 @@ import { ProductContext } from "@/context";
 import { useEffect, useRef } from "react";
 
 export default function TourBookingForm({ priceCart }) {
+    const router = useRouter();
     const cartData = priceCart;
 
     const [participants, setParticipants] = useState(1);
@@ -72,7 +74,7 @@ export default function TourBookingForm({ priceCart }) {
     // Prevent dropdown from closing when clicking AM/PM
     const handlePeriodChange = (newPeriod, e) => {
         e.preventDefault();
-        e.stopPropagation(); // This prevents the click from bubbling up
+        e.stopPropagation();
         setPeriod(newPeriod);
     };
 
@@ -98,7 +100,7 @@ export default function TourBookingForm({ priceCart }) {
 
     // Format the selected range for display
     const formatDateRange = () => {
-        if (!range) return "04 August, 2025";
+        if (!range) return format(new Date(), "dd MMMM, yyyy");
 
         if (range.from) {
             if (!range.to) {
@@ -109,13 +111,12 @@ export default function TourBookingForm({ priceCart }) {
                 "dd MMMM, yyyy"
             )}`;
         }
-        return "04 August, 2025";
+        return format(new Date(), "dd MMMM, yyyy");
     };
 
     // Handle Add To Cart
     function handleAddToCart(event, priceCart) {
         event.stopPropagation();
-        // console.log("Add to card :", priceCart);
 
         // Ensure productData is an array
         const currentProducts = Array.isArray(productData) ? productData : [];
@@ -126,8 +127,10 @@ export default function TourBookingForm({ priceCart }) {
 
         if (!found) {
             setProductData([...currentProducts, priceCart]);
+            router.push("/checkout");
         } else {
             console.error(`The course id ${priceCart.id} already exists.`);
+            router.push("/checkout");
         }
     }
     console.log("Product Data :", productData);
@@ -189,6 +192,7 @@ export default function TourBookingForm({ priceCart }) {
                                         mode="range"
                                         selected={range}
                                         onSelect={setRange}
+                                        disabled={{ before: new Date() }}
                                         classNames={{}}
                                     />
                                 </div>
@@ -306,7 +310,7 @@ export default function TourBookingForm({ priceCart }) {
                                                 }
                                                 onMouseDown={(e) =>
                                                     e.preventDefault()
-                                                } // Prevents focus issues
+                                                }
                                                 className={`px-4 py-2 text-2xs font-medium transition-colors ${
                                                     period === "am"
                                                         ? "bg-blue-500 text-white"
@@ -321,7 +325,7 @@ export default function TourBookingForm({ priceCart }) {
                                                 }
                                                 onMouseDown={(e) =>
                                                     e.preventDefault()
-                                                } // Prevents focus issues
+                                                }
                                                 className={`px-4 py-2 text-2xs font-medium transition-colors border-l border-neutral-300 ${
                                                     period === "pm"
                                                         ? "bg-blue-500 text-white"

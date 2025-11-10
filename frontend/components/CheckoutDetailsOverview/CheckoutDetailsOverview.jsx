@@ -1,15 +1,21 @@
 "use client";
 
+import { ProductContext } from "@/context";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 export default function CheckoutDetailsOverview({ data }) {
+    const { productData } = useContext(ProductContext);
+
+    console.log("Product Data From Checkout page", productData);
+
     const [guestCount, setGuestCount] = useState(1);
 
     const handleAddGuest = () => {
         setGuestCount((prevCount) => prevCount + 1);
     };
+
     return (
         <section className="py-8 md:py-16">
             <div className="container grid grid-cols-1 md:grid-cols-12 gap-12 xl:gap-16">
@@ -20,7 +26,6 @@ export default function CheckoutDetailsOverview({ data }) {
                                 href={{}}
                                 className="text-neutral-500 text-xs font-medium"
                             >
-                                {" "}
                                 Snorkeling
                             </Link>
                             <Image
@@ -34,7 +39,6 @@ export default function CheckoutDetailsOverview({ data }) {
                                 href={{}}
                                 className="text-neutral-500 text-xs font-medium"
                             >
-                                {" "}
                                 Private Snorkeling Excursion – Blue Brothers 1
                                 (up to 5 guests, 2.5 hours)
                             </Link>
@@ -71,6 +75,11 @@ export default function CheckoutDetailsOverview({ data }) {
                                             </p>
                                         </div>
                                         <h3 className="md:text-sm text-xs md:leading-md leading-xs font-semiBold tracking-xs">
+                                            {productData.map((item) => (
+                                                <span key={item.id}>
+                                                    {item?.meta_title} - Title
+                                                </span>
+                                            ))}
                                             Private Snorkeling Excursion – Blue
                                             Brothers 1 (up to 5 guests, 2.5
                                             hours)
