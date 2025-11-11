@@ -3,10 +3,11 @@
 import { ProductContext } from "@/context";
 import Image from "next/image";
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { useContext, useMemo, useState } from "react";
+import { StrapiImage } from "../StrapiImage/StrapiImage";
 
 export default function CheckoutDetailsOverview({ data }) {
-    const { productData } = useContext(ProductContext);
+    const { productData, removeProduct } = useContext(ProductContext);
 
     console.log("Product Data From Checkout page", productData);
 
@@ -15,6 +16,42 @@ export default function CheckoutDetailsOverview({ data }) {
     const handleAddGuest = () => {
         setGuestCount((prevCount) => prevCount + 1);
     };
+
+    const handleRemoveProduct = (productId) => {
+        removeProduct(productId);
+    };
+
+    // Calculate totals
+    const calculations = useMemo(() => {
+        // Products total
+        const productsTotal =
+            productData?.reduce((sum, item) => {
+                const price = parseFloat(item?.price) || 0;
+                return sum + price;
+            }, 0) || 0;
+
+        // Fixed values (আপনি চাইলে এগুলোও dynamic করতে পারবেন)
+        const tax = 16;
+        const fees = 0;
+
+        // Sub-total calculation
+        const subTotal = productsTotal + tax + fees;
+
+        // Discount (আপনি চাইলে percentage বা fixed amount করতে পারেন)
+        const discount = 22;
+
+        // Final total
+        const total = subTotal - discount;
+
+        return {
+            productsTotal,
+            tax,
+            fees,
+            subTotal,
+            discount,
+            total,
+        };
+    }, [productData]);
 
     return (
         <section className="py-8 md:py-16">
@@ -48,62 +85,110 @@ export default function CheckoutDetailsOverview({ data }) {
                                 Overview
                             </p>
                             <div className="md:p-6 p-3 rounded-lg bg-white border border-neutral-500 mb-5">
-                                <h4 className="md:text-ml text-sm font-semiBold tracking-xs md:leading-ml leading-sm md:mb-5 mb-5">
-                                    Booking Details
-                                </h4>
-                                <div className="rounded-md bg-neutral-100 gap-2 block md:grid grid-cols-12">
-                                    <Image
-                                        src={
-                                            "/images/booking_details_image.webp"
-                                        }
-                                        alt="Icon"
-                                        width={335}
-                                        height={250}
-                                        className=" inline-block h-full w-full md:rounded-tl-md rounded-tl-md rounded-tr-md md:rounded-bl-md col-span-5 object-cover"
-                                    />
-                                    <div className="flex flex-col gap-3 p-4 col-span-7">
-                                        <div className="flex items-center gap-2">
-                                            <Image
-                                                src={"/icons/Clock.svg"}
-                                                alt="Icon"
-                                                width={24}
-                                                height={24}
-                                                className="w-[22px] md:w-6 h-[22px] md:h-6 inline-block"
-                                            />
-                                            <p className="text-xs font-semiBold leading-xs text-neutral-700">
-                                                2.5 hour
-                                            </p>
-                                        </div>
-                                        <h3 className="md:text-sm text-xs md:leading-md leading-xs font-semiBold tracking-xs">
+                                {productData?.length > 0 && (
+                                    <>
+                                        <h4 className="md:text-ml text-sm font-semiBold tracking-xs md:leading-ml leading-sm md:mb-5 mb-5">
+                                            Booking Details
+                                        </h4>
+                                        <div className="flex flex-col gap-5">
                                             {productData.map((item) => (
-                                                <span key={item.id}>
-                                                    {item?.meta_title} - Title
-                                                </span>
-                                            ))}
-                                            Private Snorkeling Excursion – Blue
-                                            Brothers 1 (up to 5 guests, 2.5
-                                            hours)
-                                        </h3>
-                                        <p className="md:text-xs leading-xs text-neutral-500 font-medium">
-                                            Enjoy a private 2.5-hour snorkeling
-                                            trip on Blue Brothers 1. Perfect for
-                                            small groups of up to 5 guests –
-                                            fast, flexible, and personalized.
-                                        </p>
+                                                <div
+                                                    key={item?.id}
+                                                    className="rounded-md bg-neutral-100 gap-2 block md:grid grid-cols-12 items-center relative"
+                                                >
+                                                    {/* Close button */}
+                                                    <button
+                                                        onClick={() =>
+                                                            handleRemoveProduct(
+                                                                item.id
+                                                            )
+                                                        }
+                                                        className="absolute top-2 right-2 bg-red-200/50 backdrop:blur-sm p-2 rounded-full hover:bg-red-300/70 transition-colors z-10"
+                                                        aria-label="Remove product"
+                                                    >
+                                                        <svg
+                                                            width="14"
+                                                            height="14"
+                                                            viewBox="0 0 14 14"
+                                                            fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                        >
+                                                            <path
+                                                                d="M1.4 14L0 12.6L5.6 7L0 1.4L1.4 0L7 5.6L12.6 0L14 1.4L8.4 7L14 12.6L12.6 14L7 8.4L1.4 14Z"
+                                                                fill="#3B71B8"
+                                                                className="fill-red-500"
+                                                            />
+                                                        </svg>
+                                                    </button>
+                                                    <StrapiImage
+                                                        src={
+                                                            item?.og_image?.url
+                                                        }
+                                                        alt="Icon"
+                                                        width={500}
+                                                        height={500}
+                                                        className=" inline-block h-full w-full min-h-52 md:rounded-tl-md rounded-tl-md rounded-tr-md md:rounded-bl-md col-span-5 object-cover object-center"
+                                                    />
+                                                    <div className="flex flex-col gap-3 p-4 col-span-7">
+                                                        <div className="flex items-center gap-2">
+                                                            <Image
+                                                                src={
+                                                                    "/icons/Clock.svg"
+                                                                }
+                                                                alt="Icon"
+                                                                width={24}
+                                                                height={24}
+                                                                className="w-[22px] md:w-6 h-[22px] md:h-6 inline-block"
+                                                            />
+                                                            <p className="text-xs font-semiBold leading-xs text-neutral-700">
+                                                                2.5 hour
+                                                            </p>
+                                                        </div>
+                                                        <h3 className="md:text-sm text-xs md:leading-md leading-xs font-semiBold tracking-xs">
+                                                            <span>
+                                                                {
+                                                                    item
+                                                                        ?.blocks[0]
+                                                                        ?.title
+                                                                }
+                                                            </span>
+                                                        </h3>
+                                                        <p className="md:text-xs leading-xs text-neutral-500 font-medium line-clamp-3">
+                                                            {
+                                                                item?.blocks[0]
+                                                                    ?.description
+                                                            }
+                                                        </p>
 
-                                        <div className="flex items-center gap-1">
-                                            <Image
-                                                src={"/icons/rate.svg"}
-                                                alt="Icon"
-                                                width={80}
-                                                height={16}
-                                                className=" md:h-6 inline-block"
-                                            />
-                                            <p className=" text-2xs leading-3xs font-medium text-neutral-900">
-                                                (4598 reviews)
-                                            </p>
+                                                        <div className="flex items-center gap-1">
+                                                            <Image
+                                                                src={
+                                                                    "/icons/rate.svg"
+                                                                }
+                                                                alt="Icon"
+                                                                width={80}
+                                                                height={16}
+                                                                className=" md:h-6 inline-block"
+                                                            />
+                                                            <p className=" text-2xs leading-3xs font-medium text-neutral-900">
+                                                                (4598 reviews)
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
-                                    </div>
+                                    </>
+                                )}
+
+                                <div className="flex flex-col gap-4 md:gap-6 mt-6">
+                                    {/* Button */}
+                                    <Link
+                                        href="/booking"
+                                        className="text-xs sm:text-sm font-medium leading-sm rounded-full px-6 sm:px-8 py-2.5 sm:py-3.5 h-12 sm:h-[58px] text-neutral-900 border border-neutral-900 bg-white flex w-full sm:w-auto sm:inline-flex justify-center sm:items-center transition-colors duration-200 hover:bg-blue-700 hover:text-white hover:border-blue-500"
+                                    >
+                                        + Add More
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -271,7 +356,7 @@ export default function CheckoutDetailsOverview({ data }) {
                                 <div className="flex flex-col gap-4 md:gap-6 mt-6">
                                     {/* Button */}
                                     <button className="text-xs sm:text-sm font-medium leading-sm rounded-full px-6 sm:px-8 py-2.5 sm:py-3.5 h-12 sm:h-[58px] text-neutral-50 bg-blue-700 flex w-full sm:w-auto sm:inline-flex justify-center sm:items-center transition-colors duration-200 hover:bg-blue-900">
-                                        Add Guest
+                                        Submit
                                     </button>
                                 </div>
                             </form>
@@ -291,7 +376,7 @@ export default function CheckoutDetailsOverview({ data }) {
                                 </p>
                                 <ul className="pl-6 flex flex-col gap-1.5 mt-1">
                                     <li className="leading-xs relative text-neutral-500 before:absolute before:content-[''] before:w-1 before:h-1 before:bg-neutral-500 before:rounded-full before:top-4 before:-translate-y-1/2 before:-left-3.5">
-                                        We’ll send you a final Booking
+                                        We'll send you a final Booking
                                         Confirmation Email on average within 24
                                         hours. We advise you to not make any
                                         other travel arrangements before that
@@ -356,21 +441,27 @@ export default function CheckoutDetailsOverview({ data }) {
 
                             {/* Line Items */}
                             <div className="space-y-4 mb-6 border-t border-neutral-300 pt-5">
-                                <div className="flex justify-between items-center">
-                                    <span className="text-neutral-950 text-sm font-semiBold ">
-                                        Private Snorkeling
-                                    </span>
-                                    <span className="text-neutral-950 text-sm font-semiBold">
-                                        196 €
-                                    </span>
-                                </div>
+                                {productData?.map((item) => (
+                                    <div
+                                        key={item?.id}
+                                        className="flex justify-between items-top gap-6"
+                                    >
+                                        <span className="text-neutral-950 text-sm font-semiBold ">
+                                            {item?.blocks[0]?.title}
+                                        </span>
+                                        <span className="text-neutral-950 text-sm font-semiBold shrink-0">
+                                            {parseFloat(item?.price).toFixed(2)}{" "}
+                                            €
+                                        </span>
+                                    </div>
+                                ))}
 
                                 <div className="flex justify-between items-center">
                                     <span className="text-neutral-950 text-sm font-semiBold ">
                                         Tax
                                     </span>
                                     <span className="text-neutral-950 text-sm font-semiBold">
-                                        16 €
+                                        {calculations.tax.toFixed(2)} €
                                     </span>
                                 </div>
 
@@ -379,7 +470,7 @@ export default function CheckoutDetailsOverview({ data }) {
                                         Fees
                                     </span>
                                     <span className="text-neutral-950 text-sm font-semiBold">
-                                        0 €
+                                        {calculations.fees.toFixed(2)} €
                                     </span>
                                 </div>
                             </div>
@@ -394,7 +485,7 @@ export default function CheckoutDetailsOverview({ data }) {
                                         Sub-Total
                                     </span>
                                     <span className="text-neutral-950 text-sm font-semiBold">
-                                        212 €
+                                        {calculations.subTotal.toFixed(2)} €
                                     </span>
                                 </div>
 
@@ -403,7 +494,7 @@ export default function CheckoutDetailsOverview({ data }) {
                                         Discount
                                     </span>
                                     <span className="text-neutral-950 text-sm font-semiBold">
-                                        (-22 €)
+                                        (-{calculations.discount.toFixed(2)} €)
                                     </span>
                                 </div>
                             </div>
@@ -415,7 +506,7 @@ export default function CheckoutDetailsOverview({ data }) {
                                     Total
                                 </span>
                                 <span className="text-blue-700 text-ml leading-ml">
-                                    190 €
+                                    {calculations.total.toFixed(2)} €
                                 </span>
                             </div>
                         </div>
@@ -508,7 +599,7 @@ export default function CheckoutDetailsOverview({ data }) {
                         </div>
                         <div className="title-summary w-full bg-white  md:p-6 p-3 border border-neutral-500 rounded-lg mt-14">
                             <h4 className="md:text-ml text-sm font-semiBold tracking-xs md:leading-ml leading-sm md:mb-2 mb-2">
-                                Title summary{" "}
+                                Title summary
                             </h4>
                             <p className="text-xs font-medium leading-xs ">
                                 Lorem ipsum dolor sit amet consectetur.

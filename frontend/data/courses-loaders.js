@@ -50,8 +50,17 @@ export const getSingleCoursesData = cache(async (slug) => {
                 $eq: slug,
             },
         },
-        fields: ["meta_title", "meta_description", "slug", "price", "offerPrice"],
+        fields: [
+            "meta_title",
+            "meta_description",
+            "slug",
+            "price",
+            "offerPrice",
+        ],
         populate: {
+            og_image: {
+                fields: ["url", "alternativeText"],
+            },
             blocks: {
                 on: {
                     "blocks.sub-header": {
@@ -129,7 +138,6 @@ export const getSingleCoursesData = cache(async (slug) => {
 
     return await fetchAPI(url.href, { method: "GET" });
 });
-
 
 // Get category wise fetching courses
 export async function getCategoryWiseCoursesData(categoryName) {

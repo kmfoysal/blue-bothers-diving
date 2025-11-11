@@ -21,6 +21,8 @@ export default async function SingleCourse({ params }) {
 
     const singleCourseData = await getSingleCoursesData(slug);
 
+    console.log("Single page", singleCourseData);
+
     return (
         <main>
             <PageHeader data={singleCourseData?.data[0]?.blocks[0]} />

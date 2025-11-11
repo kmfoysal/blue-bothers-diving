@@ -121,19 +121,40 @@ export default function TourBookingForm({ priceCart }) {
         // Ensure productData is an array
         const currentProducts = Array.isArray(productData) ? productData : [];
 
+        // Create updated cart item with calculated prices and booking details
+        const updatedCartItem = {
+            ...priceCart,
+            price: totalPrice,
+            offerPrice: totalOfferPrice,
+            originalPrice: priceCart?.price,
+            originalOfferPrice: priceCart?.offerPrice,
+            participants: participants,
+            selectedDate: range,
+            selectedTime: selectedTime,
+            tieredPricing: tieredPricing,
+        };
+
         const found = currentProducts.find((item) => {
             return item.id === priceCart.id;
         });
 
         if (!found) {
-            setProductData([...currentProducts, priceCart]);
+            setProductData([...currentProducts, updatedCartItem]);
             router.push("/checkout");
         } else {
-            console.error(`The course id ${priceCart.id} already exists.`);
+            // Update existing product with new details
+            const updatedProducts = currentProducts.map((item) =>
+                item.id === priceCart.id ? updatedCartItem : item
+            );
+            setProductData(updatedProducts);
             router.push("/checkout");
         }
     }
     console.log("Product Data :", productData);
+
+    // Calculate total prices based on participants
+    const totalOfferPrice = participants * (cartData?.offerPrice || 0);
+    const totalPrice = totalOfferPrice + participants * 100;
 
     return (
         <div className=" sticky top-8">
@@ -485,7 +506,7 @@ export default function TourBookingForm({ priceCart }) {
                         </div>
                         {/* Price */}
                         <h4 className="text-sm leading-md font-semiBold tracking-xs text-neutral-950">
-                            {cartData?.price} €
+                            {totalPrice} €
                         </h4>
                     </div>
                     <div className="flex items-center justify-between gap-6">
@@ -499,7 +520,7 @@ export default function TourBookingForm({ priceCart }) {
                         </div>
                         {/* Price */}
                         <h4 className="text-sm leading-md font-semiBold tracking-xs text-neutral-950">
-                            {cartData?.offerPrice} €
+                            {totalOfferPrice} €
                         </h4>
                     </div>
                 </div>
@@ -514,10 +535,10 @@ export default function TourBookingForm({ priceCart }) {
 
                     <div className="flex items-center gap-3">
                         <h3 className="text-ml leading-ml font-semiBold tracking-xs text-blue-700">
-                            {cartData?.offerPrice} €
+                            {totalOfferPrice} €
                         </h3>
                         <h4 className="text-sm leading-md font-semiBold tracking-xs text-neutral-500 line-through">
-                            {cartData?.price} €
+                            {totalPrice} €
                         </h4>
                     </div>
                     {/* Button */}
