@@ -8,6 +8,7 @@ import "react-day-picker/dist/style.css";
 
 import { ProductContext } from "@/context";
 import { useEffect, useRef } from "react";
+import { toast } from "react-toastify";
 
 export default function TourBookingForm({ priceCart }) {
     const router = useRouter();
@@ -115,6 +116,7 @@ export default function TourBookingForm({ priceCart }) {
     };
 
     // Handle Add To Cart
+    // Handle Add To Cart
     function handleAddToCart(event, priceCart) {
         event.stopPropagation();
 
@@ -139,18 +141,21 @@ export default function TourBookingForm({ priceCart }) {
         });
 
         if (!found) {
+            toast.success("Added to Cart", {
+                position: "bottom-right",
+                autoClose: 2000,
+            });
             setProductData([...currentProducts, updatedCartItem]);
             router.push("/checkout");
         } else {
-            // Update existing product with new details
-            const updatedProducts = currentProducts.map((item) =>
-                item.id === priceCart.id ? updatedCartItem : item
-            );
-            setProductData(updatedProducts);
+            toast.error("This item is already in your cart ⚠️", {
+                position: "bottom-right",
+                autoClose: 2000,
+            });
             router.push("/checkout");
         }
     }
-    console.log("Product Data :", productData);
+    // console.log("Product Data :", productData);
 
     // Calculate total prices based on participants
     const totalOfferPrice = participants * (cartData?.offerPrice || 0);

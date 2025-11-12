@@ -22,6 +22,7 @@
     "react-day-picker": "^9.11.1",
     "react-dom": "^19.1.1",
     "react-image-previewer": "^1.1.6",
+    "react-toastify": "^11.0.5",
     "swiper": "^11.2.10",
     "zod": "^4.1.12"
   },

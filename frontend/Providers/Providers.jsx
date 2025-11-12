@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ProductContext } from "..";
+import { ProductContext } from "../context";
 
 export function Providers({ children }) {
     const [productData, setProductData] = useState([]);

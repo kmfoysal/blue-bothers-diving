@@ -4,6 +4,7 @@ import { ProductContext } from "@/context";
 import Image from "next/image";
 import Link from "next/link";
 import { useContext, useMemo, useState } from "react";
+import { toast } from "react-toastify";
 import { StrapiImage } from "../StrapiImage/StrapiImage";
 
 export default function CheckoutDetailsOverview({ data }) {
@@ -19,6 +20,10 @@ export default function CheckoutDetailsOverview({ data }) {
 
     const handleRemoveProduct = (productId) => {
         removeProduct(productId);
+        toast.success("Product removed from cart", {
+            position: "bottom-right",
+            autoClose: 2000,
+        });
     };
 
     // Calculate totals
@@ -30,25 +35,25 @@ export default function CheckoutDetailsOverview({ data }) {
                 return sum + price;
             }, 0) || 0;
 
-        // Fixed values (আপনি চাইলে এগুলোও dynamic করতে পারবেন)
-        const tax = 16;
-        const fees = 0;
+        // Dynamic tax calculation (10% of products total)
+        const taxRate = 0.1;
+        const tax = productsTotal * taxRate;
+
+        // Dynamic fees calculation (service fee per product)
+        const feePerProduct = 2;
+        const fees = (productData?.length || 0) * feePerProduct;
 
         // Sub-total calculation
         const subTotal = productsTotal + tax + fees;
 
-        // Discount (আপনি চাইলে percentage বা fixed amount করতে পারেন)
-        const discount = 22;
-
         // Final total
-        const total = subTotal - discount;
+        const total = subTotal;
 
         return {
             productsTotal,
             tax,
             fees,
             subTotal,
-            discount,
             total,
         };
     }, [productData]);
@@ -60,8 +65,8 @@ export default function CheckoutDetailsOverview({ data }) {
                     <div className="">
                         <div className="md:flex hidden items-center gap-2">
                             <Link
-                                href={{}}
-                                className="text-neutral-500 text-xs font-medium"
+                                href="/booking"
+                                className="text-neutral-500 text-xs font-medium transition-colors duration-200 hover:text-blue-700"
                             >
                                 Snorkeling
                             </Link>
@@ -72,13 +77,9 @@ export default function CheckoutDetailsOverview({ data }) {
                                 height={24}
                                 className="w-[22px] md:w-6 h-[22px] md:h-6 inline-block"
                             />
-                            <Link
-                                href={{}}
-                                className="text-neutral-500 text-xs font-medium"
-                            >
-                                Private Snorkeling Excursion – Blue Brothers 1
-                                (up to 5 guests, 2.5 hours)
-                            </Link>
+                            <p className="text-neutral-500 text-xs font-medium">
+                                Checkout
+                            </p>
                         </div>
                         <div>
                             <p className="text-lg leading-lg font-bold text-neutral-900 tracking-xs md:my-6 my-2">
@@ -96,7 +97,6 @@ export default function CheckoutDetailsOverview({ data }) {
                                                     key={item?.id}
                                                     className="rounded-md bg-neutral-100 gap-2 block md:grid grid-cols-12 items-center relative"
                                                 >
-                                                    {/* Close button */}
                                                     <button
                                                         onClick={() =>
                                                             handleRemoveProduct(
@@ -182,7 +182,6 @@ export default function CheckoutDetailsOverview({ data }) {
                                 )}
 
                                 <div className="flex flex-col gap-4 md:gap-6 mt-6">
-                                    {/* Button */}
                                     <Link
                                         href="/booking"
                                         className="text-xs sm:text-sm font-medium leading-sm rounded-full px-6 sm:px-8 py-2.5 sm:py-3.5 h-12 sm:h-[58px] text-neutral-900 border border-neutral-900 bg-white flex w-full sm:w-auto sm:inline-flex justify-center sm:items-center transition-colors duration-200 hover:bg-blue-700 hover:text-white hover:border-blue-500"
@@ -203,7 +202,6 @@ export default function CheckoutDetailsOverview({ data }) {
                         <div className=" mt-4">
                             <form className="px-3 py-6 md:p-6 border border-neutral-500 rounded-lg ">
                                 <div className="flex flex-col gap-6">
-                                    {/* Dynamically render guest fields */}
                                     {Array.from(
                                         { length: guestCount },
                                         (_, index) => (
@@ -216,7 +214,6 @@ export default function CheckoutDetailsOverview({ data }) {
                                                     )}
                                                 </h5>
                                                 <div className="grid grid-cols-2 gap-4">
-                                                    {/* First name */}
                                                     <div className="sm:col-span-1 col-span-2">
                                                         <fieldset className="border border-neutral-500 rounded-full">
                                                             <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
@@ -231,7 +228,6 @@ export default function CheckoutDetailsOverview({ data }) {
                                                             />
                                                         </fieldset>
                                                     </div>
-                                                    {/* Last name */}
                                                     <div className="sm:col-span-1 col-span-2">
                                                         <fieldset className="border border-neutral-500 rounded-full">
                                                             <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
@@ -253,7 +249,6 @@ export default function CheckoutDetailsOverview({ data }) {
                                 </div>
 
                                 <div className="flex flex-col gap-4 md:gap-6 mt-6">
-                                    {/* Button */}
                                     <button
                                         type="button"
                                         onClick={handleAddGuest}
@@ -274,7 +269,6 @@ export default function CheckoutDetailsOverview({ data }) {
                             <form className="px-3 py-6 md:p-6 border border-neutral-500 rounded-lg ">
                                 <div className="flex flex-col gap-6">
                                     <div className="grid grid-cols-2 gap-4">
-                                        {/* First name */}
                                         <div className="sm:col-span-1  col-span-2">
                                             <fieldset className="border border-neutral-500 rounded-full">
                                                 <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
@@ -289,7 +283,6 @@ export default function CheckoutDetailsOverview({ data }) {
                                                 />
                                             </fieldset>
                                         </div>
-                                        {/* Last name */}
                                         <div className="sm:col-span-1 col-span-2">
                                             <fieldset className="border border-neutral-500 rounded-full">
                                                 <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
@@ -304,7 +297,6 @@ export default function CheckoutDetailsOverview({ data }) {
                                                 />
                                             </fieldset>
                                         </div>
-                                        {/* Email Address */}
                                         <div className="sm:col-span-1 col-span-2">
                                             <fieldset className="border border-neutral-500 rounded-full">
                                                 <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
@@ -319,7 +311,6 @@ export default function CheckoutDetailsOverview({ data }) {
                                                 />
                                             </fieldset>
                                         </div>
-                                        {/* Phone number */}
                                         <div className="sm:col-span-1 col-span-2">
                                             <fieldset className="border border-neutral-500 rounded-full">
                                                 <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
@@ -335,7 +326,6 @@ export default function CheckoutDetailsOverview({ data }) {
                                             </fieldset>
                                         </div>
 
-                                        {/* Write details */}
                                         <div className="col-span-2">
                                             <fieldset className="border border-neutral-500 rounded-xl ">
                                                 <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
@@ -354,7 +344,6 @@ export default function CheckoutDetailsOverview({ data }) {
                                 </div>
 
                                 <div className="flex flex-col gap-4 md:gap-6 mt-6">
-                                    {/* Button */}
                                     <button className="text-xs sm:text-sm font-medium leading-sm rounded-full px-6 sm:px-8 py-2.5 sm:py-3.5 h-12 sm:h-[58px] text-neutral-50 bg-blue-700 flex w-full sm:w-auto sm:inline-flex justify-center sm:items-center transition-colors duration-200 hover:bg-blue-900">
                                         Submit
                                     </button>
@@ -365,7 +354,6 @@ export default function CheckoutDetailsOverview({ data }) {
 
                     {/* checkout feature */}
                     <div className="py-6 border-t border-neutral-100">
-                        {/* Others Info */}
                         <div className=" border-t border-neutral-100 pt-6">
                             <h4 className="text-sm leading-md font-semiBold text-neutral-950 tracking-xs">
                                 Information
@@ -413,7 +401,6 @@ export default function CheckoutDetailsOverview({ data }) {
                             </div>
                         </div>
 
-                        {/* Cancellation policy */}
                         <div className=" border-t border-neutral-100 pt-6 mt-6">
                             <h4 className="text-sm leading-md font-semiBold text-neutral-950 tracking-xs mb-3">
                                 Cancellation policy
@@ -428,7 +415,6 @@ export default function CheckoutDetailsOverview({ data }) {
                 <div className="col-span-full md:col-span-6 xl:col-span-5">
                     <div className="">
                         <div className="w-full bg-white md:p-6 p-3 border border-neutral-500 rounded-lg ">
-                            {/* Header */}
                             <div className="mb-6">
                                 <h4 className="md:text-ml text-sm font-semiBold tracking-xs md:leading-ml leading-sm md:mb-2 mb-2">
                                     Billing summary
@@ -439,7 +425,6 @@ export default function CheckoutDetailsOverview({ data }) {
                                 </p>
                             </div>
 
-                            {/* Line Items */}
                             <div className="space-y-4 mb-6 border-t border-neutral-300 pt-5">
                                 {productData?.map((item) => (
                                     <div
@@ -458,7 +443,7 @@ export default function CheckoutDetailsOverview({ data }) {
 
                                 <div className="flex justify-between items-center">
                                     <span className="text-neutral-950 text-sm font-semiBold ">
-                                        Tax
+                                        Tax (10%)
                                     </span>
                                     <span className="text-neutral-950 text-sm font-semiBold">
                                         {calculations.tax.toFixed(2)} €
@@ -467,7 +452,7 @@ export default function CheckoutDetailsOverview({ data }) {
 
                                 <div className="flex justify-between items-center">
                                     <span className="text-neutral-950 text-sm font-semiBold ">
-                                        Fees
+                                        Service Fees
                                     </span>
                                     <span className="text-neutral-950 text-sm font-semiBold">
                                         {calculations.fees.toFixed(2)} €
@@ -475,10 +460,8 @@ export default function CheckoutDetailsOverview({ data }) {
                                 </div>
                             </div>
 
-                            {/* Divider */}
                             <div className="border-t border-neutral-300 mb-4"></div>
 
-                            {/* Sub-total and Discount */}
                             <div className="space-y-4 mb-4">
                                 <div className="flex justify-between items-center">
                                     <span className="text-neutral-950 text-sm font-semiBold">
@@ -488,18 +471,8 @@ export default function CheckoutDetailsOverview({ data }) {
                                         {calculations.subTotal.toFixed(2)} €
                                     </span>
                                 </div>
-
-                                <div className="flex justify-between items-center">
-                                    <span className="text-neutral-950 text-sm font-semiBold">
-                                        Discount
-                                    </span>
-                                    <span className="text-neutral-950 text-sm font-semiBold">
-                                        (-{calculations.discount.toFixed(2)} €)
-                                    </span>
-                                </div>
                             </div>
 
-                            {/* Total */}
                             <div className="border-t border-neutral-300 mb-6"></div>
                             <div className="flex justify-between items-center">
                                 <span className="text-ml leading-ml text-neutral-900">
@@ -512,12 +485,10 @@ export default function CheckoutDetailsOverview({ data }) {
                         </div>
 
                         <div className="w-full bg-white  md:p-6 p-3 border border-neutral-500 rounded-lg  mt-14">
-                            {/* Header */}
                             <h2 className="md:text-ml text-sm font-semiBold tracking-xs md:leading-ml leading-sm md:mb-2 mb-2">
                                 Payment Details
                             </h2>
 
-                            {/* Card Details Section */}
                             <div className="mb-6">
                                 <div className="flex justify-between items-center mb-4 pt-2 border-t border-neutral-300">
                                     <label className="text-xs text-neutral-500 font-medium">
@@ -528,7 +499,6 @@ export default function CheckoutDetailsOverview({ data }) {
                                     </button>
                                 </div>
 
-                                {/* Card Number Input */}
                                 <div className="mb-0">
                                     <div className="relative">
                                         <input
@@ -536,7 +506,6 @@ export default function CheckoutDetailsOverview({ data }) {
                                             placeholder="1234 1234 1234 1234"
                                             className="w-full px-4 py-3 border border-neutral-500 rounded-t-[10px] focus:outline-none "
                                         />
-                                        {/* Card Logos */}
                                         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1">
                                             <div className="flex gap-2">
                                                 <Image
@@ -565,7 +534,6 @@ export default function CheckoutDetailsOverview({ data }) {
                                     </div>
                                 </div>
 
-                                {/* MM/YY and CVC Row */}
                                 <div className="grid grid-cols-2 ">
                                     <input
                                         type="text"
@@ -578,7 +546,6 @@ export default function CheckoutDetailsOverview({ data }) {
                                             placeholder="CVC"
                                             className="w-full px-4 py-3 border border-neutral-500 rounded-br-[10px] border-t-transparent focus:outline-none"
                                         />
-                                        {/* Card Icon */}
                                         <div className="absolute right-3 top-1/2 -translate-y-1/2">
                                             <Image
                                                 src={"/icons/cvc.svg"}
@@ -592,7 +559,6 @@ export default function CheckoutDetailsOverview({ data }) {
                                 </div>
                             </div>
 
-                            {/* Pay Now Button */}
                             <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-full transition-colors duration-200">
                                 Pay now
                             </button>

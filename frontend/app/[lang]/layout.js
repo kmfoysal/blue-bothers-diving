@@ -3,14 +3,14 @@ import { Barlow, Playfair_Display } from "next/font/google";
 import Footer from "@/components/Footer/Footer";
 import Header from "@/components/Header/Header";
 import TermlyCMP from "@/components/TermlyCMP/TermlyCMP";
-import { Providers } from "@/context/Providers/Providers";
 import {
     getGlobalSection,
     getHomeBanner,
     getNavigationData,
 } from "@/data/loaders";
+import { Providers } from "@/Providers/Providers";
+import ToastProvider from "@/Providers/Toast";
 import "../globals.css";
-
 // Fonts
 const barlow = Barlow({
     variable: "--font-barlow",
@@ -58,11 +58,13 @@ export default async function RootLayout({ children }) {
         <html lang="en">
             <body className={`${playFairDisplay.variable} ${barlow.variable}`}>
                 <TermlyCMP websiteUUID={WEBSITE_UUID} />
-                <Providers>
-                    <Header data={data.header} navData={navigationData} />
-                    {children}
-                    <Footer data={data.footer} />
-                </Providers>
+                <ToastProvider>
+                    <Providers>
+                        <Header data={data.header} navData={navigationData} />
+                        {children}
+                        <Footer data={data.footer} />
+                    </Providers>
+                </ToastProvider>
             </body>
         </html>
     );
