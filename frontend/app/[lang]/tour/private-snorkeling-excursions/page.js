@@ -1,10 +1,12 @@
 import PrivateSnorkelingCourse from "@/components/PrivateSnorkelingCourse/PrivateSnorkelingCourse";
 import SubPageBanner from "@/components/SubBanner/SubPageBanner";
-import { getPrivateSnorkelingCardData } from "@/data/private-snorkeling-loaders";
+import { getAboutPagesData } from "@/data/about-us-loaders";
 import { getTourPagesData } from "@/data/tour-loaders";
 
 export async function generateMetadata() {
-    const getMetaData = await getTourPagesData("private-snorkeling-excursions");
+    const getMetaData = await getAboutPagesData(
+        "private-snorkeling-excursions"
+    );
 
     return {
         title: getMetaData?.data[0]?.title || "",
@@ -13,20 +15,19 @@ export async function generateMetadata() {
 }
 
 export default async function PrivateSnorkelingExcursions() {
-    const getSnorkelingExcursionsData = await getTourPagesData(
+    // Page Banner
+    const getTourPageData = await getAboutPagesData(
         "private-snorkeling-excursions"
     );
 
-    const privateSnorkelingCardData = await getPrivateSnorkelingCardData();
+    const tourCollectionData = await getTourPagesData();
 
     return (
         <main>
             <SubPageBanner
-                bannerContent={
-                    getSnorkelingExcursionsData?.data[0]?.page_banner
-                }
+                bannerContent={getTourPageData?.data[0]?.page_banner}
             />
-            <PrivateSnorkelingCourse data={privateSnorkelingCardData?.data} />
+            <PrivateSnorkelingCourse data={tourCollectionData?.data} />
         </main>
     );
 }

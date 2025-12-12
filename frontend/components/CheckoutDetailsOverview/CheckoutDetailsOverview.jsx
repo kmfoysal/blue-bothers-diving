@@ -10,7 +10,7 @@ import { StrapiImage } from "../StrapiImage/StrapiImage";
 export default function CheckoutDetailsOverview({ data }) {
     const { productData, removeProduct } = useContext(ProductContext);
 
-    console.log("Product Data From Checkout page", productData);
+    // console.log("Product Data From Checkout page", productData);
 
     const [guestCount, setGuestCount] = useState(1);
 
@@ -62,298 +62,303 @@ export default function CheckoutDetailsOverview({ data }) {
         <section className="py-8 md:py-16">
             <div className="container grid grid-cols-1 md:grid-cols-12 gap-12 xl:gap-16">
                 <div className="col-span-full md:col-span-6 xl:col-span-7 relative before:absolute before:content-[''] before:w-full md:before:w-[1px] before:h-[1px] md:before:h-full before:left-0 md:before:left-auto md:before:-right-6 xl:before:-right-8 before:-bottom-6 md:before:top-0 before:bg-neutral-300">
-                    <div className="">
-                        <div className="md:flex hidden items-center gap-2">
-                            <Link
-                                href="/booking"
-                                className="text-neutral-500 text-xs font-medium transition-colors duration-200 hover:text-blue-700"
-                            >
-                                Snorkeling
-                            </Link>
-                            <Image
-                                src={"/icons/badgeIcon.svg"}
-                                alt="Icon"
-                                width={24}
-                                height={24}
-                                className="w-[22px] md:w-6 h-[22px] md:h-6 inline-block"
-                            />
-                            <p className="text-neutral-500 text-xs font-medium">
-                                Checkout
-                            </p>
-                        </div>
-                        <div>
-                            <p className="text-lg leading-lg font-bold text-neutral-900 tracking-xs md:my-6 my-2">
-                                Overview
-                            </p>
-                            <div className="md:p-6 p-3 rounded-lg bg-white border border-neutral-500 mb-5">
-                                {productData?.length > 0 && (
-                                    <>
-                                        <h4 className="md:text-ml text-sm font-semiBold tracking-xs md:leading-ml leading-sm md:mb-5 mb-5">
-                                            Booking Details
-                                        </h4>
-                                        <div className="flex flex-col gap-5">
-                                            {productData.map((item) => (
-                                                <div
-                                                    key={item?.id}
-                                                    className="rounded-md bg-neutral-100 gap-2 block md:grid grid-cols-12 items-center relative"
+                    <div className="md:flex hidden items-center gap-2">
+                        <Link
+                            href="/booking"
+                            className="text-neutral-500 text-xs font-medium transition-colors duration-200 hover:text-blue-700"
+                        >
+                            Snorkeling
+                        </Link>
+                        <Image
+                            src={"/icons/badgeIcon.svg"}
+                            alt="Icon"
+                            width={24}
+                            height={24}
+                            className="w-[22px] md:w-6 h-[22px] md:h-6 inline-block"
+                        />
+                        <p className="text-neutral-500 text-xs font-medium">
+                            Checkout
+                        </p>
+                    </div>
+                    <div>
+                        <p className="text-lg leading-lg font-bold text-neutral-900 tracking-xs md:my-6 my-2">
+                            Overview
+                        </p>
+                        <div className="md:p-6 p-3 rounded-lg bg-white border border-neutral-500 mb-5">
+                            {productData?.length > 0 ? (
+                                <>
+                                    <h4 className="md:text-ml text-sm font-semiBold tracking-xs md:leading-ml leading-sm md:mb-5 mb-5">
+                                        Booking Details
+                                    </h4>
+                                    <div className="flex flex-col gap-5">
+                                        {productData.map((item) => (
+                                            <div
+                                                key={item?.id}
+                                                className="rounded-md bg-neutral-100 gap-2 block md:grid grid-cols-12 items-center relative"
+                                            >
+                                                <button
+                                                    onClick={() =>
+                                                        handleRemoveProduct(
+                                                            item.id
+                                                        )
+                                                    }
+                                                    className="absolute top-2 right-2 bg-red-200/50 backdrop:blur-sm p-2 rounded-full hover:bg-red-300/70 transition-colors z-10"
+                                                    aria-label="Remove product"
                                                 >
-                                                    <button
-                                                        onClick={() =>
-                                                            handleRemoveProduct(
-                                                                item.id
-                                                            )
-                                                        }
-                                                        className="absolute top-2 right-2 bg-red-200/50 backdrop:blur-sm p-2 rounded-full hover:bg-red-300/70 transition-colors z-10"
-                                                        aria-label="Remove product"
+                                                    <svg
+                                                        width="14"
+                                                        height="14"
+                                                        viewBox="0 0 14 14"
+                                                        fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg"
                                                     >
-                                                        <svg
-                                                            width="14"
-                                                            height="14"
-                                                            viewBox="0 0 14 14"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M1.4 14L0 12.6L5.6 7L0 1.4L1.4 0L7 5.6L12.6 0L14 1.4L8.4 7L14 12.6L12.6 14L7 8.4L1.4 14Z"
-                                                                fill="#3B71B8"
-                                                                className="fill-red-500"
-                                                            />
-                                                        </svg>
-                                                    </button>
-                                                    <StrapiImage
-                                                        src={
-                                                            item?.og_image?.url
-                                                        }
-                                                        alt="Icon"
-                                                        width={500}
-                                                        height={500}
-                                                        className=" inline-block h-full w-full min-h-52 md:rounded-tl-md rounded-tl-md rounded-tr-md md:rounded-bl-md col-span-5 object-cover object-center"
-                                                    />
-                                                    <div className="flex flex-col gap-3 p-4 col-span-7">
-                                                        <div className="flex items-center gap-2">
-                                                            <Image
-                                                                src={
-                                                                    "/icons/Clock.svg"
-                                                                }
-                                                                alt="Icon"
-                                                                width={24}
-                                                                height={24}
-                                                                className="w-[22px] md:w-6 h-[22px] md:h-6 inline-block"
-                                                            />
-                                                            <p className="text-xs font-semiBold leading-xs text-neutral-700">
-                                                                2.5 hour
-                                                            </p>
-                                                        </div>
-                                                        <h3 className="md:text-sm text-xs md:leading-md leading-xs font-semiBold tracking-xs">
-                                                            <span>
-                                                                {
-                                                                    item
-                                                                        ?.blocks[0]
-                                                                        ?.title
-                                                                }
-                                                            </span>
-                                                        </h3>
-                                                        <p className="md:text-xs leading-xs text-neutral-500 font-medium line-clamp-3">
+                                                        <path
+                                                            d="M1.4 14L0 12.6L5.6 7L0 1.4L1.4 0L7 5.6L12.6 0L14 1.4L8.4 7L14 12.6L12.6 14L7 8.4L1.4 14Z"
+                                                            fill="#3B71B8"
+                                                            className="fill-red-500"
+                                                        />
+                                                    </svg>
+                                                </button>
+                                                <StrapiImage
+                                                    src={item?.og_image?.url}
+                                                    alt="Icon"
+                                                    width={500}
+                                                    height={500}
+                                                    className=" inline-block h-full w-full min-h-52 md:rounded-tl-md rounded-tl-md rounded-tr-md md:rounded-bl-md col-span-5 object-cover object-center"
+                                                />
+                                                <div className="flex flex-col gap-3 p-4 col-span-7">
+                                                    <div className="flex items-center gap-2">
+                                                        <Image
+                                                            src={
+                                                                "/icons/Clock.svg"
+                                                            }
+                                                            alt="Icon"
+                                                            width={24}
+                                                            height={24}
+                                                            className="w-[22px] md:w-6 h-[22px] md:h-6 inline-block"
+                                                        />
+                                                        <p className="text-xs font-semiBold leading-xs text-neutral-700">
+                                                            2.5 hour
+                                                        </p>
+                                                    </div>
+                                                    <h3 className="md:text-sm text-xs md:leading-md leading-xs font-semiBold tracking-xs">
+                                                        <span>
                                                             {
                                                                 item?.blocks[0]
-                                                                    ?.description
+                                                                    ?.title
                                                             }
-                                                        </p>
+                                                        </span>
+                                                    </h3>
+                                                    <p className="md:text-xs leading-xs text-neutral-500 font-medium line-clamp-3">
+                                                        {
+                                                            item?.blocks[0]
+                                                                ?.description
+                                                        }
+                                                    </p>
 
-                                                        <div className="flex items-center gap-1">
-                                                            <Image
-                                                                src={
-                                                                    "/icons/rate.svg"
-                                                                }
-                                                                alt="Icon"
-                                                                width={80}
-                                                                height={16}
-                                                                className=" md:h-6 inline-block"
-                                                            />
-                                                            <p className=" text-2xs leading-3xs font-medium text-neutral-900">
-                                                                (4598 reviews)
-                                                            </p>
-                                                        </div>
+                                                    <div className="flex items-center gap-1">
+                                                        <Image
+                                                            src={
+                                                                "/icons/rate.svg"
+                                                            }
+                                                            alt="Icon"
+                                                            width={80}
+                                                            height={16}
+                                                            className=" md:h-6 inline-block"
+                                                        />
+                                                        <p className=" text-2xs leading-3xs font-medium text-neutral-900">
+                                                            (4598 reviews)
+                                                        </p>
                                                     </div>
                                                 </div>
-                                            ))}
-                                        </div>
-                                    </>
-                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
+                            ) : (
+                                <h4 className="md:text-ml text-sm font-semiBold text-center tracking-xs md:leading-ml leading-sm mb-5 py-10">
+                                    No products to checkout.
+                                </h4>
+                            )}
 
-                                <div className="flex flex-col gap-4 md:gap-6 mt-6">
-                                    <Link
-                                        href="/booking"
-                                        className="text-xs sm:text-sm font-medium leading-sm rounded-full px-6 sm:px-8 py-2.5 sm:py-3.5 h-12 sm:h-[58px] text-neutral-900 border border-neutral-900 bg-white flex w-full sm:w-auto sm:inline-flex justify-center sm:items-center transition-colors duration-200 hover:bg-blue-700 hover:text-white hover:border-blue-500"
-                                    >
-                                        + Add More
-                                    </Link>
-                                </div>
+                            <div className="flex flex-col gap-4 md:gap-6 mt-6">
+                                <Link
+                                    href="/booking"
+                                    className="text-xs sm:text-sm font-medium leading-sm rounded-full px-6 sm:px-8 py-2.5 sm:py-3.5 h-12 sm:h-[58px] text-neutral-900 border border-neutral-900 bg-white flex w-full sm:w-auto sm:inline-flex justify-center sm:items-center transition-colors duration-200 hover:bg-blue-700 hover:text-white hover:border-blue-500"
+                                >
+                                    + Add More
+                                </Link>
                             </div>
                         </div>
                     </div>
 
-                    {/* Guest Details */}
-                    <div className="py-6 border-t border-neutral-100">
-                        <h4 className="text-sm leading-md font-semiBold text-neutral-950 tracking-xs">
-                            Guest Details
-                        </h4>
+                    {productData?.length > 0 && (
+                        <>
+                            {/* Guest Details */}
+                            <div className="py-6 border-t border-neutral-100">
+                                <h4 className="text-sm leading-md font-semiBold text-neutral-950 tracking-xs">
+                                    Guest Details
+                                </h4>
 
-                        <div className=" mt-4">
-                            <form className="px-3 py-6 md:p-6 border border-neutral-500 rounded-lg ">
-                                <div className="flex flex-col gap-6">
-                                    {Array.from(
-                                        { length: guestCount },
-                                        (_, index) => (
-                                            <div key={index}>
-                                                <h5 className="text-base font-semiBold text-neutral-950 mb-4">
-                                                    Guest Name{" "}
-                                                    {String(index + 1).padStart(
-                                                        2,
-                                                        "0"
-                                                    )}
-                                                </h5>
-                                                <div className="grid grid-cols-2 gap-4">
-                                                    <div className="sm:col-span-1 col-span-2">
-                                                        <fieldset className="border border-neutral-500 rounded-full">
-                                                            <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
-                                                                First Name
-                                                            </legend>
-                                                            <input
-                                                                type="text"
-                                                                id="fname"
-                                                                name="fname"
-                                                                placeholder="You First Name"
-                                                                className="w-full focus:outline-none rounded-full h-14 placeholder:text-xs placeholder:leading-xs placeholder:text-neutral-300 p-4 text-neutral-900"
-                                                            />
-                                                        </fieldset>
+                                <div className=" mt-4">
+                                    <form className="px-3 py-6 md:p-6 border border-neutral-500 rounded-lg ">
+                                        <div className="flex flex-col gap-6">
+                                            {Array.from(
+                                                { length: guestCount },
+                                                (_, index) => (
+                                                    <div key={index}>
+                                                        <h5 className="text-base font-semiBold text-neutral-950 mb-4">
+                                                            Guest Name
+                                                            {String(
+                                                                index + 1
+                                                            ).padStart(2, "0")}
+                                                        </h5>
+                                                        <div className="grid grid-cols-2 gap-4">
+                                                            <div className="sm:col-span-1 col-span-2">
+                                                                <fieldset className="border border-neutral-500 rounded-full">
+                                                                    <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
+                                                                        First
+                                                                        Name
+                                                                    </legend>
+                                                                    <input
+                                                                        type="text"
+                                                                        id="fname"
+                                                                        name="fname"
+                                                                        placeholder="You First Name"
+                                                                        className="w-full focus:outline-none rounded-full h-14 placeholder:text-xs placeholder:leading-xs placeholder:text-neutral-300 p-4 text-neutral-900"
+                                                                    />
+                                                                </fieldset>
+                                                            </div>
+                                                            <div className="sm:col-span-1 col-span-2">
+                                                                <fieldset className="border border-neutral-500 rounded-full">
+                                                                    <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
+                                                                        Last
+                                                                        Name
+                                                                    </legend>
+                                                                    <input
+                                                                        type="text"
+                                                                        id="lname"
+                                                                        name="lname"
+                                                                        placeholder="You Last Name"
+                                                                        className="w-full focus:outline-none rounded-full h-14 placeholder:text-xs placeholder:leading-xs placeholder:text-neutral-300 p-4 text-neutral-900"
+                                                                    />
+                                                                </fieldset>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div className="sm:col-span-1 col-span-2">
-                                                        <fieldset className="border border-neutral-500 rounded-full">
-                                                            <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
-                                                                Last Name
-                                                            </legend>
-                                                            <input
-                                                                type="text"
-                                                                id="lname"
-                                                                name="lname"
-                                                                placeholder="You Last Name"
-                                                                className="w-full focus:outline-none rounded-full h-14 placeholder:text-xs placeholder:leading-xs placeholder:text-neutral-300 p-4 text-neutral-900"
-                                                            />
-                                                        </fieldset>
-                                                    </div>
+                                                )
+                                            )}
+                                        </div>
+
+                                        <div className="flex flex-col gap-4 md:gap-6 mt-6">
+                                            <button
+                                                type="button"
+                                                onClick={handleAddGuest}
+                                                className="text-xs sm:text-sm font-medium leading-sm rounded-full px-6 sm:px-8 py-2.5 sm:py-3.5 h-12 sm:h-[58px] text-neutral-50 bg-blue-700 flex w-full sm:w-auto sm:inline-flex justify-center sm:items-center transition-colors duration-200 hover:bg-blue-900"
+                                            >
+                                                Add Guest
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            {/* Contact Details */}
+                            <div className="py-6  border-t border-neutral-100 ">
+                                <h4 className="text-sm leading-md font-semiBold text-neutral-950 tracking-xs">
+                                    Contact Details
+                                </h4>
+                                <div className=" mt-4">
+                                    <form className="px-3 py-6 md:p-6 border border-neutral-500 rounded-lg ">
+                                        <div className="flex flex-col gap-6">
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div className="sm:col-span-1  col-span-2">
+                                                    <fieldset className="border border-neutral-500 rounded-full">
+                                                        <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
+                                                            First Name
+                                                        </legend>
+                                                        <input
+                                                            type="text"
+                                                            id="fname"
+                                                            name="fname"
+                                                            placeholder="You First Name"
+                                                            className="w-full focus:outline-none rounded-full h-14 placeholder:text-xs placeholder:leading-xs placeholder:text-neutral-300 p-4 text-neutral-900"
+                                                        />
+                                                    </fieldset>
+                                                </div>
+                                                <div className="sm:col-span-1 col-span-2">
+                                                    <fieldset className="border border-neutral-500 rounded-full">
+                                                        <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
+                                                            Last Name
+                                                        </legend>
+                                                        <input
+                                                            type="text"
+                                                            id="lname"
+                                                            name="lname"
+                                                            placeholder="You Last Name"
+                                                            className="w-full focus:outline-none rounded-full h-14 placeholder:text-xs placeholder:leading-xs placeholder:text-neutral-300 p-4 text-neutral-900"
+                                                        />
+                                                    </fieldset>
+                                                </div>
+                                                <div className="sm:col-span-1 col-span-2">
+                                                    <fieldset className="border border-neutral-500 rounded-full">
+                                                        <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
+                                                            Choose Available
+                                                            Start Time
+                                                        </legend>
+                                                        <input
+                                                            type="email"
+                                                            id="email"
+                                                            name="email"
+                                                            placeholder="Enter your email address"
+                                                            className="w-full focus:outline-none rounded-full h-14 placeholder:text-xs placeholder:leading-xs placeholder:text-neutral-300 p-4 text-neutral-900"
+                                                        />
+                                                    </fieldset>
+                                                </div>
+                                                <div className="sm:col-span-1 col-span-2">
+                                                    <fieldset className="border border-neutral-500 rounded-full">
+                                                        <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
+                                                            Phone Number
+                                                        </legend>
+                                                        <input
+                                                            type="number"
+                                                            id="number"
+                                                            name="number"
+                                                            placeholder="Phone Number"
+                                                            className="w-full focus:outline-none rounded-full h-14 placeholder:text-xs placeholder:leading-xs placeholder:text-neutral-300 p-4 text-neutral-900"
+                                                        />
+                                                    </fieldset>
+                                                </div>
+
+                                                <div className="col-span-2">
+                                                    <fieldset className="border border-neutral-500 rounded-xl ">
+                                                        <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
+                                                            Special requests
+                                                        </legend>
+                                                        <textarea
+                                                            id="custom-textarea"
+                                                            placeholder="Write details"
+                                                            maxLength=""
+                                                            className={`w-full h-[146px] rounded-lg px-3 py-2 focus:outline-none border-0 bg-transparent`}
+                                                            aria-describedby="charcount"
+                                                        />
+                                                    </fieldset>
                                                 </div>
                                             </div>
-                                        )
-                                    )}
-                                </div>
-
-                                <div className="flex flex-col gap-4 md:gap-6 mt-6">
-                                    <button
-                                        type="button"
-                                        onClick={handleAddGuest}
-                                        className="text-xs sm:text-sm font-medium leading-sm rounded-full px-6 sm:px-8 py-2.5 sm:py-3.5 h-12 sm:h-[58px] text-neutral-50 bg-blue-700 flex w-full sm:w-auto sm:inline-flex justify-center sm:items-center transition-colors duration-200 hover:bg-blue-900"
-                                    >
-                                        Add Guest
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    {/* Contact Details */}
-                    <div className="py-6  border-t border-neutral-100 ">
-                        <h4 className="text-sm leading-md font-semiBold text-neutral-950 tracking-xs">
-                            Contact Details
-                        </h4>
-                        <div className=" mt-4">
-                            <form className="px-3 py-6 md:p-6 border border-neutral-500 rounded-lg ">
-                                <div className="flex flex-col gap-6">
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="sm:col-span-1  col-span-2">
-                                            <fieldset className="border border-neutral-500 rounded-full">
-                                                <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
-                                                    First Name
-                                                </legend>
-                                                <input
-                                                    type="text"
-                                                    id="fname"
-                                                    name="fname"
-                                                    placeholder="You First Name"
-                                                    className="w-full focus:outline-none rounded-full h-14 placeholder:text-xs placeholder:leading-xs placeholder:text-neutral-300 p-4 text-neutral-900"
-                                                />
-                                            </fieldset>
-                                        </div>
-                                        <div className="sm:col-span-1 col-span-2">
-                                            <fieldset className="border border-neutral-500 rounded-full">
-                                                <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
-                                                    Last Name
-                                                </legend>
-                                                <input
-                                                    type="text"
-                                                    id="lname"
-                                                    name="lname"
-                                                    placeholder="You Last Name"
-                                                    className="w-full focus:outline-none rounded-full h-14 placeholder:text-xs placeholder:leading-xs placeholder:text-neutral-300 p-4 text-neutral-900"
-                                                />
-                                            </fieldset>
-                                        </div>
-                                        <div className="sm:col-span-1 col-span-2">
-                                            <fieldset className="border border-neutral-500 rounded-full">
-                                                <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
-                                                    Choose Available Start Time
-                                                </legend>
-                                                <input
-                                                    type="email"
-                                                    id="email"
-                                                    name="email"
-                                                    placeholder="Enter your email address"
-                                                    className="w-full focus:outline-none rounded-full h-14 placeholder:text-xs placeholder:leading-xs placeholder:text-neutral-300 p-4 text-neutral-900"
-                                                />
-                                            </fieldset>
-                                        </div>
-                                        <div className="sm:col-span-1 col-span-2">
-                                            <fieldset className="border border-neutral-500 rounded-full">
-                                                <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
-                                                    Phone Number
-                                                </legend>
-                                                <input
-                                                    type="number"
-                                                    id="number"
-                                                    name="number"
-                                                    placeholder="Phone Number"
-                                                    className="w-full focus:outline-none rounded-full h-14 placeholder:text-xs placeholder:leading-xs placeholder:text-neutral-300 p-4 text-neutral-900"
-                                                />
-                                            </fieldset>
                                         </div>
 
-                                        <div className="col-span-2">
-                                            <fieldset className="border border-neutral-500 rounded-xl ">
-                                                <legend className="text-2xs font-semiBold text-neutral-900 leading-[1px] relative z-10 ml-4 before:absolute before:w-[calc(100%+8px)] before:h-5 before:bg-white before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] before:z-[-1]">
-                                                    Special requests
-                                                </legend>
-                                                <textarea
-                                                    id="custom-textarea"
-                                                    placeholder="Write details"
-                                                    maxLength=""
-                                                    className={`w-full h-[146px] rounded-lg px-3 py-2 focus:outline-none border-0 bg-transparent`}
-                                                    aria-describedby="charcount"
-                                                />
-                                            </fieldset>
+                                        <div className="flex flex-col gap-4 md:gap-6 mt-6">
+                                            <button className="text-xs sm:text-sm font-medium leading-sm rounded-full px-6 sm:px-8 py-2.5 sm:py-3.5 h-12 sm:h-[58px] text-neutral-50 bg-blue-700 flex w-full sm:w-auto sm:inline-flex justify-center sm:items-center transition-colors duration-200 hover:bg-blue-900">
+                                                Submit
+                                            </button>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
-
-                                <div className="flex flex-col gap-4 md:gap-6 mt-6">
-                                    <button className="text-xs sm:text-sm font-medium leading-sm rounded-full px-6 sm:px-8 py-2.5 sm:py-3.5 h-12 sm:h-[58px] text-neutral-50 bg-blue-700 flex w-full sm:w-auto sm:inline-flex justify-center sm:items-center transition-colors duration-200 hover:bg-blue-900">
-                                        Submit
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+                            </div>
+                        </>
+                    )}
 
                     {/* checkout feature */}
-                    <div className="py-6 border-t border-neutral-100">
+                    <div className="">
                         <div className=" border-t border-neutral-100 pt-6">
                             <h4 className="text-sm leading-md font-semiBold text-neutral-950 tracking-xs">
                                 Information

@@ -1,39 +1,37 @@
 import SubPageBanner from "@/components/SubBanner/SubPageBanner";
 import TourDetailContent from "@/components/TourDetailContent/TourDetailContent";
 import TourGallery from "@/components/TourGallery/TourGallery";
-import { getSnorkelingTourPagesData } from "@/data/private-snorkeling-loaders";
+import { getSingleTourData } from "@/data/single-tour-loader";
+
 
 // Dynamic Metadata
 export async function generateMetadata({ params }) {
     const { slug } = await params;
 
-    const snorkelingTourPagesData = await getSnorkelingTourPagesData(slug);
+    const metaData = await getSingleTourData(slug);
 
     return {
-        title:
-            snorkelingTourPagesData?.data[0]?.name ||
-            "Private Snorkeling",
-        description: snorkelingTourPagesData?.data[0]?.description || "",
+        title: metaData?.data[0]?.meta_title || "Set your meta title.",
+        description:
+            metaData?.data[0]?.meta_description || "Set your meta description",
     };
 }
 
-export default async function SinglePrivateSnorkeling({ params }) {
+export default async function SingleTour({ params }) {
     const { slug } = await params;
 
-    const snorkelingTourPagesData = await getSnorkelingTourPagesData(slug);
+    const singleTourData = await getSingleTourData(slug);
 
     return (
         <main>
             <SubPageBanner
-                bannerContent={snorkelingTourPagesData?.data[0]?.blocks[0]}
+                bannerContent={singleTourData?.data[0]?.page_banner}
             />
             <TourDetailContent
-                overviewFeatures={snorkelingTourPagesData?.data[0]?.blocks[1]}
+                overviewFeatures={singleTourData?.data[0]?.blocks[0]}
             />
             <TourGallery
-                tourGallery={
-                    snorkelingTourPagesData?.data[0]?.blocks[2]?.gallery_image
-                }
+                tourGallery={singleTourData?.data[0]?.blocks[1]?.gallery_image}
             />
         </main>
     );
