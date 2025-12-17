@@ -2,7 +2,6 @@ import { fetchAPI } from "@/utils/fetch-api";
 import { getStrapiURL } from "@/utils/get-strapi-url";
 import qs from "qs";
 
-
 export async function getTourPagesData(slug) {
     const aboutPagesQuery = qs.stringify({
         filters: {
@@ -79,7 +78,14 @@ export async function getTourPagesData(slug) {
                 },
             },
         },
-        fields: ["title", "description", "slug"],
+        fields: [
+            "title",
+            "description",
+            "slug",
+            "price",
+            "offer_price",
+            "duration",
+        ],
     });
 
     const path = "/api/tours";
@@ -91,3 +97,4 @@ export async function getTourPagesData(slug) {
 
     return await fetchAPI(url.href, { method: "GET" });
 }
+

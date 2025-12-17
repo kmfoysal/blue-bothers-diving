@@ -9,8 +9,8 @@ export default function CourseCard({ course, slugPrefix }) {
             <div className="rounded-md bg-blue-25 flex flex-col justify-between h-full">
                 <div className="flex flex-col justify-between">
                     <StrapiImage
-                        src={course?.blocks[0]?.background?.url}
-                        alt={course?.blocks[0]?.background?.alt}
+                        src={course?.page_banner?.background?.url}
+                        alt={course?.page_banner?.background?.alternativeText}
                         width={485}
                         height={317}
                         className="w-full max-w-full rounded-t-md object-cover h-[284px]"
@@ -41,13 +41,16 @@ export default function CourseCard({ course, slugPrefix }) {
                                 </div>
                             ) : null}
                         </div>
-                        <Link href={`/${slugPrefix}/${course?.slug}`} className="group">
+                        <Link
+                            href={`/${slugPrefix}/${course?.slug}`}
+                            className="group"
+                        >
                             <h4 className="text-xs sm:text-sm font-semiBold leading-xs sm:leading-md tracking-xs text-neutral-900 mb-2 sm:mb-4 group-hover:text-blue-700 transition-colors duration-200">
-                                {course?.name}
+                                {course?.title}
                             </h4>
                         </Link>
                         <p className="text-neutral-500 text-2xs sm:text-xs font-semiBold leading-xs mb-4 sm:mb-6">
-                            {course?.excerpt}
+                            {course?.page_banner?.content}
                         </p>
                     </div>
                 </div>
