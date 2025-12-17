@@ -54,7 +54,7 @@ export function BannerSlide({ dict, data }) {
                                 }
                                 className="h-full"
                             >
-                                {data?.slideImage.map((slide) => (
+                                {data?.slideImage?.map((slide) => (
                                     <SwiperSlide key={slide?.id}>
                                         <StrapiImage
                                             height={1024}

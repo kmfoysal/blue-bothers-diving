@@ -30,7 +30,7 @@ export default async function Home({ params }) {
   const bannerSlider = await getHomeBanner(lang);
   const bannerData = bannerSlider.data?.blocks?.[0];
 
-  console.log(lang);
+  // console.log(lang);
 
   // Adventures Escapes data fetch
   const advEscapes = await getAdvEscapesData();

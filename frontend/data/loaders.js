@@ -52,35 +52,33 @@ export async function getGlobalSection() {
 
 /* * Start Home page data fetching */
 
-// Home page data - [Banner, Slider,]
-const bannerSlider = qs.stringify({
-  populate: {
-    blocks: {
-      on: {
-        "blocks.banner-slider": {
-          populate: {
-            button: true,
-            slideImage: {
-              fields: ["url", "alternativeText", "width", "height"],
+export async function getHomeBanner(lang) {
+  const path = "/api/home-page";
+  const BASE_URL = getStrapiURL();
+
+  // Merge the lang (locale) into the query object directly
+  const query = {
+    populate: {
+      blocks: {
+        on: {
+          "blocks.banner-slider": {
+            populate: {
+              button: true,
+              slideImage: {
+                fields: ["url", "alternativeText", "width", "height"],
+              },
             },
           },
         },
       },
     },
-  },
-});
-
-export async function getHomeBanner(lang) {
-  const path = "/api/home-page";
-  const BASE_URL = getStrapiURL();
+    locale: lang, // Add it here
+  };
 
   const url = new URL(path, BASE_URL);
+  url.search = qs.stringify(query); // Stringify everything together
 
-  url.search = bannerSlider;
-
-  url.searchParams.append("locale", lang);
-
-  console.log(url.href);
+  console.log(url);
 
   return await fetchAPI(url.href, { method: "GET" });
 }
