@@ -50,7 +50,7 @@ export async function generateMetadata() {
 
 export default async function RootLayout({ children }) {
     const globalData = await getGlobalSection();
-    const data = globalData.data;
+    const data = globalData?.data;
 
     const navigationData = await getNavigationData("main-menu");
 
@@ -60,9 +60,9 @@ export default async function RootLayout({ children }) {
                 <TermlyCMP websiteUUID={WEBSITE_UUID} />
                 <ToastProvider>
                     <Providers>
-                        <Header data={data.header} navData={navigationData} />
+                        <Header data={data?.header} navData={navigationData} />
                         {children}
-                        <Footer data={data.footer} />
+                        <Footer data={data?.footer} />
                     </Providers>
                 </ToastProvider>
             </body>
