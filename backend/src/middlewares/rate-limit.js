@@ -9,7 +9,7 @@ module.exports = ({ strapi }) => {
     db: new Map(),
     duration: 60 * 1000, // 1 minute
     errorMessage: "Too many requests, slow down.",
-    max: 100,
+    max: 1000,
     id: (ctx) => ctx?.ip,
     whitelist: (ctx) => WHITELIST.includes(ctx.ip),
     headers: {
