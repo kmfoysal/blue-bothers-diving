@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_pricing_tiers",
+  "info": {
+    "displayName": "Pricing Tier",
+    "icon": "layer-group",
+    "description": "Discount tiers based on session count"
+  },
+  "options": {},
+  "attributes": {
+    "fromSessionCount": {
+      "type": "integer",
+      "required": true,
+      "default": 1
+    },
+    "toSessionCount": {
+      "type": "integer",
+      "required": false
+    },
+    "pricePerParticipant": {
+      "type": "decimal",
+      "required": true
+    }
+  }
+}

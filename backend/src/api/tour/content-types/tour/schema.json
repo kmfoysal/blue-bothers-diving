@@ -42,23 +42,6 @@
       "targetField": "title",
       "required": true
     },
-    "price": {
-      "type": "integer",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "min": 0
-    },
-    "offer_price": {
-      "type": "integer",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
     "duration": {
       "type": "decimal",
       "pluginOptions": {
@@ -66,6 +49,43 @@
           "localized": true
         }
       }
+    },
+    "pricingMode": {
+      "type": "enumeration",
+      "enum": [
+        "fixed_per_participant",
+        "static_per_booking",
+        "discount_by_sessions"
+      ],
+      "default": "fixed_per_participant"
+    },
+    "currency": {
+      "type": "string",
+      "default": "EUR"
+    },
+    "vatRatePercent": {
+      "type": "decimal",
+      "default": 14
+    },
+    "vatIncluded": {
+      "type": "boolean",
+      "default": false
+    },
+    "pricingPeriods": {
+      "type": "component",
+      "repeatable": true,
+      "component": "pricing.period",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "sessions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::session.session",
+      "mappedBy": "tour"
     },
     "page_banner": {
       "type": "component",
@@ -84,10 +104,7 @@
           "localized": true
         }
       },
-      "components": [
-        "blocks.gallery",
-        "blocks.features-overview"
-      ]
+      "components": ["blocks.gallery", "blocks.features-overview"]
     }
   }
 }

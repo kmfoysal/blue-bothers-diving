@@ -1,0 +1,39 @@
+{
+  "collectionName": "components_booking_items",
+  "info": {
+    "displayName": "Booking Item",
+    "icon": "shopping-basket",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "session": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::session.session"
+    },
+    "itemGuestCount": {
+      "type": "integer"
+    },
+    "itemPriceTotal": {
+      "type": "decimal"
+    },
+    "itemCurrency": {
+      "type": "string"
+    },
+    "itemNetAmount": {
+      "type": "decimal"
+    },
+    "itemVatAmount": {
+      "type": "decimal"
+    },
+    "pricingDetailsSnapshot": {
+      "type": "json"
+    },
+    "participants": {
+      "type": "component",
+      "repeatable": true,
+      "component": "booking.participant"
+    }
+  }
+}

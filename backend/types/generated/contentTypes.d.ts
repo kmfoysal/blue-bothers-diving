@@ -373,6 +373,52 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiBookingBooking extends Struct.CollectionTypeSchema {
+  collectionName: 'bookings';
+  info: {
+    displayName: 'Booking';
+    pluralName: 'bookings';
+    singularName: 'booking';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    bookingCode: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    contactEmail: Schema.Attribute.Email;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    guestCountTotal: Schema.Attribute.Integer;
+    items: Schema.Attribute.Component<'booking.item', true>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::booking.booking'
+    >;
+    paymentStatus: Schema.Attribute.Enumeration<
+      ['unpaid', 'deposit_paid', 'paid', 'refunded']
+    > &
+      Schema.Attribute.DefaultTo<'unpaid'>;
+    priceTotal: Schema.Attribute.Decimal;
+    publishedAt: Schema.Attribute.DateTime;
+    status: Schema.Attribute.Enumeration<
+      ['quote', 'pending', 'confirmed', 'cancelled']
+    > &
+      Schema.Attribute.DefaultTo<'pending'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   collectionName: 'categories';
   info: {
@@ -482,6 +528,7 @@ export interface ApiCoursesCollectionCoursesCollection
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    currency: Schema.Attribute.String & Schema.Attribute.DefaultTo<'EUR'>;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -499,26 +546,24 @@ export interface ApiCoursesCollectionCoursesCollection
           localized: true;
         };
       }>;
-    offerPrice: Schema.Attribute.Integer &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
     og_image: Schema.Attribute.Media<'images'> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
         };
       }>;
-    price: Schema.Attribute.Integer &
-      Schema.Attribute.Required &
+    pricingMode: Schema.Attribute.Enumeration<
+      ['fixed_per_participant', 'static_per_booking', 'discount_by_sessions']
+    > &
+      Schema.Attribute.DefaultTo<'fixed_per_participant'>;
+    pricingPeriods: Schema.Attribute.Component<'pricing.period', true> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
         };
       }>;
     publishedAt: Schema.Attribute.DateTime;
+    sessions: Schema.Attribute.Relation<'oneToMany', 'api::session.session'>;
     slug: Schema.Attribute.UID<'meta_title'> &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -529,6 +574,8 @@ export interface ApiCoursesCollectionCoursesCollection
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    vatIncluded: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    vatRatePercent: Schema.Attribute.Decimal & Schema.Attribute.DefaultTo<14>;
   };
 }
 
@@ -946,6 +993,52 @@ export interface ApiPricingRowPricingRow extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiSessionSession extends Struct.CollectionTypeSchema {
+  collectionName: 'sessions';
+  info: {
+    description: 'A scheduled instance of a Tour or Training';
+    displayName: 'Session';
+    pluralName: 'sessions';
+    singularName: 'session';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    capacity: Schema.Attribute.Integer & Schema.Attribute.Required;
+    courses_collection: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::courses-collection.courses-collection'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    endDateTime: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::session.session'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    sessionType: Schema.Attribute.Enumeration<['public', 'private']> &
+      Schema.Attribute.DefaultTo<'public'>;
+    startDateTime: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    status: Schema.Attribute.Enumeration<['scheduled', 'cancelled', 'draft']> &
+      Schema.Attribute.DefaultTo<'scheduled'>;
+    tour: Schema.Attribute.Relation<'manyToOne', 'api::tour.tour'>;
+    training: Schema.Attribute.Relation<'manyToOne', 'api::training.training'>;
+    trip: Schema.Attribute.Relation<'manyToOne', 'api::trip.trip'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiSnorkelingPageSnorkelingPage
   extends Struct.SingleTypeSchema {
   collectionName: 'snorkeling_pages';
@@ -1188,6 +1281,7 @@ export interface ApiTourTour extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    currency: Schema.Attribute.String & Schema.Attribute.DefaultTo<'EUR'>;
     description: Schema.Attribute.Text &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -1202,31 +1296,24 @@ export interface ApiTourTour extends Struct.CollectionTypeSchema {
       }>;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::tour.tour'>;
-    offer_price: Schema.Attribute.Integer &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
     page_banner: Schema.Attribute.Component<'blocks.sub-banner', false> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
         };
       }>;
-    price: Schema.Attribute.Integer &
+    pricingMode: Schema.Attribute.Enumeration<
+      ['fixed_per_participant', 'static_per_booking', 'discount_by_sessions']
+    > &
+      Schema.Attribute.DefaultTo<'fixed_per_participant'>;
+    pricingPeriods: Schema.Attribute.Component<'pricing.period', true> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
         };
-      }> &
-      Schema.Attribute.SetMinMax<
-        {
-          min: 0;
-        },
-        number
-      >;
+      }>;
     publishedAt: Schema.Attribute.DateTime;
+    sessions: Schema.Attribute.Relation<'oneToMany', 'api::session.session'>;
     slug: Schema.Attribute.UID<'title'> &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -1244,6 +1331,8 @@ export interface ApiTourTour extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    vatIncluded: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    vatRatePercent: Schema.Attribute.Decimal & Schema.Attribute.DefaultTo<14>;
   };
 }
 
@@ -1274,6 +1363,7 @@ export interface ApiTrainingTraining extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    currency: Schema.Attribute.String & Schema.Attribute.DefaultTo<'EUR'>;
     description: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -1285,7 +1375,18 @@ export interface ApiTrainingTraining extends Struct.CollectionTypeSchema {
       'oneToMany',
       'api::training.training'
     >;
+    pricingMode: Schema.Attribute.Enumeration<
+      ['fixed_per_participant', 'static_per_booking', 'discount_by_sessions']
+    > &
+      Schema.Attribute.DefaultTo<'fixed_per_participant'>;
+    pricingPeriods: Schema.Attribute.Component<'pricing.period', true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     publishedAt: Schema.Attribute.DateTime;
+    sessions: Schema.Attribute.Relation<'oneToMany', 'api::session.session'>;
     slug: Schema.Attribute.UID<'title'> &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -1299,6 +1400,46 @@ export interface ApiTrainingTraining extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    vatIncluded: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    vatRatePercent: Schema.Attribute.Decimal & Schema.Attribute.DefaultTo<14>;
+  };
+}
+
+export interface ApiTripTrip extends Struct.CollectionTypeSchema {
+  collectionName: 'trips';
+  info: {
+    description: 'Capacity container for boat/speedboat/pool/shore sessions';
+    displayName: 'Trip';
+    pluralName: 'trips';
+    singularName: 'trip';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    boatName: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    kind: Schema.Attribute.Enumeration<
+      ['boat', 'speedboat', 'pool', 'shore', 'classroom']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'boat'>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::trip.trip'>;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    sessions: Schema.Attribute.Relation<'oneToMany', 'api::session.session'>;
+    totalCapacity: Schema.Attribute.Integer & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1964,6 +2105,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::booking.booking': ApiBookingBooking;
       'api::category.category': ApiCategoryCategory;
       'api::contact-forms-data.contact-forms-data': ApiContactFormsDataContactFormsData;
       'api::courses-collection.courses-collection': ApiCoursesCollectionCoursesCollection;
@@ -1975,11 +2117,13 @@ declare module '@strapi/strapi' {
       'api::newsletter-signup.newsletter-signup': ApiNewsletterSignupNewsletterSignup;
       'api::page.page': ApiPagePage;
       'api::pricing-row.pricing-row': ApiPricingRowPricingRow;
+      'api::session.session': ApiSessionSession;
       'api::snorkeling-page.snorkeling-page': ApiSnorkelingPageSnorkelingPage;
       'api::team-member.team-member': ApiTeamMemberTeamMember;
       'api::testimonial.testimonial': ApiTestimonialTestimonial;
       'api::tour.tour': ApiTourTour;
       'api::training.training': ApiTrainingTraining;
+      'api::trip.trip': ApiTripTrip;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

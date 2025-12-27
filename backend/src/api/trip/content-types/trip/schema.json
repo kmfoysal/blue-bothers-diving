@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "trips",
+  "info": {
+    "singularName": "trip",
+    "pluralName": "trips",
+    "displayName": "Trip",
+    "description": "Capacity container for boat/speedboat/pool/shore sessions"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "kind": {
+      "type": "enumeration",
+      "enum": ["boat", "speedboat", "pool", "shore", "classroom"],
+      "default": "boat",
+      "required": true
+    },
+    "boatName": {
+      "type": "string"
+    },
+    "totalCapacity": {
+      "type": "integer",
+      "required": true
+    },
+    "sessions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::session.session",
+      "mappedBy": "trip"
+    }
+  }
+}

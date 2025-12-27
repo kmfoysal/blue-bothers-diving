@@ -298,6 +298,43 @@ export interface BlocksWhyChooseUs extends Struct.ComponentSchema {
   };
 }
 
+export interface BookingItem extends Struct.ComponentSchema {
+  collectionName: 'components_booking_items';
+  info: {
+    description: '';
+    displayName: 'Booking Item';
+    icon: 'shopping-basket';
+  };
+  attributes: {
+    itemCurrency: Schema.Attribute.String;
+    itemGuestCount: Schema.Attribute.Integer;
+    itemNetAmount: Schema.Attribute.Decimal;
+    itemPriceTotal: Schema.Attribute.Decimal;
+    itemVatAmount: Schema.Attribute.Decimal;
+    participants: Schema.Attribute.Component<'booking.participant', true>;
+    pricingDetailsSnapshot: Schema.Attribute.JSON;
+    session: Schema.Attribute.Relation<'oneToOne', 'api::session.session'>;
+  };
+}
+
+export interface BookingParticipant extends Struct.ComponentSchema {
+  collectionName: 'components_booking_participants';
+  info: {
+    description: '';
+    displayName: 'Booking Participant';
+    icon: 'user';
+  };
+  attributes: {
+    country: Schema.Attribute.String;
+    email: Schema.Attribute.Email;
+    firstName: Schema.Attribute.String;
+    isLead: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    lastName: Schema.Attribute.String;
+    phone: Schema.Attribute.String;
+    preferredLanguage: Schema.Attribute.Enumeration<['en', 'de']>;
+  };
+}
+
 export interface ElementsConditions extends Struct.ComponentSchema {
   collectionName: 'components_elements_conditions';
   info: {
@@ -656,6 +693,39 @@ export interface LayoutHeader extends Struct.ComponentSchema {
   };
 }
 
+export interface PricingPeriod extends Struct.ComponentSchema {
+  collectionName: 'components_pricing_periods';
+  info: {
+    description: 'Seasonal pricing configuration';
+    displayName: 'Pricing Period';
+    icon: 'calendar-alt';
+  };
+  attributes: {
+    maxParticipantsIncluded: Schema.Attribute.Integer;
+    pricePerParticipant: Schema.Attribute.Decimal;
+    sessionPricingTiers: Schema.Attribute.Component<'pricing.tier', true>;
+    staticPriceTotal: Schema.Attribute.Decimal;
+    validFrom: Schema.Attribute.Date & Schema.Attribute.Required;
+    validTo: Schema.Attribute.Date;
+  };
+}
+
+export interface PricingTier extends Struct.ComponentSchema {
+  collectionName: 'components_pricing_tiers';
+  info: {
+    description: 'Discount tiers based on session count';
+    displayName: 'Pricing Tier';
+    icon: 'layer-group';
+  };
+  attributes: {
+    fromSessionCount: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<1>;
+    pricePerParticipant: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    toSessionCount: Schema.Attribute.Integer;
+  };
+}
+
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
@@ -679,6 +749,8 @@ declare module '@strapi/strapi' {
       'blocks.testimonial': BlocksTestimonial;
       'blocks.underwater-adventure': BlocksUnderwaterAdventure;
       'blocks.why-choose-us': BlocksWhyChooseUs;
+      'booking.item': BookingItem;
+      'booking.participant': BookingParticipant;
       'elements.conditions': ElementsConditions;
       'elements.contact-info-list-item': ElementsContactInfoListItem;
       'elements.content-box': ElementsContentBox;
@@ -704,6 +776,8 @@ declare module '@strapi/strapi' {
       'elements.title-with-list': ElementsTitleWithList;
       'layout.footer': LayoutFooter;
       'layout.header': LayoutHeader;
+      'pricing.period': PricingPeriod;
+      'pricing.tier': PricingTier;
     }
   }
 }

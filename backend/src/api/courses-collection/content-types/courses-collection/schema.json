@@ -17,50 +17,23 @@
   "attributes": {
     "meta_title": {
       "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
+      "pluginOptions": { "i18n": { "localized": true } }
     },
     "meta_description": {
       "type": "text",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
+      "pluginOptions": { "i18n": { "localized": true } }
     },
     "slug": {
       "type": "uid",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
+      "pluginOptions": { "i18n": { "localized": true } },
       "targetField": "meta_title",
       "required": true
     },
     "og_image": {
       "type": "media",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
+      "pluginOptions": { "i18n": { "localized": true } },
       "multiple": false,
-      "allowedTypes": [
-        "images"
-      ]
-    },
-    "price": {
-      "type": "integer",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "required": true
+      "allowedTypes": ["images"]
     },
     "categories": {
       "type": "relation",
@@ -70,24 +43,46 @@
     },
     "blocks": {
       "type": "dynamiczone",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
+      "pluginOptions": { "i18n": { "localized": true } },
       "components": [
         "blocks.features-overview",
         "blocks.gallery",
         "blocks.sub-header"
       ]
     },
-    "offerPrice": {
-      "type": "integer",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
+    "pricingMode": {
+      "type": "enumeration",
+      "enum": [
+        "fixed_per_participant",
+        "static_per_booking",
+        "discount_by_sessions"
+      ],
+      "default": "fixed_per_participant"
+    },
+    "currency": {
+      "type": "string",
+      "default": "EUR"
+    },
+    "vatRatePercent": {
+      "type": "decimal",
+      "default": 14
+    },
+    "vatIncluded": {
+      "type": "boolean",
+      "default": false
+    },
+    "pricingPeriods": {
+      "type": "component",
+      "repeatable": true,
+      "component": "pricing.period",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+
+    "sessions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::session.session",
+      "mappedBy": "courses_collection"
     }
   }
 }

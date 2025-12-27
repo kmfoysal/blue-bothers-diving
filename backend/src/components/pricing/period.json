@@ -1,0 +1,36 @@
+{
+  "collectionName": "components_pricing_periods",
+  "info": {
+    "displayName": "Pricing Period",
+    "icon": "calendar-alt",
+    "description": "Seasonal pricing configuration"
+  },
+  "options": {},
+  "attributes": {
+    "validFrom": {
+      "type": "date",
+      "required": true
+    },
+    "validTo": {
+      "type": "date",
+      "required": false
+    },
+    "pricePerParticipant": {
+      "type": "decimal",
+      "required": false
+    },
+    "staticPriceTotal": {
+      "type": "decimal",
+      "required": false
+    },
+    "maxParticipantsIncluded": {
+      "type": "integer",
+      "required": false
+    },
+    "sessionPricingTiers": {
+      "type": "component",
+      "repeatable": true,
+      "component": "pricing.tier"
+    }
+  }
+}

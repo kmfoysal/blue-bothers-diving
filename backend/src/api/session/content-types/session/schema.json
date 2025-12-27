@@ -1,0 +1,68 @@
+{
+  "kind": "collectionType",
+  "collectionName": "sessions",
+  "info": {
+    "singularName": "session",
+    "pluralName": "sessions",
+    "displayName": "Session",
+    "description": "A scheduled instance of a Tour or Training"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "startDateTime": {
+      "type": "datetime",
+      "required": true
+    },
+    "endDateTime": {
+      "type": "datetime",
+      "required": true
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["scheduled", "cancelled", "draft"],
+      "default": "scheduled"
+    },
+    "sessionType": {
+      "type": "enumeration",
+      "enum": ["public", "private"],
+      "default": "public"
+    },
+    "capacity": {
+      "type": "integer",
+      "required": true
+    },
+    "trip": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::trip.trip",
+      "inversedBy": "sessions"
+    },
+    "tour": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::tour.tour",
+      "inversedBy": "sessions"
+    },
+
+    "courses_collection": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::courses-collection.courses-collection",
+      "inversedBy": "sessions"
+    },
+
+    "training": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::training.training",
+      "inversedBy": "sessions"
+    }
+  }
+}
