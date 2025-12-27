@@ -17,6 +17,12 @@ export async function getTourPagesData(slug) {
                     },
                 },
             },
+            // ✅ NEW: Populate the pricing periods and nested tiers
+            pricingPeriods: {
+                populate: {
+                    sessionPricingTiers: true
+                }
+            },
             blocks: {
                 on: {
                     "blocks.about-content": {
@@ -82,8 +88,12 @@ export async function getTourPagesData(slug) {
             "title",
             "description",
             "slug",
-            "price",
-            "offer_price",
+            // ❌ REMOVED: "price", "offer_price" (They no longer exist)
+            // ✅ ADDED: New Pricing Fields
+            "pricingMode",
+            "currency",
+            "vatRatePercent",
+            "vatIncluded",
             "duration",
         ],
     });
@@ -97,4 +107,3 @@ export async function getTourPagesData(slug) {
 
     return await fetchAPI(url.href, { method: "GET" });
 }
-

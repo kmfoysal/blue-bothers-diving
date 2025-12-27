@@ -15,6 +15,8 @@ export async function generateMetadata() {
 export default async function DivingDayTrip() {
     const getDivingDayTripData = await getAboutPagesData("diving-day-trip");
 
+    console.log(getDivingDayTripData);
+
     return (
         <main>
             <SubPageBanner

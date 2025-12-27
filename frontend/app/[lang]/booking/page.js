@@ -1,4 +1,5 @@
 import ActivitiesBook from "@/components/ActivitiesBook/ActivitiesBook";
+import { getAllActivities } from "@/data/aggregated-loaders";
 import { getAllCoursesData } from "@/data/courses-loaders";
 
 // export async function generateMetadata() {
@@ -12,6 +13,10 @@ import { getAllCoursesData } from "@/data/courses-loaders";
 
 export default async function BookingPage() {
     const allCoursesData = await getAllCoursesData();
+
+    const allActivities = await getAllActivities();
+
+    console.log(allActivities);
 
     return (
         <main className="section-padding">

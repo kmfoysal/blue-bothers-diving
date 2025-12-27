@@ -3,36 +3,33 @@ import TourDetailContent from "@/components/TourDetailContent/TourDetailContent"
 import TourGallery from "@/components/TourGallery/TourGallery";
 import { getSingleTourData } from "@/data/single-tour-loader";
 
-
-// Dynamic Metadata
 export async function generateMetadata({ params }) {
-    const { slug } = await params;
-
-    const metaData = await getSingleTourData(slug);
-
-    return {
-        title: metaData?.data[0]?.meta_title || "Set your meta title.",
-        description:
-            metaData?.data[0]?.meta_description || "Set your meta description",
-    };
+  const { slug } = await params;
+  const metaData = await getSingleTourData(slug);
+  return {
+    title: metaData?.data[0]?.meta_title || "Tour Details",
+    description: metaData?.data[0]?.meta_description || "Book your trip.",
+  };
 }
 
 export default async function SingleTour({ params }) {
-    const { slug } = await params;
+  const { slug } = await params;
+  const singleTourData = await getSingleTourData(slug);
 
-    const singleTourData = await getSingleTourData(slug);
+  // Safety check
+  const tourData = singleTourData?.data?.[0];
 
-    return (
-        <main>
-            <SubPageBanner
-                bannerContent={singleTourData?.data[0]?.page_banner}
-            />
-            <TourDetailContent
-                overviewFeatures={singleTourData?.data[0]?.blocks[0]}
-            />
-            <TourGallery
-                tourGallery={singleTourData?.data[0]?.blocks[1]?.gallery_image}
-            />
-        </main>
-    );
+  if (!tourData) return <div>Tour Not Found</div>;
+
+  return (
+    <main>
+      <SubPageBanner bannerContent={tourData.page_banner} />
+      {/* ✅ FIXED: Pass full 'tourData' object */}
+      <TourDetailContent
+        overviewFeatures={tourData.blocks[0]}
+        tourData={tourData}
+      />
+      <TourGallery tourGallery={tourData.blocks[1]?.gallery_image} />
+    </main>
+  );
 }
