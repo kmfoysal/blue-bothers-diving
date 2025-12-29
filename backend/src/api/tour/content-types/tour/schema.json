@@ -52,12 +52,12 @@
     },
     "pricingMode": {
       "type": "enumeration",
+      "default": "fixed_per_participant",
       "enum": [
         "fixed_per_participant",
         "static_per_booking",
         "discount_by_sessions"
-      ],
-      "default": "fixed_per_participant"
+      ]
     },
     "currency": {
       "type": "string",
@@ -73,13 +73,13 @@
     },
     "pricingPeriods": {
       "type": "component",
-      "repeatable": true,
-      "component": "pricing.period",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      }
+      },
+      "component": "pricing.period",
+      "repeatable": true
     },
     "sessions": {
       "type": "relation",
@@ -104,7 +104,16 @@
           "localized": true
         }
       },
-      "components": ["blocks.gallery", "blocks.features-overview"]
+      "components": [
+        "blocks.gallery",
+        "blocks.features-overview"
+      ]
+    },
+    "categories": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category.category",
+      "inversedBy": "tours"
     }
   }
 }

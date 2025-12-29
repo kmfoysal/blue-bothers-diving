@@ -373,52 +373,6 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiBookingBooking extends Struct.CollectionTypeSchema {
-  collectionName: 'bookings';
-  info: {
-    displayName: 'Booking';
-    pluralName: 'bookings';
-    singularName: 'booking';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
-  attributes: {
-    bookingCode: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.Unique;
-    contactEmail: Schema.Attribute.Email;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    guestCountTotal: Schema.Attribute.Integer;
-    items: Schema.Attribute.Component<'booking.item', true>;
-    locale: Schema.Attribute.String;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::booking.booking'
-    >;
-    paymentStatus: Schema.Attribute.Enumeration<
-      ['unpaid', 'deposit_paid', 'paid', 'refunded']
-    > &
-      Schema.Attribute.DefaultTo<'unpaid'>;
-    priceTotal: Schema.Attribute.Decimal;
-    publishedAt: Schema.Attribute.DateTime;
-    status: Schema.Attribute.Enumeration<
-      ['quote', 'pending', 'confirmed', 'cancelled']
-    > &
-      Schema.Attribute.DefaultTo<'pending'>;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
 export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   collectionName: 'categories';
   info: {
@@ -456,6 +410,7 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
         };
       }>;
     publishedAt: Schema.Attribute.DateTime;
+    tours: Schema.Attribute.Relation<'oneToMany', 'api::tour.tour'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1278,6 +1233,10 @@ export interface ApiTourTour extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
+    categories: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::category.category'
+    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -2105,7 +2064,6 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
-      'api::booking.booking': ApiBookingBooking;
       'api::category.category': ApiCategoryCategory;
       'api::contact-forms-data.contact-forms-data': ApiContactFormsDataContactFormsData;
       'api::courses-collection.courses-collection': ApiCoursesCollectionCoursesCollection;

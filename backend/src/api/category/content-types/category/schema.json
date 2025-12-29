@@ -30,6 +30,12 @@
       "relation": "manyToMany",
       "target": "api::courses-collection.courses-collection",
       "inversedBy": "categories"
+    },
+    "tours": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::tour.tour",
+      "mappedBy": "categories"
     }
   }
 }

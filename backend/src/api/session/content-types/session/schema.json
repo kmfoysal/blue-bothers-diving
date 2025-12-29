@@ -26,12 +26,19 @@
     },
     "status": {
       "type": "enumeration",
-      "enum": ["scheduled", "cancelled", "draft"],
+      "enum": [
+        "scheduled",
+        "cancelled",
+        "draft"
+      ],
       "default": "scheduled"
     },
     "sessionType": {
       "type": "enumeration",
-      "enum": ["public", "private"],
+      "enum": [
+        "public",
+        "private"
+      ],
       "default": "public"
     },
     "capacity": {
@@ -50,14 +57,12 @@
       "target": "api::tour.tour",
       "inversedBy": "sessions"
     },
-
     "courses_collection": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::courses-collection.courses-collection",
       "inversedBy": "sessions"
     },
-
     "training": {
       "type": "relation",
       "relation": "manyToOne",

@@ -1,6 +1,6 @@
 "use client";
 
-import { format } from "date-fns";
+import { format, isAfter, parseISO } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useContext, useState, useEffect, useRef } from "react";
 import { DayPicker } from "react-day-picker";
@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 
 import { ProductContext } from "@/context";
 import { calculateTripPrice } from "@/utils/pricing-calculator";
+import PricingBreakdown from "@/components/PricingBreakdown/PricingBreakdown";
 
 export default function TourBookingForm({ tourData }) {
   const router = useRouter();
@@ -22,10 +23,6 @@ export default function TourBookingForm({ tourData }) {
       </div>
     );
   }
-  if (!tourData.pricingPeriods || tourData.pricingPeriods.length === 0) {
-    // This is normal if you haven't added pricing in Strapi yet
-    console.warn("No pricing periods found for this tour.");
-  }
 
   // --- State ---
   const [participants, setParticipants] = useState(1);
@@ -35,10 +32,9 @@ export default function TourBookingForm({ tourData }) {
 
   // UI Toggles
   const [isDateOpen, setIsDateOpen] = useState(false);
-  const [isPricingOpen, setIsPricingOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // Time Picker
 
   // Time Picker State
-  const [isOpen, setIsOpen] = useState(false);
   const [hour, setHour] = useState(9);
   const [minute, setMinute] = useState(0);
   const [period, setPeriod] = useState("am");
@@ -47,7 +43,6 @@ export default function TourBookingForm({ tourData }) {
 
   // --- 1. Price Calculation Effect ---
   useEffect(() => {
-    // If no date selected, price is 0
     if (!range?.from) {
       setCalculatedPrice(0);
       return;
@@ -75,13 +70,11 @@ export default function TourBookingForm({ tourData }) {
       setRange({ from: undefined, to: undefined });
       return;
     }
-    // Handle Range vs Single mode
     if (tourData.pricingMode === "discount_by_sessions") {
       setRange(val);
     } else {
-      // Single date mode: DayPicker returns a Date object
       setRange({ from: val, to: val });
-      setIsDateOpen(false); // Close calendar
+      setIsDateOpen(false);
     }
   };
 
@@ -89,7 +82,6 @@ export default function TourBookingForm({ tourData }) {
   const decrementParticipants = () =>
     setParticipants((prev) => (prev > 1 ? prev - 1 : 1));
 
-  // Time Picker Logic
   const handleApplyTime = () => {
     const formattedTime = `${hour}:${minute
       .toString()
@@ -98,7 +90,6 @@ export default function TourBookingForm({ tourData }) {
     setIsOpen(false);
   };
 
-  // Close dropdowns on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (pickerRef.current && !pickerRef.current.contains(event.target)) {
@@ -137,7 +128,7 @@ export default function TourBookingForm({ tourData }) {
     }
 
     const cartItem = {
-      cartId: crypto.randomUUID(), // 👈 Generate unique ID
+      cartId: crypto.randomUUID(),
       id: tourData.id,
       title: tourData.title,
       slug: tourData.slug,
@@ -165,21 +156,6 @@ export default function TourBookingForm({ tourData }) {
       "dd MMM, yyyy"
     )}`;
   };
-
-  const activePeriod =
-    tourData?.pricingPeriods?.find((p) => {
-      const now = new Date();
-      const start = new Date(p.validFrom);
-      const end = p.validTo ? new Date(p.validTo) : new Date("2099-12-31");
-      return now >= start && now <= end;
-    }) || tourData?.pricingPeriods?.[0];
-
-  const tiers = activePeriod?.sessionPricingTiers || [];
-
-  const activePricingPeriod = tourData?.pricingPeriods?.[0];
-  const pricingTiers = activePricingPeriod?.sessionPricingTiers || [];
-  const showTierDropdown =
-    tourData.pricingMode === "discount_by_sessions" && pricingTiers.length > 0;
 
   return (
     <div className="sticky top-8">
@@ -280,6 +256,7 @@ export default function TourBookingForm({ tourData }) {
             </div>
             {isOpen && (
               <div className="absolute z-50 mt-2 bg-white border border-neutral-200 rounded-xl shadow-xl p-5 min-w-[280px]">
+                {/* ... Time Picker Content (Same as before) ... */}
                 <div className="flex gap-3 items-center justify-center mb-4">
                   <div className="flex flex-col items-center">
                     <label className="text-xs text-neutral-500 mb-1">
@@ -396,71 +373,14 @@ export default function TourBookingForm({ tourData }) {
               </div>
             </fieldset>
           </div>
-
-          {/* --- TIER INFO (Optional) --- */}
-          {showTierDropdown && (
-            <div className="sm:col-span-3">
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() => setIsPricingOpen(!isPricingOpen)}
-                  className="w-full text-2xs text-blue-600 underline text-left px-4"
-                >
-                  View Discount Rates
-                </button>
-                {isPricingOpen && (
-                  <div className="absolute z-20 w-full mt-2 bg-white border border-neutral-200 rounded-xl shadow-lg p-2">
-                    {pricingTiers.map((tier, index) => (
-                      <div
-                        key={index}
-                        className="px-2 py-1 text-2xs text-neutral-700"
-                      >
-                        {tier.fromSessionCount}
-                        {tier.toSessionCount
-                          ? `-${tier.toSessionCount}`
-                          : "+"}{" "}
-                        Days: €{tier.pricePerParticipant}/day
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
         </div>
 
-        {/* ✅ NEW SECTION: VISUALIZE TIERS */}
-        {tourData.pricingMode === "discount_by_sessions" &&
-          tiers.length > 0 && (
-            <div className="mb-6 p-4 bg-blue-50 border border-blue-100 rounded-lg">
-              <h5 className="text-xs font-bold text-blue-800 uppercase mb-2">
-                Multi-Day Discounts
-              </h5>
-              <div className="flex flex-col gap-1">
-                {tiers.map((tier, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between text-xs text-blue-900 border-b border-blue-100 last:border-0 pb-1 last:pb-0"
-                  >
-                    <span>
-                      {tier.fromSessionCount}
-                      {tier.toSessionCount
-                        ? ` - ${tier.toSessionCount}`
-                        : "+"}{" "}
-                      Days
-                    </span>
-                    <span className="font-semibold">
-                      €{tier.pricePerParticipant}{" "}
-                      <span className="text-blue-500 font-normal">/ day</span>
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <p className="text-[10px] text-blue-500 mt-2 italic">
-                * Select a date range to apply these discounts automatically.
-              </p>
-            </div>
-          )}
+        <div className="mt-6">
+          <PricingBreakdown
+            pricingPeriods={tourData?.pricingPeriods}
+            pricingMode={tourData?.pricingMode}
+          />
+        </div>
 
         {/* --- TOTAL PRICE --- */}
         <div className="my-6 flex flex-col gap-2">
