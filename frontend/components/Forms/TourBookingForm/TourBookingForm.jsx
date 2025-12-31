@@ -1,6 +1,6 @@
 "use client";
 
-import { format, isAfter, parseISO } from "date-fns";
+import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useContext, useState, useEffect, useRef } from "react";
 import { DayPicker } from "react-day-picker";
@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { ProductContext } from "@/context";
 import { calculateTripPrice } from "@/utils/pricing-calculator";
 import PricingBreakdown from "@/components/PricingBreakdown/PricingBreakdown";
+import { getStrapiURL } from "@/utils/get-strapi-url";
 
 export default function TourBookingForm({ tourData }) {
   const router = useRouter();
@@ -30,6 +31,10 @@ export default function TourBookingForm({ tourData }) {
   const [calculatedPrice, setCalculatedPrice] = useState(0);
   const [priceError, setPriceError] = useState(null);
 
+  // 🛡️ AVAILABILITY STATE
+  const [maxGuests, setMaxGuests] = useState(100);
+  const [availabilityLoading, setAvailabilityLoading] = useState(false);
+
   // UI Toggles
   const [isDateOpen, setIsDateOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false); // Time Picker
@@ -41,7 +46,45 @@ export default function TourBookingForm({ tourData }) {
   const [selectedTime, setSelectedTime] = useState("09:00 am");
   const pickerRef = useRef(null);
 
-  // --- 1. Price Calculation Effect ---
+  // --- 1. AVAILABILITY CHECKER ---
+  useEffect(() => {
+    async function checkAvailability() {
+      if (!range?.from) return;
+
+      setAvailabilityLoading(true);
+      try {
+        const dateStr = format(range.from, "yyyy-MM-dd");
+        const type = tourData.type || "tour";
+
+        const apiUrl = new URL("/api/availability/check", getStrapiURL());
+        apiUrl.searchParams.append("slug", tourData.slug);
+        apiUrl.searchParams.append("date", dateStr);
+        apiUrl.searchParams.append("type", type);
+
+        const res = await fetch(apiUrl.href);
+        const data = await res.json();
+
+        if (res.ok && data.available !== undefined) {
+          setMaxGuests(data.available);
+
+          if (participants > data.available) {
+            setParticipants(data.available > 0 ? data.available : 1);
+            if (data.available > 0) {
+              toast.warn(`Only ${data.available} spots left for this date!`);
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Availability Check Failed:", error);
+      } finally {
+        setAvailabilityLoading(false);
+      }
+    }
+
+    checkAvailability();
+  }, [range?.from, tourData.slug, tourData.type]);
+
+  // --- 2. Price Calculation Effect ---
   useEffect(() => {
     if (!range?.from) {
       setCalculatedPrice(0);
@@ -64,7 +107,7 @@ export default function TourBookingForm({ tourData }) {
     }
   }, [range, participants, tourData]);
 
-  // --- 2. Handlers ---
+  // --- 3. Handlers ---
   const handleDateSelect = (val) => {
     if (!val) {
       setRange({ from: undefined, to: undefined });
@@ -78,7 +121,14 @@ export default function TourBookingForm({ tourData }) {
     }
   };
 
-  const incrementParticipants = () => setParticipants((prev) => prev + 1);
+  const incrementParticipants = () => {
+    if (participants < maxGuests) {
+      setParticipants((prev) => prev + 1);
+    } else {
+      toast.info("No more seats available for this date.");
+    }
+  };
+
   const decrementParticipants = () =>
     setParticipants((prev) => (prev > 1 ? prev - 1 : 1));
 
@@ -100,7 +150,7 @@ export default function TourBookingForm({ tourData }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
-  // --- 3. Add to Cart ---
+  // --- 4. Add to Cart (Smart Update) ---
   function handleAddToCart(event) {
     event.stopPropagation();
     event.preventDefault();
@@ -109,26 +159,40 @@ export default function TourBookingForm({ tourData }) {
       toast.error("Please select a date.", { position: "bottom-right" });
       return;
     }
+    if (maxGuests === 0) {
+      toast.error("Sold Out. Please select another date.", {
+        position: "bottom-right",
+      });
+      return;
+    }
     if (calculatedPrice === 0) {
       toast.error("Pricing unavailable.", { position: "bottom-right" });
       return;
     }
 
     const currentProducts = Array.isArray(productData) ? productData : [];
-    const found = currentProducts.find(
-      (item) =>
-        item.id === tourData.id &&
-        item.bookingDate?.from?.toString() === range.from.toString()
-    );
 
-    if (found) {
-      toast.info("Item already in cart.", { position: "bottom-right" });
-      router.push("/checkout");
-      return;
-    }
+    // Helper to format date safely for comparison
+    const targetDateStr = format(range.from, "yyyy-MM-dd");
 
-    const cartItem = {
-      cartId: crypto.randomUUID(),
+    // Check if this specific tour AND date combination already exists
+    const existingIndex = currentProducts.findIndex((item) => {
+      if (item.id !== tourData.id) return false;
+
+      // Handle date comparison safely (item date might be string or Date obj)
+      const itemDateStr = item.bookingDate?.from
+        ? format(new Date(item.bookingDate.from), "yyyy-MM-dd")
+        : "";
+
+      return itemDateStr === targetDateStr;
+    });
+
+    const newItemPayload = {
+      // If updating, keep the old cartId so keys don't break. If new, generate ID.
+      cartId:
+        existingIndex !== -1
+          ? currentProducts[existingIndex].cartId
+          : crypto.randomUUID(),
       id: tourData.id,
       title: tourData.title,
       slug: tourData.slug,
@@ -139,10 +203,25 @@ export default function TourBookingForm({ tourData }) {
       selectedTime: selectedTime,
       pricingMode: tourData.pricingMode,
       currency: tourData.currency,
+      type: tourData.type || "tour", // ✅ Ensure Type is saved
     };
 
-    setProductData([...currentProducts, cartItem]);
-    toast.success("Added to Cart!", { position: "bottom-right" });
+    let updatedList;
+
+    if (existingIndex !== -1) {
+      // UPDATE Existing Item
+      updatedList = [...currentProducts];
+      updatedList[existingIndex] = newItemPayload;
+      toast.info("Cart updated with new details!", {
+        position: "bottom-right",
+      });
+    } else {
+      // ADD New Item
+      updatedList = [...currentProducts, newItemPayload];
+      toast.success("Added to Cart!", { position: "bottom-right" });
+    }
+
+    setProductData(updatedList);
     router.push("/checkout");
   }
 
@@ -159,7 +238,21 @@ export default function TourBookingForm({ tourData }) {
 
   return (
     <div className="sticky top-8">
-      <form className="px-3 py-6 md:p-6 border border-neutral-500 rounded-lg bg-white">
+      <form className="px-3 py-6 md:p-6 border border-neutral-500 rounded-lg bg-white relative">
+        {/* SOLD OUT OVERLAY */}
+        {range?.from && maxGuests === 0 && !availabilityLoading && (
+          <div className="absolute inset-0 bg-white/60 z-20 flex items-center justify-center rounded-lg backdrop-blur-[1px]">
+            <div className="bg-red-50 border border-red-200 p-4 rounded-lg shadow-lg text-center">
+              <span className="text-red-600 font-bold text-lg block mb-1">
+                SOLD OUT
+              </span>
+              <span className="text-red-400 text-xs">
+                Please choose another date
+              </span>
+            </div>
+          </div>
+        )}
+
         <div className="flex flex-col gap-6">
           {/* --- DATE PICKER --- */}
           <div className="sm:col-span-3">
@@ -256,7 +349,6 @@ export default function TourBookingForm({ tourData }) {
             </div>
             {isOpen && (
               <div className="absolute z-50 mt-2 bg-white border border-neutral-200 rounded-xl shadow-xl p-5 min-w-[280px]">
-                {/* ... Time Picker Content (Same as before) ... */}
                 <div className="flex gap-3 items-center justify-center mb-4">
                   <div className="flex flex-col items-center">
                     <label className="text-xs text-neutral-500 mb-1">
@@ -358,20 +450,27 @@ export default function TourBookingForm({ tourData }) {
                     type="button"
                     onClick={decrementParticipants}
                     disabled={participants <= 1}
-                    className="w-8 h-8 flex items-center justify-center text-neutral-900 hover:bg-neutral-100 rounded-full text-xl"
+                    className="w-8 h-8 flex items-center justify-center text-neutral-900 hover:bg-neutral-100 rounded-full text-xl disabled:opacity-30"
                   >
                     -
                   </button>
                   <button
                     type="button"
                     onClick={incrementParticipants}
-                    className="w-8 h-8 flex items-center justify-center text-neutral-900 hover:bg-neutral-100 rounded-full text-xl"
+                    disabled={participants >= maxGuests}
+                    className="w-8 h-8 flex items-center justify-center text-neutral-900 hover:bg-neutral-100 rounded-full text-xl disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     +
                   </button>
                 </div>
               </div>
             </fieldset>
+            {/* 🛡️ AVAILABILITY MESSAGE */}
+            {range?.from && maxGuests < 20 && maxGuests > 0 && (
+              <p className="text-[10px] text-red-500 font-bold mt-1 text-right px-2 animate-pulse">
+                🔥 Only {maxGuests} seats left!
+              </p>
+            )}
           </div>
         </div>
 
@@ -415,14 +514,14 @@ export default function TourBookingForm({ tourData }) {
           <button
             type="button"
             onClick={handleAddToCart}
-            disabled={calculatedPrice === 0 || !!priceError}
+            disabled={calculatedPrice === 0 || !!priceError || maxGuests === 0}
             className={`text-xs sm:text-sm font-medium leading-sm rounded-full px-6 sm:px-8 py-2.5 sm:py-3.5 h-12 sm:h-[58px] text-white flex w-full sm:w-auto sm:inline-flex justify-center sm:items-center transition-colors duration-200 ${
-              calculatedPrice > 0
+              calculatedPrice > 0 && maxGuests > 0
                 ? "bg-blue-700 hover:bg-blue-900 shadow-md"
                 : "bg-neutral-400 cursor-not-allowed"
             }`}
           >
-            Book Now
+            {maxGuests === 0 ? "Sold Out" : "Book Now"}
           </button>
         </div>
       </form>

@@ -33,7 +33,7 @@
     },
     "tours": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "manyToMany",
       "target": "api::tour.tour",
       "mappedBy": "categories"
     }

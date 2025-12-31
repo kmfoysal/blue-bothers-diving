@@ -24,7 +24,7 @@
       "type": "datetime",
       "required": true
     },
-    "status": {
+    "sessionStatus": {
       "type": "enumeration",
       "enum": [
         "scheduled",

@@ -10,7 +10,7 @@ export default function ActivitiesBook({ allActivities }) {
   const uniqueCategories = [
     ...new Set(
       allActivities?.flatMap(
-        (item) => item?.categories?.map((cat) => cat.name) || []
+        (item) => item?.categories?.map((cat) => cat?.name) || []
       ) || []
     ),
   ];
@@ -41,7 +41,7 @@ export default function ActivitiesBook({ allActivities }) {
         >
           All
         </button>
-        {uniqueCategories.map((category) => (
+        {uniqueCategories?.map((category) => (
           <button
             key={category}
             onClick={() => handleCategoryClick(category)}
