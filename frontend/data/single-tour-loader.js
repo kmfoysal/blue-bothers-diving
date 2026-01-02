@@ -19,6 +19,8 @@ export const getSingleTourData = cache(async (slug) => {
       "vatRatePercent",
       "vatIncluded",
       "duration",
+      "categories",
+      "type"
     ],
     populate: {
       page_banner: {
@@ -98,12 +100,23 @@ export const getSingleTourData = cache(async (slug) => {
     },
   });
 
+//   const path = "/api/tours";
+//   const BASE_URL = getStrapiURL();
+
+//   const url = new URL(path, BASE_URL);
+
+//   url.search = tourQuery;
+
   const path = "/api/tours";
   const BASE_URL = getStrapiURL();
 
-  const url = new URL(path, BASE_URL);
+  const url = `${BASE_URL}${path}?filters[slug][$eq]=${slug}&populate=*`;
 
-  url.search = tourQuery;
+  console.log("Tour Url",url);
+  
 
-  return await fetchAPI(url.href, { method: "GET" });
+//   return await fetchAPI(url.href, { method: "GET" });
+
+  return await fetchAPI(url, { method: "GET" });
+
 });

@@ -1,10 +1,9 @@
-import ConfirmationDetails from '@/components/ConfirmationDetails/ConfirmationDetails'
-import React from 'react'
+import ConfirmationDetails from "@/components/ConfirmationDetails/ConfirmationDetails";
 
 export default function Confirmation() {
   return (
     <div>
-    <ConfirmationDetails />
+      <ConfirmationDetails />
     </div>
-  )
+  );
 }

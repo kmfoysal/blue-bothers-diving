@@ -6,6 +6,9 @@ module.exports = {
       `${process.env.SAFERPAY_USERNAME}:${process.env.SAFERPAY_PASSWORD}`
     ).toString("base64");
 
+    const frontendUrl = process.env.FRONTEND_URL?.replace(/\/$/, "");
+    const returnUrl = `${frontendUrl}/confirmation?bookingCode=${bookingData.bookingCode}`;
+
     const payload = {
       RequestHeader: {
         SpecVersion: "1.33",
@@ -16,14 +19,15 @@ module.exports = {
       TerminalId: process.env.SAFERPAY_TERMINAL_ID,
       Payment: {
         Amount: {
-          Value: Math.round(bookingData.amount * 100), // Saferpay expects cents (e.g. 1000 for 10.00)
+          Value: Math.round(bookingData.amount * 100),
           CurrencyCode: bookingData.currency || "EUR",
         },
         OrderId: bookingData.bookingCode,
         Description: `Booking ${bookingData.bookingCode}`,
       },
+      // Uses singular ReturnUrl for maximum compatibility
       ReturnUrl: {
-        Url: `${process.env.FRONTEND_URL}/confirmation?bookingCode=${bookingData.bookingCode}`,
+        Url: returnUrl,
       },
     };
 
@@ -35,15 +39,14 @@ module.exports = {
       );
       return response.data;
     } catch (error) {
-      console.error(
-        "Saferpay Init Error:",
-        error.response?.data || error.message
-      );
+      console.error("Saferpay Init Error:", error.response?.data || error.message);
       throw new Error("Payment Gateway Initialization Failed");
     }
   },
 
   async assertPayment(token) {
+    if (!token) throw new Error("Token missing");
+
     const auth = Buffer.from(
       `${process.env.SAFERPAY_USERNAME}:${process.env.SAFERPAY_PASSWORD}`
     ).toString("base64");
@@ -64,11 +67,8 @@ module.exports = {
       );
       return response.data;
     } catch (error) {
-      console.error(
-        "Saferpay Assert Error:",
-        error.response?.data || error.message
-      );
-      throw new Error("Payment Verification Failed");
+      console.error("Saferpay Assert Error:", error.response?.data || error.message);
+      throw error;
     }
   },
 };

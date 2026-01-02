@@ -1,34 +1,13 @@
 {
   "collectionName": "components_booking_participants",
   "info": {
-    "displayName": "Booking Participant",
-    "icon": "user",
-    "description": ""
+    "displayName": "Participant",
+    "icon": "user"
   },
   "options": {},
   "attributes": {
-    "firstName": {
-      "type": "string"
-    },
-    "lastName": {
-      "type": "string"
-    },
-    "isLead": {
-      "type": "boolean",
-      "default": false
-    },
-    "email": {
-      "type": "email"
-    },
-    "phone": {
-      "type": "string"
-    },
-    "country": {
-      "type": "string"
-    },
-    "preferredLanguage": {
-      "type": "enumeration",
-      "enum": ["en", "de"]
-    }
+    "fullName": { "type": "string" },
+    "participantsPhone": { "type": "string" },
+    "isLead": { "type": "boolean", "default": false }
   }
 }

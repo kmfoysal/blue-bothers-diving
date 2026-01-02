@@ -26,20 +26,20 @@
     },
     "sessionStatus": {
       "type": "enumeration",
+      "default": "scheduled",
       "enum": [
         "scheduled",
         "cancelled",
         "draft"
-      ],
-      "default": "scheduled"
+      ]
     },
     "sessionType": {
       "type": "enumeration",
+      "default": "public",
       "enum": [
         "public",
         "private"
-      ],
-      "default": "public"
+      ]
     },
     "capacity": {
       "type": "integer",
@@ -68,6 +68,14 @@
       "relation": "manyToOne",
       "target": "api::training.training",
       "inversedBy": "sessions"
+    },
+    "sessionName": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     }
   }
 }

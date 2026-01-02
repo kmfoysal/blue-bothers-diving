@@ -1,14 +1,20 @@
 "use strict";
 
-const { parseISO, isWithinInterval, startOfDay, endOfDay } = require('date-fns');
+const {
+  parseISO,
+  isWithinInterval,
+  startOfDay,
+  endOfDay,
+} = require("date-fns");
 
 module.exports = {
+  // 1. Get All Activities (Combined Tours & Courses)
   async getAllActivities(ctx) {
     const { locale } = ctx.query;
     const lang = locale || "en";
 
     try {
-      // 1. Fetch TOURS
+      // Fetch TOURS
       const tours = await strapi.entityService.findMany("api::tour.tour", {
         locale: lang,
         populate: {
@@ -18,7 +24,7 @@ module.exports = {
         },
       });
 
-      // 2. Fetch COURSES
+      // Fetch COURSES
       const courses = await strapi.entityService.findMany(
         "api::courses-collection.courses-collection",
         {
@@ -31,9 +37,8 @@ module.exports = {
         }
       );
 
-      // 3. NORMALIZE & MERGE
+      // Normalize & Merge
       const unifiedList = [
-        // --- Map Tours ---
         ...(tours || []).map((t) => ({
           id: t.id,
           title: t.title,
@@ -49,7 +54,6 @@ module.exports = {
           link: `/tour/${t.slug}`,
         })),
 
-        // --- Map Courses ---
         ...(courses || []).map((c) => ({
           id: c.id,
           title: c.meta_title || "Untitled Course",
@@ -72,7 +76,7 @@ module.exports = {
     }
   },
 
-  // ✅ NEW: Availability Check Endpoint
+  // 2. Check Availability (With Session & Trip Details)
   async checkAvailability(ctx) {
     const { slug, date, type } = ctx.query; // type = 'tour' or 'course'
 
@@ -81,7 +85,7 @@ module.exports = {
     }
 
     try {
-      // 1. Fetch the Product (Tour or Course) to find TOTAL CAPACITY
+      // A. Fetch the Product
       const collectionName =
         type === "tour"
           ? "api::tour.tour"
@@ -94,8 +98,25 @@ module.exports = {
 
       if (!product) return ctx.notFound("Activity not found");
 
-      // 2. Find the Active Pricing Period (for Max Capacity)
+      // B. Setup Date Helpers
+      const relationField = type === "tour" ? "tour" : "courses_collection";
       const targetDate = parseISO(date);
+      const dayStart = startOfDay(targetDate).toISOString();
+      const dayEnd = endOfDay(targetDate).toISOString();
+
+      // C. Fetch the Session
+      const session = await strapi.db.query("api::session.session").findOne({
+        where: {
+          [relationField]: { id: product.id },
+          startDateTime: {
+            $gte: dayStart,
+            $lte: dayEnd,
+          },
+        },
+        populate: ["trip"],
+      });
+
+      // D. Find Active Pricing Period
       const activePeriod = product.pricingPeriods?.find((p) => {
         const start = parseISO(p.validFrom);
         const end = p.validTo ? parseISO(p.validTo) : new Date("2099-12-31");
@@ -103,40 +124,34 @@ module.exports = {
       });
 
       if (!activePeriod) {
-        // Optional: If no pricing, maybe it's not bookable? For now returning 0.
         return ctx.send({
           available: 0,
           error: "No season found for this date",
         });
       }
 
-      // 3. Define Total Capacity
-      let totalCapacity =
-        product.pricingMode === "static_per_booking"
-          ? 1
-          : activePeriod.maxParticipantsIncluded || 20;
+      // E. Define Total Capacity
+      let totalCapacity;
+      if (product.pricingMode === "static_per_booking") {
+        totalCapacity = 1;
+      } else {
+        totalCapacity =
+          session?.capacity || activePeriod.maxParticipantsIncluded || 20;
+      }
 
-      // 4. Count "Sold Seats" using Deep Filtering
-      // We look for bookings that have items -> pointing to a session -> matching our product & date
-
-      const relationField = type === "tour" ? "tour" : "courses_collection"; // Map to session field name
-
-      // Define Start/End of the requested day for filtering
-      const dayStart = startOfDay(targetDate).toISOString();
-      const dayEnd = endOfDay(targetDate).toISOString();
-
+      // F. Count "Sold Seats"
+      // ✅ FIX 1: Use 'bookingStatus' and 'bookingItems' in filters
       const validBookings = await strapi.entityService.findMany(
         "api::booking.booking",
         {
           filters: {
-            status: { $ne: "cancelled" }, // Ignore cancelled
-            items: {
+            bookingStatus: { $ne: "cancelled" }, // Updated from 'status'
+            bookingItems: {
+              // Updated from 'items'
               session: {
-                // Match the specific Product
                 [relationField]: {
                   slug: slug,
                 },
-                // Match the specific Date Range
                 startDateTime: {
                   $gte: dayStart,
                   $lte: dayEnd,
@@ -145,7 +160,8 @@ module.exports = {
             },
           },
           populate: {
-            items: {
+            bookingItems: {
+              // Updated from 'items'
               populate: {
                 session: {
                   populate: [relationField],
@@ -156,23 +172,23 @@ module.exports = {
         }
       );
 
-      // 5. Sum up the guests from the valid items
       let soldSeats = 0;
 
       validBookings.forEach((booking) => {
-        // A booking might have multiple items (e.g. diving + snorkeling).
-        // We only care about the item matching THIS session/date.
-        if (booking.items) {
-          booking.items.forEach((item) => {
-            const session = item.session;
-            if (session) {
-              // Check if this item's session matches our target date & product
-              const sessionDate = parseISO(session.startDateTime);
+        // ✅ FIX 2: Loop through 'bookingItems'
+        if (booking.bookingItems) {
+          booking.bookingItems.forEach((item) => {
+            const itemSession = item.session;
+            if (itemSession) {
+              const sessionDate = parseISO(itemSession.startDateTime);
               const isSameDay = isWithinInterval(sessionDate, {
                 start: startOfDay(targetDate),
                 end: endOfDay(targetDate),
               });
-              const isSameProduct = session[relationField]?.slug === slug;
+
+              // Safe check for relation
+              const relationData = itemSession[relationField];
+              const isSameProduct = relationData?.slug === slug;
 
               if (isSameDay && isSameProduct) {
                 soldSeats += item.itemGuestCount || 0;
@@ -182,20 +198,29 @@ module.exports = {
         }
       });
 
-      // 6. Private Charter Logic override
-      if (product.pricingMode === "static_per_booking") {
-        // If even ONE seat is sold, the whole boat is taken
-        if (soldSeats > 0) soldSeats = 1;
+      if (product.pricingMode === "static_per_booking" && soldSeats > 0) {
+        soldSeats = 1;
       }
 
-      // 7. Result
       const available = totalCapacity - soldSeats;
 
+      // G. Extract Trip/Boat Details
+      const tripDetails = session?.trip
+        ? {
+            boatName: session.trip.boatName || session.trip.name,
+            kind: session.trip.kind,
+          }
+        : null;
+
+      // H. Return Response
       return ctx.send({
         total: totalCapacity,
         booked: soldSeats,
         available: available > 0 ? available : 0,
         isPrivate: product.pricingMode === "static_per_booking",
+        boatName: tripDetails?.boatName || null,
+        kind: tripDetails?.kind || null,
+        isSessionAvailable: session ? true : false,
       });
     } catch (err) {
       console.error("Check Availability Error:", err);

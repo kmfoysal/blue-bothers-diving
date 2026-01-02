@@ -298,40 +298,62 @@ export interface BlocksWhyChooseUs extends Struct.ComponentSchema {
   };
 }
 
-export interface BookingItem extends Struct.ComponentSchema {
-  collectionName: 'components_booking_items';
+export interface BookingBookingItem extends Struct.ComponentSchema {
+  collectionName: 'components_booking_booking_items';
   info: {
     description: '';
     displayName: 'Booking Item';
     icon: 'shopping-basket';
   };
   attributes: {
+    date: Schema.Attribute.Date;
+    image: Schema.Attribute.String;
     itemCurrency: Schema.Attribute.String;
     itemGuestCount: Schema.Attribute.Integer;
     itemNetAmount: Schema.Attribute.Decimal;
     itemPriceTotal: Schema.Attribute.Decimal;
     itemVatAmount: Schema.Attribute.Decimal;
-    participants: Schema.Attribute.Component<'booking.participant', true>;
+    participants: Schema.Attribute.Integer;
+    participants_details: Schema.Attribute.Component<
+      'booking.participant',
+      true
+    >;
+    price: Schema.Attribute.Decimal;
     pricingDetailsSnapshot: Schema.Attribute.JSON;
     session: Schema.Attribute.Relation<'oneToOne', 'api::session.session'>;
+    slug: Schema.Attribute.String;
+    type: Schema.Attribute.String;
+  };
+}
+
+export interface BookingLeadCustomer extends Struct.ComponentSchema {
+  collectionName: 'components_booking_lead_customers';
+  info: {
+    description: 'Main contact person for the booking';
+    displayName: 'Lead Customer';
+    icon: 'user-check';
+  };
+  attributes: {
+    email: Schema.Attribute.Email & Schema.Attribute.Required;
+    firstName: Schema.Attribute.String & Schema.Attribute.Required;
+    hotelName: Schema.Attribute.String;
+    lastName: Schema.Attribute.String & Schema.Attribute.Required;
+    notes: Schema.Attribute.Text;
+    phone: Schema.Attribute.String;
+    roomNumber: Schema.Attribute.String;
   };
 }
 
 export interface BookingParticipant extends Struct.ComponentSchema {
   collectionName: 'components_booking_participants';
   info: {
-    description: '';
-    displayName: 'Booking Participant';
+    displayName: 'Participant';
     icon: 'user';
   };
   attributes: {
-    country: Schema.Attribute.String;
-    email: Schema.Attribute.Email;
-    firstName: Schema.Attribute.String;
+    fullName: Schema.Attribute.String;
     isLead: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    lastName: Schema.Attribute.String;
-    phone: Schema.Attribute.String;
-    preferredLanguage: Schema.Attribute.Enumeration<['en', 'de']>;
+    participantsPhone: Schema.Attribute.String;
   };
 }
 
@@ -749,7 +771,8 @@ declare module '@strapi/strapi' {
       'blocks.testimonial': BlocksTestimonial;
       'blocks.underwater-adventure': BlocksUnderwaterAdventure;
       'blocks.why-choose-us': BlocksWhyChooseUs;
-      'booking.item': BookingItem;
+      'booking.booking-item': BookingBookingItem;
+      'booking.lead-customer': BookingLeadCustomer;
       'booking.participant': BookingParticipant;
       'elements.conditions': ElementsConditions;
       'elements.contact-info-list-item': ElementsContactInfoListItem;

@@ -78,7 +78,7 @@ export async function getHomeBanner(lang) {
   const url = new URL(path, BASE_URL);
   url.search = qs.stringify(query); // Stringify everything together
 
-  console.log(url);
+  // console.log(url);
 
   return await fetchAPI(url.href, { method: "GET" });
 }

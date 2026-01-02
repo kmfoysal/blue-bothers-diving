@@ -22,7 +22,13 @@
     },
     "kind": {
       "type": "enumeration",
-      "enum": ["boat", "speedboat", "pool", "shore", "classroom"],
+      "enum": [
+        "boat",
+        "speedboat",
+        "pool",
+        "shore",
+        "classroom"
+      ],
       "default": "boat",
       "required": true
     },

@@ -2,17 +2,18 @@
 
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { toast } from "react-toastify";
 
-import { ProductContext } from "@/context";
-import { calculateTripPrice } from "@/utils/pricing-calculator";
 import PricingBreakdown from "@/components/PricingBreakdown/PricingBreakdown";
+import { ProductContext } from "@/context";
 import { getStrapiURL } from "@/utils/get-strapi-url";
+import { calculateTripPrice } from "@/utils/pricing-calculator";
 
 export default function TourBookingForm({ tourData }) {
+  // console.log(tourData);
   const router = useRouter();
   const { productData = [], setProductData } = useContext(ProductContext);
 
@@ -31,9 +32,16 @@ export default function TourBookingForm({ tourData }) {
   const [calculatedPrice, setCalculatedPrice] = useState(0);
   const [priceError, setPriceError] = useState(null);
 
-  // 🛡️ AVAILABILITY STATE
+  // 🛡️ AVAILABILITY & BOAT STATE
   const [maxGuests, setMaxGuests] = useState(100);
   const [availabilityLoading, setAvailabilityLoading] = useState(false);
+
+  // ✅ NEW: Unified Boat Details State
+  const [boatDetails, setBoatDetails] = useState({
+    name: null,
+    kind: null,
+    isSessionAvailable: true,
+  });
 
   // UI Toggles
   const [isDateOpen, setIsDateOpen] = useState(false);
@@ -52,6 +60,10 @@ export default function TourBookingForm({ tourData }) {
       if (!range?.from) return;
 
       setAvailabilityLoading(true);
+
+      // Reset session availability state before checking
+      setBoatDetails((prev) => ({ ...prev, isSessionAvailable: true }));
+
       try {
         const dateStr = format(range.from, "yyyy-MM-dd");
         const type = tourData.type || "tour";
@@ -65,8 +77,28 @@ export default function TourBookingForm({ tourData }) {
         const data = await res.json();
 
         if (res.ok && data.available !== undefined) {
+          // A. Update Inventory
           setMaxGuests(data.available);
 
+          // B. Update Boat Details & Session Status
+          // We use the new data from backend, defaulting isSessionAvailable to true if missing
+          const sessionExists = data.isSessionAvailable !== false;
+
+          setBoatDetails({
+            name: data.boatName || null,
+            kind: data.kind || null,
+            isSessionAvailable: sessionExists,
+          });
+
+          // C. Handle "No Session" Error
+          if (!sessionExists) {
+            toast.error("On this day session is not available", {
+              position: "bottom-right",
+              toastId: "session-unavailable", // Prevent duplicate toasts
+            });
+          }
+
+          // D. Handle Capacity Warning
           if (participants > data.available) {
             setParticipants(data.available > 0 ? data.available : 1);
             if (data.available > 0) {
@@ -76,6 +108,7 @@ export default function TourBookingForm({ tourData }) {
         }
       } catch (error) {
         console.error("Availability Check Failed:", error);
+        toast.error("Failed to check availability");
       } finally {
         setAvailabilityLoading(false);
       }
@@ -159,6 +192,13 @@ export default function TourBookingForm({ tourData }) {
       toast.error("Please select a date.", { position: "bottom-right" });
       return;
     }
+    // ✅ Check Session Availability
+    if (!boatDetails.isSessionAvailable) {
+      toast.error("Session not available for this date.", {
+        position: "bottom-right",
+      });
+      return;
+    }
     if (maxGuests === 0) {
       toast.error("Sold Out. Please select another date.", {
         position: "bottom-right",
@@ -171,24 +211,17 @@ export default function TourBookingForm({ tourData }) {
     }
 
     const currentProducts = Array.isArray(productData) ? productData : [];
-
-    // Helper to format date safely for comparison
     const targetDateStr = format(range.from, "yyyy-MM-dd");
 
-    // Check if this specific tour AND date combination already exists
     const existingIndex = currentProducts.findIndex((item) => {
       if (item.id !== tourData.id) return false;
-
-      // Handle date comparison safely (item date might be string or Date obj)
       const itemDateStr = item.bookingDate?.from
         ? format(new Date(item.bookingDate.from), "yyyy-MM-dd")
         : "";
-
       return itemDateStr === targetDateStr;
     });
 
     const newItemPayload = {
-      // If updating, keep the old cartId so keys don't break. If new, generate ID.
       cartId:
         existingIndex !== -1
           ? currentProducts[existingIndex].cartId
@@ -196,27 +229,28 @@ export default function TourBookingForm({ tourData }) {
       id: tourData.id,
       title: tourData.title,
       slug: tourData.slug,
-      image: tourData.page_banner?.background?.url,
+      image: tourData.page_banner?.background?.url || tourData?.og_image?.url,
       price: calculatedPrice,
       participants: participants,
       bookingDate: range,
       selectedTime: selectedTime,
       pricingMode: tourData.pricingMode,
       currency: tourData.currency,
-      type: tourData.type || "tour", // ✅ Ensure Type is saved
+      type: tourData.type || "tour",
+      // ✅ Save Boat Details to Cart
+      boatName: boatDetails.name,
+      kind: boatDetails.kind,
     };
 
     let updatedList;
 
     if (existingIndex !== -1) {
-      // UPDATE Existing Item
       updatedList = [...currentProducts];
       updatedList[existingIndex] = newItemPayload;
       toast.info("Cart updated with new details!", {
         position: "bottom-right",
       });
     } else {
-      // ADD New Item
       updatedList = [...currentProducts, newItemPayload];
       toast.success("Added to Cart!", { position: "bottom-right" });
     }
@@ -250,6 +284,24 @@ export default function TourBookingForm({ tourData }) {
                 Please choose another date
               </span>
             </div>
+          </div>
+        )}
+
+        <div className="mb-4">
+          <PricingBreakdown
+            pricingPeriods={tourData?.pricingPeriods}
+            pricingMode={tourData?.pricingMode}
+          />
+        </div>
+
+        {/* ✅ BOAT BADGE (Optional - Shows if boat is assigned) */}
+        {boatDetails.name && (
+          <div className="mb-4 flex items-center gap-2 bg-blue-50 text-blue-800 px-3 py-2 rounded-lg text-xs font-semibold">
+            <span className="uppercase tracking-wider">
+              {boatDetails.kind === "speedboat" ? "🚤 Speedboat" : "🛳️ Boat"}:
+            </span>
+            <span>{boatDetails.name}</span>
+            <span>(🔥 Only {maxGuests} seats left!)</span>
           </div>
         )}
 
@@ -316,6 +368,7 @@ export default function TourBookingForm({ tourData }) {
 
           {/* --- TIME PICKER --- */}
           <div className="relative" ref={pickerRef}>
+            {/* ... (Time Picker code remains same) ... */}
             <div
               className="sm:col-span-3 -mt-2"
               onClick={() => setIsOpen(!isOpen)}
@@ -349,6 +402,7 @@ export default function TourBookingForm({ tourData }) {
             </div>
             {isOpen && (
               <div className="absolute z-50 mt-2 bg-white border border-neutral-200 rounded-xl shadow-xl p-5 min-w-[280px]">
+                {/* ... (Keep your Time Picker Dropdown code exactly as is) ... */}
                 <div className="flex gap-3 items-center justify-center mb-4">
                   <div className="flex flex-col items-center">
                     <label className="text-xs text-neutral-500 mb-1">
@@ -474,13 +528,6 @@ export default function TourBookingForm({ tourData }) {
           </div>
         </div>
 
-        <div className="mt-6">
-          <PricingBreakdown
-            pricingPeriods={tourData?.pricingPeriods}
-            pricingMode={tourData?.pricingMode}
-          />
-        </div>
-
         {/* --- TOTAL PRICE --- */}
         <div className="my-6 flex flex-col gap-2">
           <div className="border-b border-neutral-200 mb-4"></div>
@@ -514,15 +561,41 @@ export default function TourBookingForm({ tourData }) {
           <button
             type="button"
             onClick={handleAddToCart}
-            disabled={calculatedPrice === 0 || !!priceError || maxGuests === 0}
+            // ✅ DISABLED LOGIC updated for Session Availability
+            disabled={
+              calculatedPrice === 0 ||
+              !!priceError ||
+              maxGuests === 0 ||
+              !boatDetails.isSessionAvailable ||
+              availabilityLoading
+            }
             className={`text-xs sm:text-sm font-medium leading-sm rounded-full px-6 sm:px-8 py-2.5 sm:py-3.5 h-12 sm:h-[58px] text-white flex w-full sm:w-auto sm:inline-flex justify-center sm:items-center transition-colors duration-200 ${
-              calculatedPrice > 0 && maxGuests > 0
+              calculatedPrice > 0 &&
+              maxGuests > 0 &&
+              boatDetails.isSessionAvailable &&
+              !availabilityLoading
                 ? "bg-blue-700 hover:bg-blue-900 shadow-md"
                 : "bg-neutral-400 cursor-not-allowed"
             }`}
           >
-            {maxGuests === 0 ? "Sold Out" : "Book Now"}
+            {/* ✅ DYNAMIC LABEL */}
+            {availabilityLoading
+              ? "Checking..."
+              : !boatDetails.isSessionAvailable
+              ? "Not Available"
+              : maxGuests === 0
+              ? "Sold Out"
+              : "Book Now"}
           </button>
+
+          {/* ✅ HELPER TEXT for unavailable session */}
+          {!boatDetails.isSessionAvailable &&
+            !availabilityLoading &&
+            range?.from && (
+              <p className="text-center text-red-500 text-xs mt-[-10px]">
+                No trip scheduled for this date.
+              </p>
+            )}
         </div>
       </form>
     </div>

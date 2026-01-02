@@ -1,14 +1,14 @@
 "use client";
 
 import { ProductContext } from "@/context";
+import { getStrapiURL } from "@/utils/get-strapi-url";
 import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useContext, useMemo, useState, useEffect } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { StrapiImage } from "../StrapiImage/StrapiImage";
-import { getStrapiURL } from "@/utils/get-strapi-url";
 
 export default function CheckoutDetailsOverview() {
   const { productData, removeProduct } = useContext(ProductContext);
@@ -30,14 +30,14 @@ export default function CheckoutDetailsOverview() {
   // --- 2. PARTICIPANT DETAILS (Per Item) ---
   const [itemGuests, setItemGuests] = useState({});
 
-  // --- Initialize Item Guests ---
+  // --- Initialize Item Guests Structure ---
   useEffect(() => {
     if (productData?.length > 0) {
       setItemGuests((prev) => {
         const newState = { ...prev };
         productData.forEach((item) => {
           const currentList = newState[item.cartId] || [];
-          // Initialize slots based on fixed participant count
+          // Ensure array length matches participant count
           if (currentList.length !== item.participants) {
             newState[item.cartId] = Array.from(
               { length: item.participants },
@@ -51,6 +51,7 @@ export default function CheckoutDetailsOverview() {
         return newState;
       });
     } else {
+      // Redirect if cart is empty
       const timer = setTimeout(() => router.push("/booking"), 100);
       return () => clearTimeout(timer);
     }
@@ -79,9 +80,31 @@ export default function CheckoutDetailsOverview() {
     });
   };
 
+  // --- CALCULATION MEMO ---
+  const calculations = useMemo(() => {
+    const productsTotal =
+      productData?.reduce(
+        (sum, item) => sum + (parseFloat(item?.price) || 0),
+        0
+      ) || 0;
+    const taxRate = 0.14; // 14% Tax
+    const tax = productsTotal * taxRate;
+    const fees = 0;
+    const subTotal = productsTotal + tax + fees;
+
+    // Ensure 2 decimal places are strictly respected for the logic
+    return {
+      productsTotal,
+      tax,
+      fees,
+      subTotal,
+      total: parseFloat(subTotal.toFixed(2)),
+    };
+  }, [productData]);
+
   // --- SUBMIT PAYLOAD ---
   const handleSubmit = async () => {
-    // Validation
+    // 1. Validation
     if (!leadGuest.fullName || !leadGuest.email) {
       toast.error("Please fill in Name and Email.");
       return;
@@ -94,63 +117,87 @@ export default function CheckoutDetailsOverview() {
     setIsSubmitting(true);
 
     try {
-      // Split Lead Name
-      const [leadFirst, ...leadRest] = leadGuest.fullName.trim().split(" ");
-      const leadLast = leadRest.join(" ") || "-";
+      // 2. Prepare Lead Customer Data (Split Name safely)
+      const cleanLeadName = (leadGuest.fullName || "").trim();
+      const firstSpaceIndex = cleanLeadName.indexOf(" ");
+      const leadFirst =
+        firstSpaceIndex === -1
+          ? cleanLeadName
+          : cleanLeadName.substring(0, firstSpaceIndex);
+      const leadLast =
+        firstSpaceIndex === -1
+          ? "-"
+          : cleanLeadName.substring(firstSpaceIndex + 1);
 
+      // 3. Construct Payload
       const payload = {
+        // Root fields
+        amount: calculations.total, // Uses the exact calculation with tax
+        currency: "EUR",
+        locale: "en",
+        newsletterOptIn: leadGuest.newsletterOptIn,
+        termsAccepted: leadGuest.termsAccepted,
+        source: "website",
+
+        // Customer Object (Backend maps this to 'leadCustomer')
         customer: {
           firstName: leadFirst,
-          lastName: leadLast,
+          lastName: leadLast || "-",
           email: leadGuest.email,
           phone: leadGuest.phone,
           hotelName: leadGuest.hotelName,
           roomNumber: leadGuest.roomNumber,
           notes: leadGuest.notes,
         },
+
+        // Items Array (Backend maps this to 'bookingItems')
         items: productData.map((item) => {
           const guestsForThisItem = itemGuests[item.cartId] || [];
 
-          // Map to backend schema
+          // Map Participants for this specific item
           const participantsDetails = guestsForThisItem.map((guest, idx) => {
-            // Split Guest Name
-            const gName =
+            // Logic: Fallback to Lead Guest info for first slot if empty
+            const rawName =
               guest.fullName ||
               (idx === 0 ? leadGuest.fullName : `Guest ${idx + 1}`);
-            const [gFirst, ...gRest] = gName.trim().split(" ");
-            const gLast = gRest.join(" ") || "-";
+
+            // Split Guest Name
+            const cleanGName = rawName.trim();
+            const gSpaceIdx = cleanGName.indexOf(" ");
+            const gFirst =
+              gSpaceIdx === -1
+                ? cleanGName
+                : cleanGName.substring(0, gSpaceIdx);
+            const gLast =
+              gSpaceIdx === -1 ? "-" : cleanGName.substring(gSpaceIdx + 1);
 
             return {
               firstName: gFirst,
               lastName: gLast,
-              participantsPhone: guest.phone || leadGuest.phone,
-              isLead: idx === 0,
+              participantsPhone:
+                guest.phone || (idx === 0 ? leadGuest.phone : ""),
+              isLead: idx === 0, // Mark first slot as lead for this item
             };
           });
 
           return {
             slug: item.slug,
             type: item.type || "tour",
+            // Date format: yyyy-MM-dd
             date: item.bookingDate?.from
               ? format(new Date(item.bookingDate.from), "yyyy-MM-dd")
-              : null,
+              : format(new Date(), "yyyy-MM-dd"),
             participants: item.participants,
             price: item.price,
-            image: item.image,
+            image: item.image, // Passed for reference/snapshot
             participants_details: participantsDetails,
           };
         }),
-        status: "pending",
-        paymentStatus: "unpaid",
-        source: "website",
-        newsletterOptIn: leadGuest.newsletterOptIn,
-        termsAccepted: leadGuest.termsAccepted,
-        amount: calculations.total,
-        currency: "EUR",
-        locale: "en",
       };
 
-      // Send to Backend
+      console.log("🚀 Submitting Payload:", payload);
+
+      // 4. Send to Backend
       const apiUrl = `${getStrapiURL()}/api/booking/initiate`;
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -159,16 +206,26 @@ export default function CheckoutDetailsOverview() {
       });
 
       const data = await response.json();
-      if (!response.ok)
-        throw new Error(data.error?.message || "Booking failed");
 
+      if (!response.ok) {
+        throw new Error(data.error?.message || "Booking failed");
+      }
+
+      // 5. Handle Success / Redirect
       if (data.redirectUrl) {
-        toast.success("Redirecting to Saferpay...");
-        window.location.href = data.redirectUrl;
+        toast.success("Redirecting to Payment...");
+        // Delay slightly to let toast show
+        setTimeout(() => {
+          window.location.href = data.redirectUrl;
+        }, 1000);
+      } else {
+        // Fallback if no redirect (e.g. 100% discount or dev mode)
+        toast.success("Booking Initiated!");
+        router.push(`/confirmation?bookingCode=${data.bookingCode}`);
       }
     } catch (error) {
-      console.error(error);
-      toast.error("Something went wrong. Please try again.");
+      console.error("Booking Error:", error);
+      toast.error(error.message || "Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -183,20 +240,6 @@ export default function CheckoutDetailsOverview() {
     return `${format(from, "dd MMM")} - ${format(to, "dd MMM yyyy")}`;
   };
 
-  // Calculate totals
-  const calculations = useMemo(() => {
-    const productsTotal =
-      productData?.reduce(
-        (sum, item) => sum + (parseFloat(item?.price) || 0),
-        0
-      ) || 0;
-    const taxRate = 0.14;
-    const tax = productsTotal * taxRate;
-    const fees = 0;
-    const subTotal = productsTotal + tax + fees;
-    return { productsTotal, tax, fees, subTotal, total: subTotal };
-  }, [productData]);
-
   return (
     <section className="py-8 md:py-16">
       <div className="container grid grid-cols-1 md:grid-cols-12 gap-12 xl:gap-16">
@@ -207,7 +250,7 @@ export default function CheckoutDetailsOverview() {
               href="/booking"
               className="text-neutral-500 text-xs font-medium transition-colors duration-200 hover:text-blue-700"
             >
-              Snorkeling
+              Booking
             </Link>
             <Image
               src={"/icons/badgeIcon.svg"}
@@ -295,7 +338,6 @@ export default function CheckoutDetailsOverview() {
                             {item?.title}
                           </h3>
 
-                          {/* STATIC GUEST INFO (No Update Buttons) */}
                           <div className="flex items-center justify-between mt-2 pr-4">
                             <span className="text-xs font-bold text-neutral-700 bg-white border border-neutral-300 px-3 py-1.5 rounded-lg">
                               {item.participants} Guest
@@ -453,7 +495,7 @@ export default function CheckoutDetailsOverview() {
                   >
                     <h5 className="text-base font-semiBold text-neutral-950 mb-4 flex items-center gap-2">
                       <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
-                        {item.title} - {getBookingDateString(item)}
+                        {item.title || item.title} - {getBookingDateString(item)}
                       </span>
                       <span className="text-xs font-normal text-neutral-500">
                         ({item.participants} Participants)
@@ -466,14 +508,12 @@ export default function CheckoutDetailsOverview() {
                           key={guestIndex}
                           className="grid grid-cols-2 gap-4"
                         >
-                          {/* Label */}
                           <div className="col-span-2 text-xs font-bold text-neutral-400 uppercase tracking-wider mb-[-10px] mt-2">
                             {guestIndex === 0 && itemIndex === 0
                               ? "Lead Guest (You)"
                               : `Guest ${guestIndex + 1}`}
                           </div>
 
-                          {/* Full Name */}
                           <div className="sm:col-span-1 col-span-2">
                             <fieldset className="border border-neutral-500 rounded-full relative px-4 bg-white">
                               <legend className="text-2xs font-semiBold text-neutral-900 px-1 ml-3">
@@ -500,7 +540,6 @@ export default function CheckoutDetailsOverview() {
                             </fieldset>
                           </div>
 
-                          {/* Phone */}
                           <div className="sm:col-span-1 col-span-2">
                             <fieldset className="border border-neutral-500 rounded-full relative px-4 bg-white">
                               <legend className="text-2xs font-semiBold text-neutral-900 px-1 ml-3">
@@ -643,13 +682,12 @@ export default function CheckoutDetailsOverview() {
               </div>
             </div>
 
-            {/* PAYMENT DETAILS (Visual + Action) */}
+            {/* PAYMENT DETAILS */}
             <div className="w-full bg-white md:p-6 p-3 border border-neutral-500 rounded-lg mt-14">
               <h2 className="md:text-ml text-sm font-semiBold tracking-xs md:leading-ml leading-sm md:mb-2 mb-2">
                 Payment Details
               </h2>
               <div className="mb-6">
-                {/* Visual Placeholder for Cards to match design, but functionality is external */}
                 <div className="flex justify-between items-center mb-4 pt-2 border-t border-neutral-300">
                   <label className="text-xs text-neutral-500 font-medium">
                     Secured by Saferpay
@@ -677,7 +715,6 @@ export default function CheckoutDetailsOverview() {
                 </p>
               </div>
 
-              {/* Terms Checkbox */}
               <div className="space-y-3 mb-6">
                 <label className="flex items-start gap-2 cursor-pointer">
                   <input
@@ -709,7 +746,6 @@ export default function CheckoutDetailsOverview() {
                 </label>
               </div>
 
-              {/* PAY BUTTON */}
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}

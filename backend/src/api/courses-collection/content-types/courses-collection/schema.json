@@ -74,12 +74,12 @@
     },
     "pricingMode": {
       "type": "enumeration",
+      "default": "fixed_per_participant",
       "enum": [
         "fixed_per_participant",
         "static_per_booking",
         "discount_by_sessions"
-      ],
-      "default": "fixed_per_participant"
+      ]
     },
     "currency": {
       "type": "string",
@@ -95,19 +95,31 @@
     },
     "pricingPeriods": {
       "type": "component",
-      "repeatable": true,
-      "component": "pricing.period",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      }
+      },
+      "component": "pricing.period",
+      "repeatable": true
     },
     "sessions": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::session.session",
       "mappedBy": "courses_collection"
+    },
+    "type": {
+      "type": "enumeration",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "default": "course",
+      "enum": [
+        "course"
+      ]
     }
   }
 }

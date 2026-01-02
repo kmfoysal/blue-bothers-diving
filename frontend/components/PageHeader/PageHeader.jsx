@@ -1,47 +1,11 @@
-import Image from "next/image";
 import { StrapiImage } from "../StrapiImage/StrapiImage";
 
-const titleAndFeatureData = {
-    subTitle: "Try Scuba",
-    title: "PADI Try Scuba Diving – Safe, Fun, and Unforgettable",
-    featureContent:
-        "Want to find out what diving is like before you decide to get your PADI Open Water Diver certification? A Discover Scuba® Diving experience is your first time diving in a pool or calm water environment.",
-    featureList: [
-        {
-            id: 1,
-            title: "Professional snorkel guides",
-            icon: "/icons/professional-guides.svg",
-        },
-        {
-            id: 2,
-            title: "Experienced boat's crew",
-            icon: "/icons/boat-crew.svg",
-        },
-        {
-            id: 3,
-            title: "Rental equipment included",
-            icon: "/icons/equipment.svg",
-        },
-        {
-            id: 4,
-            title: "Small groups",
-            icon: "/icons/group.svg",
-        },
-        {
-            id: 5,
-            title: "All fees and taxes included",
-            icon: "/icons/taxes.svg",
-        },
-        {
-            id: 6,
-            title: "Transfer from hotel and back",
-            icon: "/icons/car.svg",
-        },
-    ],
-};
+
 
 export default function  PageHeader({ data }) {
     const { sub_title, title, description, feature_list } = data;
+
+    console.log(data);
 
     return (
         <section className="section-padding">

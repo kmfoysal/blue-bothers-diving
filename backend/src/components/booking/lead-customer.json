@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_booking_lead_customers",
+  "info": {
+    "displayName": "Lead Customer",
+    "icon": "user-check",
+    "description": "Main contact person for the booking"
+  },
+  "options": {},
+  "attributes": {
+    "firstName": { "type": "string", "required": true },
+    "lastName": { "type": "string", "required": true },
+    "email": { "type": "email", "required": true },
+    "phone": { "type": "string" },
+    "hotelName": { "type": "string" },
+    "roomNumber": { "type": "string" },
+    "notes": { "type": "text" }
+  }
+}

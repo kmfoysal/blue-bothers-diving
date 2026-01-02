@@ -4,7 +4,8 @@
   "info": {
     "singularName": "booking",
     "pluralName": "bookings",
-    "displayName": "Booking"
+    "displayName": "Booking",
+    "description": "Central reservation record for tours and courses"
   },
   "options": {
     "draftAndPublish": false
@@ -12,33 +13,63 @@
   "pluginOptions": {},
   "attributes": {
     "bookingCode": {
-      "type": "string",
-      "unique": true,
+      "type": "uid",
       "required": true
     },
-    "status": {
+    "bookingStatus": {
       "type": "enumeration",
-      "enum": ["quote", "pending", "confirmed", "cancelled"],
+      "enum": [
+        "pending",
+        "confirmed",
+        "cancelled",
+        "completed"
+      ],
       "default": "pending"
     },
     "paymentStatus": {
       "type": "enumeration",
-      "enum": ["unpaid", "deposit_paid", "paid", "refunded"],
+      "enum": [
+        "unpaid",
+        "paid",
+        "refunded"
+      ],
       "default": "unpaid"
     },
     "priceTotal": {
       "type": "decimal"
     },
+    "currency": {
+      "type": "string",
+      "default": "EUR"
+    },
     "guestCountTotal": {
       "type": "integer"
     },
-    "contactEmail": {
-      "type": "email"
+    "source": {
+      "type": "string",
+      "default": "website"
     },
-    "items": {
+    "transactionToken": {
+      "type": "string",
+      "private": true
+    },
+    "newsletterOptIn": {
+      "type": "boolean",
+      "default": false
+    },
+    "termsAccepted": {
+      "type": "boolean",
+      "default": false
+    },
+    "leadCustomer": {
+      "type": "component",
+      "repeatable": false,
+      "component": "booking.lead-customer"
+    },
+    "bookingItems": {
       "type": "component",
       "repeatable": true,
-      "component": "booking.item"
+      "component": "booking.booking-item"
     }
   }
 }

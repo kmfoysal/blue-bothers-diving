@@ -24,7 +24,7 @@ export default async function SnorkelingDayTripPage() {
     return <div>Tour not found</div>; // Handle missing data gracefully
   }
   
-  console.log("tourData:",tourData);
+//   console.log("tourData:",tourData);
 
   return (
     <main>

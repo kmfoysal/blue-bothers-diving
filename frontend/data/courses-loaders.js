@@ -6,7 +6,7 @@ import { cache } from "react";
 // Shared Populate Logic for Consistency
 const coursePopulateLogic = {
   populate: {
-    fields: ["slug", "meta_title", "pricingMode", "currency"], // Updated fields
+    fields: ["slug", "meta_title", "pricingMode", "currency", "type"], // Updated fields
     categories: { fields: ["name"] },
     og_image: { fields: ["url", "alternativeText"] },
     // ✅ NEW: Populate Pricing
@@ -77,6 +77,7 @@ export const getSingleCoursesData = cache(async (slug) => {
       // ✅ Added:
       "pricingMode",
       "currency",
+      "type",
       "vatRatePercent",
       "vatIncluded",
     ],
@@ -86,6 +87,7 @@ export const getSingleCoursesData = cache(async (slug) => {
   const BASE_URL = getStrapiURL();
   const url = new URL(path, BASE_URL);
   url.search = coursesQuery;
+
   return await fetchAPI(url.href, { method: "GET" });
 });
 

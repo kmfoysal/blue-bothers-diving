@@ -114,6 +114,19 @@
       "relation": "manyToMany",
       "target": "api::category.category",
       "inversedBy": "tours"
+    },
+    "type": {
+      "type": "enumeration",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": true,
+      "default": "tour",
+      "enum": [
+        "tour"
+      ]
     }
   }
 }

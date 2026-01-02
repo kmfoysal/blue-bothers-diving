@@ -19,7 +19,6 @@ export default async function SingleTour({ params }) {
   // Safety check
   const tourData = singleTourData?.data?.[0];
 
-  console.log(tourData);
 
   if (!tourData) return <div>Tour Not Found</div>;
 
