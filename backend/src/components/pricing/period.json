@@ -29,8 +29,8 @@
     },
     "sessionPricingTiers": {
       "type": "component",
-      "repeatable": true,
-      "component": "pricing.tier"
+      "component": "pricing.tier",
+      "repeatable": true
     }
   }
 }

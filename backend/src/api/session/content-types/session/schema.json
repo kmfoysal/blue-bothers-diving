@@ -16,6 +16,14 @@
     }
   },
   "attributes": {
+    "sessionName": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
     "startDateTime": {
       "type": "datetime",
       "required": true
@@ -55,27 +63,19 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::tour.tour",
-      "inversedBy": "sessions"
+      "inversedBy": "sessionName"
     },
     "courses_collection": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::courses-collection.courses-collection",
-      "inversedBy": "sessions"
+      "inversedBy": "sessionName"
     },
     "training": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::training.training",
       "inversedBy": "sessions"
-    },
-    "sessionName": {
-      "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
     }
   }
 }

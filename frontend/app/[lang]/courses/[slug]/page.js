@@ -2,18 +2,22 @@ import PageHeader from "@/components/PageHeader/PageHeader";
 import TourDetailContent from "@/components/TourDetailContent/TourDetailContent";
 import TourGallery from "@/components/TourGallery/TourGallery";
 import { getSingleCoursesData } from "@/data/courses-loaders";
+import { generateSeo } from "@/utils/seo-helper";
 
 // Dynamic Metadata
 export async function generateMetadata({ params }) {
   const { slug } = await params;
 
-  const metaData = await getSingleCoursesData(slug);
+  const singleCourseData = await getSingleCoursesData(slug);
 
-  return {
-    title: metaData?.data[0]?.meta_title || "Set your meta title.",
-    description:
-      metaData?.data[0]?.meta_description || "Set your meta description",
-  };
+  const course = singleCourseData?.data?.[0];
+
+  // Use the helper
+  return generateSeo({
+    seo: course?.seo,
+    slug: slug,
+    path: "courses",
+  });
 }
 
 export default async function SingleCourse({ params }) {

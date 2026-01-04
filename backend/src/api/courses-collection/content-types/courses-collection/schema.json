@@ -103,7 +103,7 @@
       "component": "pricing.period",
       "repeatable": true
     },
-    "sessions": {
+    "sessionName": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::session.session",
@@ -120,6 +120,11 @@
       "enum": [
         "course"
       ]
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
     }
   }
 }

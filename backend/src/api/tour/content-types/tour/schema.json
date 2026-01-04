@@ -81,7 +81,7 @@
       "component": "pricing.period",
       "repeatable": true
     },
-    "sessions": {
+    "sessionName": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::session.session",
@@ -127,6 +127,11 @@
       "enum": [
         "tour"
       ]
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
     }
   }
 }

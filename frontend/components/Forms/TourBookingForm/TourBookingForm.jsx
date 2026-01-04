@@ -274,7 +274,7 @@ export default function TourBookingForm({ tourData }) {
     <div className="sticky top-8">
       <form className="px-3 py-6 md:p-6 border border-neutral-500 rounded-lg bg-white relative">
         {/* SOLD OUT OVERLAY */}
-        {range?.from && maxGuests === 0 && !availabilityLoading && (
+        {/* {range?.from && maxGuests === 0 && !availabilityLoading && (
           <div className="absolute inset-0 bg-white/60 z-20 flex items-center justify-center rounded-lg backdrop-blur-[1px]">
             <div className="bg-red-50 border border-red-200 p-4 rounded-lg shadow-lg text-center">
               <span className="text-red-600 font-bold text-lg block mb-1">
@@ -285,7 +285,7 @@ export default function TourBookingForm({ tourData }) {
               </span>
             </div>
           </div>
-        )}
+        )} */}
 
         <div className="mb-4">
           <PricingBreakdown

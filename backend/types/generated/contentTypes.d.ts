@@ -565,7 +565,8 @@ export interface ApiCoursesCollectionCoursesCollection
         };
       }>;
     publishedAt: Schema.Attribute.DateTime;
-    sessions: Schema.Attribute.Relation<'oneToMany', 'api::session.session'>;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    sessionName: Schema.Attribute.Relation<'oneToMany', 'api::session.session'>;
     slug: Schema.Attribute.UID<'meta_title'> &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -805,6 +806,7 @@ export interface ApiHomePageHomePage extends Struct.SingleTypeSchema {
       'api::home-page.home-page'
     >;
     publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
     title: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -952,6 +954,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         };
       }>;
     publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
     slug: Schema.Attribute.UID &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -1334,7 +1337,8 @@ export interface ApiTourTour extends Struct.CollectionTypeSchema {
         };
       }>;
     publishedAt: Schema.Attribute.DateTime;
-    sessions: Schema.Attribute.Relation<'oneToMany', 'api::session.session'>;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    sessionName: Schema.Attribute.Relation<'oneToMany', 'api::session.session'>;
     slug: Schema.Attribute.UID<'title'> &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -1469,40 +1473,6 @@ export interface ApiTripTrip extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     sessions: Schema.Attribute.Relation<'oneToMany', 'api::session.session'>;
     totalCapacity: Schema.Attribute.Integer & Schema.Attribute.Required;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
-export interface ApiTypeType extends Struct.CollectionTypeSchema {
-  collectionName: 'types';
-  info: {
-    displayName: 'Type';
-    pluralName: 'types';
-    singularName: 'type';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
-  attributes: {
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String;
-    localizations: Schema.Attribute.Relation<'oneToMany', 'api::type.type'>;
-    publishedAt: Schema.Attribute.DateTime;
-    Type: Schema.Attribute.Enumeration<['Tour', 'Course']> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -2187,7 +2157,6 @@ declare module '@strapi/strapi' {
       'api::tour.tour': ApiTourTour;
       'api::training.training': ApiTrainingTraining;
       'api::trip.trip': ApiTripTrip;
-      'api::type.type': ApiTypeType;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

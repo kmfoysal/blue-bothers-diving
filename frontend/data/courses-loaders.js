@@ -47,6 +47,16 @@ const coursePopulateLogic = {
         },
       },
     },
+    seo: {
+      populate: {
+        metaImage: {
+          fields: ["url", "mime", "width", "height"],
+        },
+        metaSocial: {
+          populate: ["image"],
+        },
+      },
+    },
   },
 };
 
@@ -87,6 +97,8 @@ export const getSingleCoursesData = cache(async (slug) => {
   const BASE_URL = getStrapiURL();
   const url = new URL(path, BASE_URL);
   url.search = coursesQuery;
+
+  console.log(url);
 
   return await fetchAPI(url.href, { method: "GET" });
 });

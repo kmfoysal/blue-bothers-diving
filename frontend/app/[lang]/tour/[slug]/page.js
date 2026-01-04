@@ -2,14 +2,21 @@ import SubPageBanner from "@/components/SubBanner/SubPageBanner";
 import TourDetailContent from "@/components/TourDetailContent/TourDetailContent";
 import TourGallery from "@/components/TourGallery/TourGallery";
 import { getSingleTourData } from "@/data/single-tour-loader";
+import { generateSeo } from "@/utils/seo-helper";
 
 export async function generateMetadata({ params }) {
-  const { slug } = await params;
-  const metaData = await getSingleTourData(slug);
-  return {
-    title: metaData?.data[0]?.meta_title || "Tour Details",
-    description: metaData?.data[0]?.meta_description || "Book your trip.",
-  };
+  const { slug, lang } = params;
+
+  const singleTourData = await getSingleTourData(slug);
+
+  const tour = singleTourData?.data?.[0];
+
+  // Use the helper
+  return generateSeo({
+    seo: tour?.seo,
+    slug: slug,
+    path: "tour",
+  });
 }
 
 export default async function SingleTour({ params }) {
@@ -18,7 +25,6 @@ export default async function SingleTour({ params }) {
 
   // Safety check
   const tourData = singleTourData?.data?.[0];
-
 
   if (!tourData) return <div>Tour Not Found</div>;
 

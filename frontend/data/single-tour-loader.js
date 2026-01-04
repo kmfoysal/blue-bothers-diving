@@ -19,10 +19,10 @@ export const getSingleTourData = cache(async (slug) => {
       "vatRatePercent",
       "vatIncluded",
       "duration",
-      "categories",
-      "type"
+      "type",
     ],
     populate: {
+      categories: { fields: ["name"] },
       page_banner: {
         populate: {
           background: {
@@ -97,26 +97,28 @@ export const getSingleTourData = cache(async (slug) => {
           sessionPricingTiers: true, // Populate the tiers inside periods
         },
       },
+      seo: {
+      populate: {
+        metaImage: {
+          fields: ["url", "mime", "width", "height"]
+        },
+        metaSocial: {
+          populate: ["image"]
+        }
+      }
+    }
     },
   });
-
-//   const path = "/api/tours";
-//   const BASE_URL = getStrapiURL();
-
-//   const url = new URL(path, BASE_URL);
-
-//   url.search = tourQuery;
 
   const path = "/api/tours";
   const BASE_URL = getStrapiURL();
 
-  const url = `${BASE_URL}${path}?filters[slug][$eq]=${slug}&populate=*`;
+  const url = new URL(path, BASE_URL);
 
-  console.log("Tour Url",url);
-  
+  url.search = tourQuery;
 
-//   return await fetchAPI(url.href, { method: "GET" });
 
-  return await fetchAPI(url, { method: "GET" });
+  console.log("Tour Url", url);
 
+  return await fetchAPI(url.href, { method: "GET" });
 });
