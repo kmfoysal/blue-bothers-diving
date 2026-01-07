@@ -11,7 +11,7 @@ export default function AdventuresEscapes({ data }) {
                         <StrapiImage
                             width={72}
                             height={44}
-                            src={getStrapiMedia(data.first_image.url)}
+                            src={getStrapiMedia(data?.first_image?.url)}
                             alt={
                                 data?.first_image?.alternativeText ||
                                 "Default alt"
