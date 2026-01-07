@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "blue-brothers",
   "version": "0.1.0",
   "private": true,
   "description": "A Strapi application",
@@ -15,28 +15,26 @@
     "upgrade:dry": "npx @strapi/upgrade latest --dry"
   },
   "dependencies": {
-    "@strapi/plugin-cloud": "5.23.6",
-    "@strapi/plugin-users-permissions": "5.23.6",
-    "@strapi/strapi": "5.23.6",
-    "axios": "^1.13.2",
-    "better-sqlite3": "11.3.0",
-    "date-fns": "^2.30.0",
-    "koa-ratelimit": "^6.0.0",
+    "@strapi/plugin-cloud": "5.33.1",
+    "@strapi/plugin-users-permissions": "5.33.1",
+    "@strapi/strapi": "5.33.1",
+    "better-sqlite3": "12.4.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.0.0",
-    "strapi-plugin-navigation": "^3.2.4",
-    "styled-components": "^6.0.0"
+    "styled-components": "^6.0.0",
+    "axios": "^1.13.2",
+    "date-fns": "^2.30.0",
+    "koa-ratelimit": "^6.0.0",
+    "strapi-plugin-navigation": "^3.2.4"
   },
+  "devDependencies": {},
   "engines": {
-    "node": ">=18.0.0 <=22.x.x",
+    "node": ">=20.0.0 <=24.x.x",
     "npm": ">=6.0.0"
   },
   "strapi": {
-    "uuid": "272c1767-b22d-41d2-8bf7-ab77bcfe42cc",
-    "installId": "accb044b8be054c571109ff7229d209909b8a21b3939f066f98a3a4c6fc58f4f"
-  },
-  "devDependencies": {
-    "baseline-browser-mapping": "^2.9.12"
+    "uuid": "0506bd32-02ce-4711-9c2f-7d8beffad9f4",
+    "installId": "b49f3bcc0228769ffc1e8405203467f10ddf6596d16b805fb475aa99df39bf9a"
   }
 }
