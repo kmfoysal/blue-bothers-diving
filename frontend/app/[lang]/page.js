@@ -22,7 +22,7 @@ import { getDictionary } from "./dictionaries/dictionaries";
 export default async function Home({ params }) {
   const awaitedParams = await params;
 
-   const lang = awaitedParams?.lang ?? "en";
+  const lang = awaitedParams?.lang ?? "en";
 
   const dict = await getDictionary(lang);
 
@@ -78,10 +78,6 @@ export default async function Home({ params }) {
       <AdventuresEscapes data={advEscapesData} />
       <DiscoverScuba data={discoverScubaData} />
       <UnderwaterAdventure data={underwaterAdvData} />
-      {/* <ProfessionalCourses
-                data={professionalCoursesHeading}
-                coursesData={coursesData}
-            /> */}
       <Questions heading={homeFaqSecHeadingData} faqData={homeFaq} />
       <Testimonials
         heading={testimonialSecHeadingData}

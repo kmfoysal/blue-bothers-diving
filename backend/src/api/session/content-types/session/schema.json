@@ -5,7 +5,7 @@
     "singularName": "session",
     "pluralName": "sessions",
     "displayName": "Session",
-    "description": "A scheduled instance of a Tour or Training"
+    "description": "A scheduled instance of a Tour or Course"
   },
   "options": {
     "draftAndPublish": true
@@ -70,12 +70,6 @@
       "relation": "manyToOne",
       "target": "api::courses-collection.courses-collection",
       "inversedBy": "sessionName"
-    },
-    "training": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::training.training",
-      "inversedBy": "sessions"
     }
   }
 }

@@ -1065,7 +1065,7 @@ export interface ApiPricingRowPricingRow extends Struct.SingleTypeSchema {
 export interface ApiSessionSession extends Struct.CollectionTypeSchema {
   collectionName: 'sessions';
   info: {
-    description: 'A scheduled instance of a Tour or Training';
+    description: 'A scheduled instance of a Tour or Course';
     displayName: 'Session';
     pluralName: 'sessions';
     singularName: 'session';
@@ -1108,7 +1108,6 @@ export interface ApiSessionSession extends Struct.CollectionTypeSchema {
       Schema.Attribute.DefaultTo<'public'>;
     startDateTime: Schema.Attribute.DateTime & Schema.Attribute.Required;
     tour: Schema.Attribute.Relation<'manyToOne', 'api::tour.tour'>;
-    training: Schema.Attribute.Relation<'manyToOne', 'api::training.training'>;
     trip: Schema.Attribute.Relation<'manyToOne', 'api::trip.trip'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1418,78 +1417,6 @@ export interface ApiTourTour extends Struct.CollectionTypeSchema {
         };
       }> &
       Schema.Attribute.DefaultTo<'tour'>;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    vatIncluded: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    vatRatePercent: Schema.Attribute.Decimal & Schema.Attribute.DefaultTo<14>;
-  };
-}
-
-export interface ApiTrainingTraining extends Struct.CollectionTypeSchema {
-  collectionName: 'trainings';
-  info: {
-    displayName: 'Training';
-    pluralName: 'trainings';
-    singularName: 'training';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
-  attributes: {
-    blocks: Schema.Attribute.DynamicZone<
-      ['blocks.gallery', 'blocks.sub-header', 'blocks.features-overview']
-    > &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    currency: Schema.Attribute.String & Schema.Attribute.DefaultTo<'EUR'>;
-    description: Schema.Attribute.String &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    locale: Schema.Attribute.String;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::training.training'
-    >;
-    pricingMode: Schema.Attribute.Enumeration<
-      ['fixed_per_participant', 'static_per_booking', 'discount_by_sessions']
-    > &
-      Schema.Attribute.DefaultTo<'fixed_per_participant'>;
-    pricingPeriods: Schema.Attribute.Component<'pricing.period', true> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    publishedAt: Schema.Attribute.DateTime;
-    sessions: Schema.Attribute.Relation<'oneToMany', 'api::session.session'>;
-    slug: Schema.Attribute.UID<'title'> &
-      Schema.Attribute.Required &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    title: Schema.Attribute.String &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -2213,7 +2140,6 @@ declare module '@strapi/strapi' {
       'api::team-member.team-member': ApiTeamMemberTeamMember;
       'api::testimonial.testimonial': ApiTestimonialTestimonial;
       'api::tour.tour': ApiTourTour;
-      'api::training.training': ApiTrainingTraining;
       'api::trip.trip': ApiTripTrip;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

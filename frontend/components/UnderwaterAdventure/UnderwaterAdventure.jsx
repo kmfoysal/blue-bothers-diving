@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function UnderwaterAdventure({ data }) {
     // Data Destructuring
-    const { highlight_content, right_content } = data;
+    const { highlight_content, right_content } = data || {};
     return (
         <section className="pt-[168px] sm:pt-[236px] pb-12 sm:pb-[120px] bg-blue-1000">
             <div className="container grid grid-cols-12 gap-6">

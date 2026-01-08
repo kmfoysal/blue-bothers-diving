@@ -3,10 +3,10 @@ import { StrapiImage } from "../StrapiImage/StrapiImage";
 
 export default function Questions({ heading, faqData }) {
   // Data Destructuring
-  const { section_image, section_heading } = heading;
+  const { section_image, section_heading } = heading || {};
 
   return (
-    <section className="">
+    <section>
       {/* Divider */}
       <div className="container">
         <div className="border-b border-neutral-200"></div>
@@ -15,8 +15,8 @@ export default function Questions({ heading, faqData }) {
         <div className="container grid grid-cols-1 sm:grid-cols-2 gap-6 ">
           <div className="col-span-1 flex items-start">
             <StrapiImage
-              src={section_image?.url}
-              alt={section_image?.alternativeText}
+              src={section_image?.url || ""}
+              alt={section_image?.alternativeText || "Question Icon"}
               width={840}
               height={884}
               className="w-auto rounded-md object-cover min-w-full"
